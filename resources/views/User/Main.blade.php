@@ -156,7 +156,7 @@
                     <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
                 </ul>
                 <div class="d-flex gap-3 align-items-center mt-3 mt-lg-0">
-                    <a href="#" class="text-decoration-none fw-bold text-secondary px-2">Log In</a>
+                    <a href="/login" class="text-decoration-none fw-bold text-secondary px-2">Log In</a>
                     <a href="#" class="btn btn-danger rounded-3 fw-bold px-4 shadow-sm">Register</a>
                 </div>
             </div>
