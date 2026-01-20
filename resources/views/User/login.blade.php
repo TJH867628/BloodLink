@@ -7,6 +7,11 @@
 </head>
 <body>
     <h1>Login to Blood Link</h1>
+    @if(session('success'))
+        <div style="color: green;">
+            {{ session('success') }}
+        </div>
+    @endif
     <form method="POST" action="{{ route('login') }}">
         @csrf
         <div>
@@ -18,6 +23,7 @@
             <input type="password" id="password" name="password" required>
         </div>
         <button type="submit">Login</button>
+        <a href="/register">Register</a>
     </form>
 </body>
 </html>
