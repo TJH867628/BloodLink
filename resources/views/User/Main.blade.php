@@ -157,7 +157,7 @@
                 </ul>
                 <div class="d-flex gap-3 align-items-center mt-3 mt-lg-0">
                     <a href="/login" class="text-decoration-none fw-bold text-secondary px-2">Log In</a>
-                    <a href="#" class="btn btn-danger rounded-3 fw-bold px-4 shadow-sm">Register</a>
+                    <a href="/register" class="btn btn-danger rounded-3 fw-bold px-4 shadow-sm">Register</a>
                 </div>
             </div>
         </div>
@@ -184,10 +184,10 @@
                     </p>
                     
                     <div class="d-flex flex-column flex-sm-row gap-3">
-                        <button class="btn btn-brand d-flex align-items-center justify-content-center gap-2 shadow-lg">
+                        <a href="{{ route('login') }}" class="btn btn-brand d-flex align-items-center justify-content-center gap-2 shadow-lg">
                             <i class="bi bi-heart-fill"></i>
                             Start Donating Now
-                        </button>
+                        </a>
                         <button class="btn btn-outline-custom">
                             <a class="text-decoration-none text-dark" href="#how-it-works">How it Works</a>
                         </button>
