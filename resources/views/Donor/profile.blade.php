@@ -206,16 +206,9 @@
                     <h5 class="fw-bold mb-1">Donor</h5>
                     <div class="d-flex justify-content-center gap-2 mb-4">
                         <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill">Eligible</span>
-                        <span class="badge bg-light text-dark border px-3 py-2 rounded-pill">A+ Positive</span>
-                    </div>
-                    <div class="border-top pt-3 text-start">
-                        <small class="fw-bold text-muted text-uppercase" style="font-size: 0.7rem;">Account Status</small>
-                        <div class="d-flex align-items-center gap-2 mt-2">
-                            <i class="fas fa-check-circle text-success"></i> <span class="small fw-bold">Email Verified</span>
-                        </div>
-                        <div class="d-flex align-items-center gap-2 mt-2">
-                            <i class="fas fa-check-circle text-success"></i> <span class="small fw-bold">Phone Verified</span>
-                        </div>
+                        <span class="badge bg-light text-dark border px-3 py-2 rounded-pill">
+                            {{ $donorHealthDetails->blood_type ?? 'Unknown' }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -223,20 +216,21 @@
             <!-- Profile Form-->
             <div class="col-lg-8">
                 <div class="custom-card p-4 p-md-5">
-                    <form>
+                    <form method="POST" action="{{ route('donor.updateProfile') }}">
+                        @csrf
                         <h5 class="fw-bold mb-4">Personal Information</h5>
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-muted">Full Name</label>
-                                <input type="text" class="form-control" value="Donor">
+                                <input type="text" name="name" class="form-control" value="{{ $user->name }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-muted">Email Address</label>
-                                <input type="email" class="form-control" value="donor@example.com">
+                                <input type="email" class="form-control" value="{{ $user->email }}" readonly>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-muted">Phone Number</label>
-                                <input type="tel" class="form-control" value="+60 12-345 6789">
+                                <input type="tel" name="phone" class="form-control" value="{{ $user->phone }}">
                             </div>
                         </div>
 
@@ -245,21 +239,19 @@
                         <h5 class="fw-bold mb-4 text-danger">Health Details</h5>
                         <div class="alert alert-warning border-0 d-flex gap-3 mb-4 rounded-4">
                             <i class="fas fa-exclamation-triangle mt-1"></i>
-                            <div class="small">Please ensure this information is accurate. False health data can endanger patients. Updates may require re-verification.</div>
+                            <div class="small">Please ensure this information is accurate. False health data can endanger patients.</div>
                         </div>
                         <div class="row g-3 mb-4">
                             <!-- Blood Type -->
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-muted">Blood Type</label>
-                                <select class="form-select">
-                                    <option value="A+" selected>A+</option>
-                                    <option value="A-">A-</option>
-                                    <option value="B+">B+</option>
-                                    <option value="B-">B-</option>
-                                    <option value="AB+">AB+</option>
-                                    <option value="AB-">AB-</option>
-                                    <option value="O+">O+</option>
-                                    <option value="O-">O-</option>
+                                <select class="form-select" name="blood_type">
+                                    @foreach($bloodTypes as $bt)
+                                        <option value="{{ $bt->value }}"
+                                            {{ ($donorHealthDetails->blood_type ?? '') == $bt->value ? 'selected' : '' }}>
+                                            {{ $bt->value }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                             <!-- Weight -->
@@ -272,7 +264,7 @@
                                     min="30"
                                     max="200"
                                     step="0.1"
-                                    value="58"
+                                    value="{{ $donorHealthDetails->weight ?? "" }}"
                                     required>
                             </div>
                             <!-- Height -->
@@ -284,18 +276,18 @@
                                     placeholder="e.g. 170"
                                     min="100"
                                     max="250"
-                                    value="165"
+                                    value="{{ $donorHealthDetails->height ?? "" }}"
                                     required>
                             </div>
                             <!-- Blood Pressure -->
                             <div class="col-md-6">
-                                <label class="form-label small fw-bold text-muted">Blood Pressure (mmHg)</label>
+                                <label class="form-label small fw-bold text-muted">Blood Pressure e.g. 120/80 (mmHg)</label>
                                 <input type="text"
                                     class="form-control"
                                     name="blood_pressure"
                                     placeholder="e.g. 120/80"
                                     pattern="[0-9]{2,3}/[0-9]{2,3}"
-                                    value="120/80"
+                                    value="{{ $donorHealthDetails->blood_pressure ?? "" }}"
                                     required>
                             </div>
                             <!-- Hemoglobin Level -->
@@ -303,12 +295,12 @@
                                 <label class="form-label small fw-bold text-muted">Hemoglobin Level (g/dL)</label>
                                 <input type="number"
                                     class="form-control"
-                                    name="hemoglobin"
+                                    name="hemoglobin_level"
                                     placeholder="e.g. 13.5"
                                     step="0.1"
                                     min="8"
                                     max="20"
-                                    value="14.2"
+                                    value="{{ $donorHealthDetails->hemoglobin_level ?? "" }}"
                                     required>
                             </div>
                         </div>

@@ -16,6 +16,9 @@ Route::middleware(['role:DONOR','auth'])->group(function () {
     Route::get('donor/findEvent', [App\Http\Controllers\DonorController::class, 'findEvent'])->name('donor.findEvent');
     Route::get('donor/history', [App\Http\Controllers\DonorController::class, 'history'])->name('donor.history');
     Route::get('donor/feedback', [App\Http\Controllers\DonorController::class, 'feedback'])->name('donor.feedback');
+    Route::get('donor/profile', [App\Http\Controllers\DonorController::class, 'profile'])->name('donor.profile');
+
     Route::post('donor/bookEvent/{eventId}', [App\Http\Controllers\DonorController::class, 'bookEvent'])->name('donor.bookEvent');
+    Route::post('donor/updateProfile', [App\Http\Controllers\DonorController::class, 'updateProfile'])->name('donor.updateProfile');
     Route::post('donor/submitFeedback', [App\Http\Controllers\DonorController::class, 'submitFeedback'])->name('donor.submitFeedback');
 });

@@ -236,6 +236,24 @@
     <!-- Main Content -->
     <div class="main-content">
         <!-- Header -->
+         @php
+        $missingHealth =
+            !$donorHealthDetails ||
+            !$donorHealthDetails->blood_type ||
+            !$donorHealthDetails->weight ||
+            !$donorHealthDetails->height ||
+            !$donorHealthDetails->blood_pressure ||
+            !$donorHealthDetails->hemoglobin;
+        @endphp
+        @if($missingHealth)
+        <div class="alert alert-warning d-flex align-items-center justify-content-between" role="alert">
+            <div>
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>Incomplete Health Profile:</strong> Please update your health details to ensure eligibility for donation.
+            </div>
+            <a href="/donor/profile" class="btn btn-sm btn-danger fw-bold">Update Now</a>
+        </div>
+        @endif
         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
                 <h2 class="fw-black mb-0">Dashboard</h2>

@@ -9,6 +9,7 @@ use App\Models\Event;
 use App\Models\Appointment;
 use App\Models\DonationRecord;
 use App\Models\Feedback;
+use App\Models\BloodType;
 
 class DonorController extends Controller
 {
@@ -137,6 +138,36 @@ class DonorController extends Controller
         return redirect()->back()->with('success', 'Event booked successfully!');
     }
     public function profile() {
-        return view('donor.profile');
+        $user = Auth::user();
+        $donorHealthDetails = $user->donorHealthDetails;
+        $bloodTypes = BloodType::active()
+                        ->orderBy('value')
+                        ->get();
+
+        return view('donor.profile', compact('user','donorHealthDetails', 'bloodTypes'));
     }
+
+    public function updateProfile(Request $request) {
+        $user = Auth::user();
+
+        $user->name = $request->input('name');
+        $user->phone = $request->input('phone');
+        $user->save();
+
+        $donorHealthDetails = $user->donorHealthDetails;
+        if (!$donorHealthDetails) {
+            $donorHealthDetails = new App\Models\DonorHealthDetails();
+            $donorHealthDetails->donor_id = $user->id;
+        }
+        $donorHealthDetails->height = $request->input('height');
+        $donorHealthDetails->weight = $request->input('weight');
+        $donorHealthDetails->blood_type = $request->input('blood_type');
+        $donorHealthDetails->blood_pressure = $request->input('blood_pressure');
+        $donorHealthDetails->hemoglobin_level = $request->input('hemoglobin_level');
+        $donorHealthDetails->medical_conditions = $request->input('medical_conditions');
+        $donorHealthDetails->last_checkup_date = $request->input('last_checkup_date');
+        $donorHealthDetails->save();
+
+        return redirect()->back()->with('success', 'Profile updated successfully!');
+    }   
 }

@@ -10,10 +10,6 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    public function index()
-    {
-        //
-    }
 
     public function loginPage(){
         return view('user.login');

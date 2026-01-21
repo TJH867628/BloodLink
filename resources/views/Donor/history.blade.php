@@ -386,11 +386,11 @@
                 <div class="d-flex align-items-center gap-3 border-start ps-md-4 mt-3 mt-md-0 pt-3 pt-md-0 border-top-0 border-top-md opacity-75">
                     <div class="text-center">
                         <div class="text-label mb-1">Hemoglobin</div>
-                        <div class="vitals-box text-danger border-danger">11.2 g/dL</div>
+                        <div class="vitals-box text-danger border-danger">{{ $donation->hemoglobin_level ?? "NULL"}} g/dL</div>
                     </div>
                     <div class="text-center">
                         <div class="text-label mb-1">Pressure</div>
-                        <div class="vitals-box">140/90</div>
+                        <div class="vitals-box">{{ $donation->blood_pressure ??  "NULL"}}</div>
                     </div>
                 </div>
             </div>
@@ -426,14 +426,6 @@
                     </div>
                 </div>
                 <div class="d-flex align-items-center gap-3 border-start ps-md-4 mt-3 mt-md-0 pt-3 pt-md-0 border-top-0 border-top-md opacity-75">
-                    <div class="text-center">
-                        <div class="text-label mb-1">Hemoglobin</div>
-                        <div class="vitals-box text-danger border-danger">11.2 g/dL</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-label mb-1">Pressure</div>
-                        <div class="vitals-box">140/90</div>
-                    </div>
                 </div>
             </div>
             @endforeach
