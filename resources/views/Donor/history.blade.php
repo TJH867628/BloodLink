@@ -83,6 +83,22 @@
             padding: 2rem;
         }
 
+        @media (max-width: 992px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+                padding-top: 5rem;
+            }
+
+            .mobile-nav {
+                display: block !important;
+            }
+        }
+
         /* History Specific Styles */
         .history-card {
             background: white;
@@ -270,6 +286,24 @@
 </head>
 
 <body>
+    <!-- Mobile Nav -->
+    <nav class="navbar navbar-light bg-white border-bottom mobile-nav d-none fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                <div class="brand-icon"><i class="fas fa-droplet"></i></div>
+                <span class="fw-bold">BloodLink</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="mobileMenu">
+                <ul class="navbar-nav mt-3">
+                    <li class="nav-item"><a class="nav-link" href="donor_dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="find_events.html">Find Events</a></li>
+                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="my_history.html">My History</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <!-- Sidebar -->
     <div class="sidebar d-none d-lg-flex">
         <div class="brand-section">
@@ -282,6 +316,7 @@
             <a href="/donor/findEvent" class="nav-link"><i class="fas fa-search w-25"></i> Find Events</a>
             <a href="/donor/history" class="nav-link active"><i class="fas fa-history w-25"></i> My History</a>
             <a href="/donor/feedback" class="nav-link"><i class="fas fa-comment-dots w-25"></i> Feedback</a>
+            <a href="/donor/profile" class="nav-link"><i class="fas fa-user-circle w-25"></i> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <div class="d-flex align-items-center gap-3 p-2 rounded hover-bg-light">
@@ -341,6 +376,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="d-flex align-items-center gap-3 border-start ps-md-4 mt-3 mt-md-0 pt-3 pt-md-0 border-top-0 border-top-md opacity-75">
+                    <div class="text-center">
+                        <div class="text-label mb-1">Hemoglobin</div>
+                        <div class="vitals-box text-danger border-danger">11.2 g/dL</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-label mb-1">Pressure</div>
+                        <div class="vitals-box">140/90</div>
+                    </div>
+                </div>
             </div>
 
             <!-- Record Pending -->
@@ -367,30 +412,50 @@
                         </div>
                     </div>
                 </div>
+                <div class="d-flex align-items-center gap-3 border-start ps-md-4 mt-3 mt-md-0 pt-3 pt-md-0 border-top-0 border-top-md opacity-75">
+                    <div class="text-center">
+                        <div class="text-label mb-1">Hemoglobin</div>
+                        <div class="vitals-box text-danger border-danger">11.2 g/dL</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-label mb-1">Pressure</div>
+                        <div class="vitals-box">140/90</div>
+                    </div>
+                </div>
             </div>
 
             <!-- Record Deferred -->
             <div class="history-card">
-                <div class="date-box">
+                <div class="date-box opacity-75">
                     <div class="date-day text-muted">10</div>
-                    <div class="date-month">Apr 2025</div>
+                    <div class="date-month text-muted">Apr 2025</div>
                 </div>
 
                 <div class="history-content">
-                    <div class="history-header text-muted">
-                        <h5>Community Center Drive</h5>
-                        <span class="status-badge badge-failed">Deferred</span>
+                    <div class="history-header">
+                        <h5 class="text-muted">Community Center Drive</h5>
+                        <span class="status-badge badge-failed text-danger">Deferred</span>
                     </div>
 
-                    <div class="history-meta text-muted">
-                        <div class="meta-item">
+                    <div class="history-meta  opacity-75">
+                        <div class="meta-item text-muted">
                             <i class="fas fa-map-marker-alt"></i>
                             Mobile Unit 4
                         </div>
-                        <div class="meta-item">
+                        <div class="meta-item text-muted">
                             <i class="fas fa-exclamation"></i>
-                            not meet requirements
+                            not meet requirements   
                         </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-3 border-start ps-md-4 mt-3 mt-md-0 pt-3 pt-md-0 border-top-0 border-top-md opacity-75">
+                    <div class="text-center">
+                        <div class="text-label text-muted mb-1">Hemoglobin</div>
+                        <div class="vitals-box text-danger border-danger">11.2 g/dL</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-label text-muted mb-1">Pressure</div>
+                        <div class="vitals-box">140/90</div>
                     </div>
                 </div>
             </div>

@@ -82,6 +82,22 @@
             padding: 2rem;
         }
 
+        @media (max-width: 992px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+                padding-top: 5rem;
+            }
+
+            .mobile-nav {
+                display: block !important;
+            }
+        }
+
         .feedback-container {
             max-width: 800px;
             margin: 0 auto;
@@ -163,6 +179,25 @@
 </head>
 
 <body>
+    <!-- Mobile Nav -->
+    <nav class="navbar navbar-light bg-white border-bottom mobile-nav d-none fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                <div class="brand-icon"><i class="fas fa-droplet"></i></div>
+                <span class="fw-bold">BloodLink</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="mobileMenu">
+                <ul class="navbar-nav mt-3">
+                    <li class="nav-item"><a class="nav-link" href="donor_dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="find_events.html">Find Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="my_history.html">My History</a></li>
+                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="feedback.html">Feedback</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <!-- Sidebar -->
     <div class="sidebar d-none d-lg-flex">
         <div class="brand-section">
@@ -175,6 +210,7 @@
             <a href="/donor/findEvent" class="nav-link"><i class="fas fa-search w-25"></i> Find Events</a>
             <a href="/donor/history" class="nav-link"><i class="fas fa-history w-25"></i> My History</a>
             <a href="/donor/feedback" class="nav-link active"><i class="fas fa-comment-dots w-25"></i> Feedback</a>
+            <a href="/donor/profile" class="nav-link"><i class="fas fa-user-circle w-25"></i> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <div class="d-flex align-items-center gap-3 p-2 rounded hover-bg-light">

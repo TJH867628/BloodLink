@@ -21,4 +21,7 @@ class DonorController extends Controller
     public function feedback() {
         return view('donor.feedback');
     }
+    public function profile() {
+        return view('donor.profile');
+    }
 }
