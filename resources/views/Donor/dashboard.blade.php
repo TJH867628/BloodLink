@@ -221,13 +221,15 @@
             <a href="/donor/profile" class="nav-link"><i class="fas fa-user-circle w-25"></i> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
-            <div class="d-flex align-items-center gap-3 p-2 rounded hover-bg-light">
-                <div class="bg-light rounded-3 p-2 text-secondary"><i class="fas fa-sign-out-alt"></i></div>
-                <div>
-                    <div class="fw-bold text-dark small">Donor</div>
-                    <div class="text-label text-danger" style="cursor:pointer">Sign Out</div>
+            <a href="/logout" style="text-decoration:none">
+                <div class="d-flex align-items-center gap-3 p-2 rounded hover-bg-light">
+                    <div class="bg-light rounded-3 p-2 text-secondary"><i class="fas fa-sign-out-alt"></i></div>
+                    <div>
+                        <div class="fw-bold text-dark small">{{ $user->name }}</div>
+                        <div class="text-label text-danger" style="cursor:pointer">Sign Out</div>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 
@@ -251,8 +253,8 @@
                 <div class="d-none d-md-block border-start h-50 mx-2"></div>
                 <div class="d-flex align-items-center gap-3">
                     <div class="text-end d-none d-md-block">
-                        <div class="fw-bold small">Donor</div>
-                        <div class="text-label text-success">Verified Donor</div>
+                        <div class="fw-bold small">{{ $user->name }}</div>
+                        <div class="text-label text-success">Donor</div>
                     </div>
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Donor" class="rounded-3 border" width="40" height="40" alt="Avatar">
                 </div>
@@ -285,11 +287,11 @@
                     <div class="vstack gap-3">
                         <div class="d-flex justify-content-between border-bottom pb-3">
                             <span class="text-label">Blood Type</span>
-                            <span class="fw-bold text-danger fs-5">A+</span>
+                            <span class="fw-bold text-danger fs-5">{{ $donorHealthDetails->blood_type ?? "Pending For Update" }}</span>
                         </div>
                         <div class="d-flex justify-content-between border-bottom pb-3">
                             <span class="text-label">Weight</span>
-                            <span class="fw-bold text-dark">58 kg</span>
+                            <span class="fw-bold text-dark">{{ $donorHealthDetails->weight ?? "Pending For Update"}}</span>
                         </div>
                         <div class="d-flex justify-content-between border-bottom pb-3">
                             <span class="text-label">Height</span>
@@ -297,11 +299,20 @@
                         </div>
                         <div class="d-flex justify-content-between border-bottom pb-3">
                             <span class="text-label">Eligibility</span>
+                            @if( $donorHealthDetails->is_eligible ?? false)
                             <span class="status-badge badge-eligible">Eligible</span>
+                            @else
+                            <span class="status-badge badge-deffered">Not Eligible</span>
+                            @endif
                         </div>
                         <div class="d-flex justify-content-between border-bottom pb-3">
                             <span class="text-label">Last Donation</span>
-                            <span class="fw-bold text-dark">18-01-2026</span>
+                            <span class="fw-bold text-dark">
+                                @if($lastDonation)
+                                    {{ \Carbon\Carbon::parse($lastDonation->created_at)->format('d M Y') }}
+                                @else
+                                    No Previous Donations
+                                @endif
                         </div>
                         <button class="btn w-100 btn-light text-danger fw-bold mt-2 border">Update Details</button>
                     </div>

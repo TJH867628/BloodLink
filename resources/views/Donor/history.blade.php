@@ -319,13 +319,15 @@
             <a href="/donor/profile" class="nav-link"><i class="fas fa-user-circle w-25"></i> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
-            <div class="d-flex align-items-center gap-3 p-2 rounded hover-bg-light">
-                <div class="bg-light rounded-3 p-2 text-secondary"><i class="fas fa-sign-out-alt"></i></div>
-                <div>
-                    <div class="fw-bold text-dark small">Donor</div>
-                    <div class="text-label text-danger" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Sign Out</div>
+            <a href="/logout" style="text-decoration:none">
+                <div class="d-flex align-items-center gap-3 p-2 rounded hover-bg-light">
+                    <div class="bg-light rounded-3 p-2 text-secondary"><i class="fas fa-sign-out-alt"></i></div>
+                    <div>
+                        <div class="fw-bold text-dark small">{{ $user->name }}</div>
+                        <div class="text-label text-danger" style="cursor:pointer">Sign Out</div>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 
@@ -335,8 +337,8 @@
             <h2 class="fw-black mb-0">Donation History</h2>
             <div class="d-flex align-items-center gap-3">
                 <div class="text-end d-none d-md-block">
-                    <div class="fw-bold small">Donor</div>
-                    <div class="text-label text-success" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Verified Donor</div>
+                    <div class="fw-bold small">{{ $user->name }}</div>
+                    <div class="text-label text-success">Donor</div>
                 </div>
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Donor" class="rounded-3 border" width="40" height="40" alt="Avatar">
             </div>
@@ -352,27 +354,32 @@
 
         <!-- History List -->
         <div class="vstack gap-3">
-            <!-- Record Successful -->
+            {{-- Successful donations --}}
+            @foreach($donations as $donation)
             <div class="history-card">
                 <div class="date-box">
-                    <div class="date-day">30</div>
-                    <div class="date-month">DEC 2025</div>
+                    <div class="date-day">{{ $donation->created_at->format('d') }}</div>
+                    <div class="date-month">{{ $donation->created_at->format('M Y') }}</div>
                 </div>
 
                 <div class="history-content">
                     <div class="history-header">
-                        <h5>General Hospital</h5>
+                        <h5>{{ $donation->event->name ?? 'Blood Donation' }}</h5>
                         <span class="status-badge success">Successful</span>
                     </div>
 
                     <div class="history-meta">
                         <div class="meta-item">
                             <i class="fas fa-map-marker-alt"></i>
-                            Walk-in Visit
+                            {{ $donation->facility->name ?? 'Medical Facility' }}
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            {{ $donation->created_at->format('h:i A')   }}
                         </div>
                         <div class="meta-item">
                             <i class="fas fa-tint"></i>
-                            Whole Blood (450ml)
+                            {{ $donation->unit }} Bag(s)
                         </div>
                     </div>
                 </div>
@@ -387,28 +394,34 @@
                     </div>
                 </div>
             </div>
+            @endforeach
 
-            <!-- Record Pending -->
+
+            {{-- Appointments (pending / cancelled) --}}
+            @foreach($appointments as $app)
             <div class="history-card">
                 <div class="date-box">
-                    <div class="date-day">15</div>
-                    <div class="date-month">Aug 2025</div>
+                    <div class="date-day">{{ \Carbon\Carbon::parse($app->date)->format('d') }}</div>
+                    <div class="date-month">{{ \Carbon\Carbon::parse($app->date)->format('M Y') }}</div>
                 </div>
 
                 <div class="history-content">
                     <div class="history-header">
-                        <h5>Red Cross Annual Drive</h5>
-                        <span class="status-badge pending">Pending</span>
+                        <h5>{{ $app->event_name }}</h5>
+                        <span class="status-badge 
+                            {{ $app->status == 'APPROVED' || $app->status == 'PENDING' ? 'pending' : 'badge-failed' }}">
+                            {{ $app->status }}
+                        </span>
                     </div>
 
                     <div class="history-meta">
                         <div class="meta-item">
                             <i class="fas fa-map-marker-alt"></i>
-                            City Hall, Main Wing
+                            {{ $app->location }}
                         </div>
                         <div class="meta-item">
-                            <i class="fas fa-tint"></i>
-                            Whole Blood (450ml)
+                            <i class="fas fa-clock"></i>
+                            {{ \Carbon\Carbon::parse($app->time)->format('h:i A') }}
                         </div>
                     </div>
                 </div>
@@ -423,42 +436,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Record Deferred -->
-            <div class="history-card">
-                <div class="date-box opacity-75">
-                    <div class="date-day text-muted">10</div>
-                    <div class="date-month text-muted">Apr 2025</div>
-                </div>
-
-                <div class="history-content">
-                    <div class="history-header">
-                        <h5 class="text-muted">Community Center Drive</h5>
-                        <span class="status-badge badge-failed text-danger">Deferred</span>
-                    </div>
-
-                    <div class="history-meta  opacity-75">
-                        <div class="meta-item text-muted">
-                            <i class="fas fa-map-marker-alt"></i>
-                            Mobile Unit 4
-                        </div>
-                        <div class="meta-item text-muted">
-                            <i class="fas fa-exclamation"></i>
-                            not meet requirements   
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center gap-3 border-start ps-md-4 mt-3 mt-md-0 pt-3 pt-md-0 border-top-0 border-top-md opacity-75">
-                    <div class="text-center">
-                        <div class="text-label text-muted mb-1">Hemoglobin</div>
-                        <div class="vitals-box text-danger border-danger">11.2 g/dL</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-label text-muted mb-1">Pressure</div>
-                        <div class="vitals-box">140/90</div>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

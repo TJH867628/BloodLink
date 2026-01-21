@@ -213,13 +213,15 @@
             <a href="/donor/profile" class="nav-link"><i class="fas fa-user-circle w-25"></i> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
-            <div class="d-flex align-items-center gap-3 p-2 rounded hover-bg-light">
-                <div class="bg-light rounded-3 p-2 text-secondary"><i class="fas fa-sign-out-alt"></i></div>
-                <div>
-                    <div class="fw-bold text-dark small">Donor</div>
-                    <div class="text-label text-danger">Sign Out</div>
+            <a href="/logout" style="text-decoration:none">
+                <div class="d-flex align-items-center gap-3 p-2 rounded hover-bg-light">
+                    <div class="bg-light rounded-3 p-2 text-secondary"><i class="fas fa-sign-out-alt"></i></div>
+                    <div>
+                        <div class="fw-bold text-dark small">{{ $user->name }}</div>
+                        <div class="text-label text-danger" style="cursor:pointer">Sign Out</div>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 
@@ -232,8 +234,8 @@
             </div>
             <div class="d-flex align-items-center gap-3">
                 <div class="text-end d-none d-md-block">
-                    <div class="fw-bold small">Donor</div>
-                    <div class="text-label text-success">Verified Donor</div>
+                    <div class="fw-bold small">{{ $user->name }}</div>
+                    <div class="text-label text-success">Donor</div>
                 </div>
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Donor" class="rounded-3 border" width="40" height="40" alt="Avatar">
             </div>
@@ -241,15 +243,23 @@
 
         <div class="feedback-container">
             <div class="custom-card p-4 p-md-5">
-                <form id="feedbackForm">
+                <form id="feedbackForm" method="POST" action="{{ route('donor.submitFeedback') }}">
+                    @csrf
                     <!-- Event Selection -->
                     <div class="mb-4">
                         <label class="text-label mb-2 d-block">Select Donation Event</label>
-                        <select class="form-select" required>
-                            <option value="" selected disabled>Choose a recent visit...</option>
-                            <option value="1">General Hospital (30 Dec 2025)</option>
-                            <option value="2">Red Cross Annual Drive (15 Aug 2025)</option>
+                        <select name="donation_id" class="form-select" required>
+                            <option value="" disabled selected>Choose a recent visit...</option>
+
+                            @foreach($donations as $donation)
+                                <option value="{{ $donation->id }}">
+                                    {{ $donation->event_name }} 
+                                    ({{ $donation->facility_name ?? 'Medical Facility' }}, 
+                                    {{ $donation->created_at->format('d M Y') }})
+                                </option>
+                            @endforeach
                         </select>
+
                         <div class="form-text mt-2">Only completed donations are shown here.</div>
                     </div>
 
@@ -268,8 +278,36 @@
                     <!-- Comments -->
                     <div class="mb-4">
                         <label class="text-label mb-2 d-block">Your Comments</label>
-                        <textarea class="form-control" rows="5" placeholder="Tell us about the facility, staff, or any suggestions you have..." required></textarea>
+                        <textarea class="form-control" name="comments" rows="5" placeholder="Tell us about the facility, staff, or any suggestions you have..." required></textarea>
                     </div>
+                    {{-- Success message --}}
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show mb-4">
+                            <i class="fas fa-check-circle me-2"></i>
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+
+                    {{-- Error message --}}
+                    @if(session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show mb-4">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+
+                    {{-- Validation errors --}}
+                    @if($errors->any())
+                        <div class="alert alert-danger mb-4">
+                            <ul class="mb-0">
+                                @foreach($errors->all() as $err)
+                                    <li>{{ $err }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
                     <!-- Submit -->
                     <button type="submit" class="btn btn-submit">
@@ -285,8 +323,39 @@
                     As per our safety guidelines, if you experienced any adverse health effects after your donation, please contact the clinic directly at <strong>+60 1234 56789</strong>.
                 </div>
             </div>
+
+            {{-- Feedback History --}}
+            <div class="mt-5">
+                <h4 class="fw-bold mb-3">Your Feedback History</h4>
+
+                @if($feedbacks->count())
+                    <div class="vstack gap-3">
+                        @foreach($feedbacks as $fb)
+                            <div class="p-4 bg-white border rounded-4 shadow-sm">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <strong>Feedback</strong>
+                                    <small class="text-muted">
+                                        {{ $fb->created_at->format('d M Y, h:i A') }}
+                                    </small>
+                                </div>
+
+                                <p class="mb-0 text-secondary" style="white-space: pre-line;">
+                                    {{ $fb->message }}
+                                </p>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="p-4 bg-light border rounded-4 text-center text-muted">
+                        <i class="fas fa-comment-slash fa-2x mb-2"></i>
+                        <div class="fw-bold">No feedback submitted yet</div>
+                        <small>Your submitted feedback will appear here.</small>
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
+
 
     <!-- Success Modal -->
     <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
@@ -305,18 +374,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const myModal = new bootstrap.Modal(document.getElementById('successModal'));
-            myModal.show();
-
-            document.getElementById('successModal').addEventListener('hidden.bs.modal', function() {
-                window.location.href = '/donor/dashboard';
-            });
-        });
-    </script>
 </body>
 
 </html>
