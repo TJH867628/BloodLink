@@ -16,5 +16,5 @@ Route::get('donor/history', [App\Http\Controllers\DonorController::class, 'histo
 Route::get('donor/feedback', [App\Http\Controllers\DonorController::class, 'feedback'])->name('donor.feedback');
 Route::get('donor/profile', [App\Http\Controllers\DonorController::class, 'profile'])->name('donor.profile');
 Route::get('hospital/dashboard', [App\Http\Controllers\HospitalController::class, 'hospitalDashboard'])->name('hospital.dashboard');
-Route::get('hospital/inventory_and_report', [App\Http\Controllers\HospitalController::class, 'inventory_and_report'])->name('hospital.inventory');
-Route::get('hospital/donorManagement', [App\Http\Controllers\HospitalController::class, 'donorManagement'])->name('hospital.donorManagement');
+Route::get('hospital/inventory', [App\Http\Controllers\HospitalController::class, 'inventory_and_report'])->name('hospital.inventory');
+Route::get('hospital/donationManagement', [App\Http\Controllers\HospitalController::class, 'donationManagement'])->name('hospital.donationManagement');

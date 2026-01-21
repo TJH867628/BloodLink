@@ -154,7 +154,6 @@
 </head>
 
 <body>
-
     <!-- Mobile Nav -->
     <nav class="navbar navbar-light bg-white border-bottom mobile-nav d-none fixed-top">
         <div class="container-fluid">
@@ -165,9 +164,9 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="mobileMenu">
                 <ul class="navbar-nav mt-3">
-                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="hospital_dashboard.html">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="hospital_inventory.html">Inventory & Reports</a></li>
-                    <li class="nav-item"><a class="nav-link" href="hospital_donation.html">Donation Management</a></li>
+                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="/hospital/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/hospital/inventory">Inventory & Reports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/hospital/donationManagement">Donation Management</a></li>
                 </ul>
             </div>
         </div>
@@ -181,9 +180,9 @@
         </div>
         <nav class="nav flex-column mt-2 w-100">
             <div class="px-4 pb-2 text-label">Hospital Portal</div>
-            <a href="hospital_dashboard.html" class="nav-link active"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
-            <a href="hospital_inventory.html" class="nav-link"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
-            <a href="hospital_donation.html" class="nav-link"><i class="fas fa-user-nurse w-25"></i> Donation Mgmt</a>
+            <a href="/hospital/dashboard" class="nav-link active"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
+            <a href="/hospital/inventory" class="nav-link"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
+            <a href="/hospital/donationManagement" class="nav-link"><i class="fas fa-user-nurse w-25"></i> Donation Management</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <div class="d-flex align-items-center gap-3 p-2 rounded hover-bg-light">
@@ -200,7 +199,7 @@
     <div class="main-content">
         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
-                <h2 class="fw-black mb-0">Overview</h2>
+                <h2 class="fw-black mb-0">Dashboard</h2>
                 <div class="d-flex align-items-center gap-2 mt-1">
                     <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3">
                         <i class="fas fa-check-circle me-1"></i> System Operational
@@ -215,8 +214,8 @@
                 <div class="d-none d-md-block border-start h-50 mx-2"></div>
                 <div class="d-flex align-items-center gap-3">
                     <div class="text-end d-none d-md-block">
-                        <div class="fw-bold small">City Central Hospital</div>
-                        <div class="text-label text-success">Authorized ID: H-402</div>
+                        <div class="fw-bold small">Hospital Staff</div>
+                        <div class="text-label text-success">Verified Staff</div>
                     </div>
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hospital" class="rounded-3 border" width="40" height="40" alt="Avatar">
                 </div>
@@ -274,7 +273,6 @@
         <div class="card border-0 shadow-sm p-4 p-lg-5" style="border-radius: 24px;">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h4 class="fw-bold mb-0"><i class="fas fa-heartbeat text-danger me-2"></i> Real-time Stock Levels</h4>
-                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-bold">Refresh Data</button>
             </div>
             <div class="stock-grid">
                 <!-- O+ -->

@@ -211,13 +211,6 @@
             </div>
         </header>
 
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
-            <div class="position-relative w-100 w-md-50" style="max-width: 400px;">
-                <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
-                <input type="text" class="form-control rounded-pill ps-5 py-2 border-0 shadow-sm" placeholder="Search Event...">
-            </div>
-        </div>
-
         <div class="row g-4">
             <!-- Event Active -->
             <div class="col-md-6 col-xl-4">

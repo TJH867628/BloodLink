@@ -17,8 +17,8 @@ class HospitalController extends Controller
         return view('hospital.inventory');
     }
 
-    public function donorManagement()
+    public function donationManagement()
     {
-        return view('hospital.donorManagement');
+        return view('hospital.donationManagement');
     }
 }
