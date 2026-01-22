@@ -257,7 +257,6 @@
                 <div class="custom-card p-4 text-center">
                     <div class="position-relative d-inline-block mb-3">
                         <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Donor" class="avatar-upload" alt="Profile">
-                        <button class="btn btn-sm btn-dark rounded-circle position-absolute bottom-0 end-0 border border-white" style="width: 32px; height: 32px;"><i class="fas fa-camera small"></i></button>
                     </div>
                     <h5 class="fw-bold mb-1">Donor</h5>
                     <div class="d-flex justify-content-center gap-2 mb-4">
