@@ -54,14 +54,22 @@
         .nav-link {
             display: flex;
             align-items: center;
-            gap: 12px;
             padding: 12px 24px;
-            color: var(--text-muted);
-            font-weight: 500;
             margin: 4px 16px;
             border-radius: 12px;
-            transition: all 0.2s;
+            color: var(--text-muted);
+            font-weight: 500;
             text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-icon {
+            width: 32px;              /* FIXED WIDTH */
+            display: flex;
+            justify-content: center;
+            font-size: 1rem;
+            margin-right: 12px;
+            color: inherit;
         }
 
         .nav-link:hover {
@@ -144,6 +152,49 @@
             background-color: #B91C1C;
             transform: translateY(-1px);
         }
+
+                /* Remove default link styles */
+                .logout-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Hover container */
+        .logout-item {
+            transition: all 0.25s ease;
+        }
+
+        /* Icon box */
+        .icon-box {
+            background: #f1f5f9;
+            padding: 10px;
+            border-radius: 10px;
+            color: #64748b;
+            transition: all 0.25s ease;
+        }
+
+        /* Text */
+        .logout-text {
+            color: #dc2626;
+            font-weight: 600;
+            transition: all 0.25s ease;
+        }
+
+        /* Hover Effects */
+        .logout-item:hover {
+            background: #fff1f2;
+        }
+
+        .logout-item:hover .icon-box {
+            background: #fee2e2;
+            color: #dc2626;
+            transform: translateX(4px);
+        }
+
+        .logout-item:hover .logout-text {
+            color: #b91c1c;
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -171,20 +222,24 @@
         </div>
         <nav class="nav flex-column mt-2 w-100">
             <div class="px-4 pb-2 text-label" style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Main Menu</div>
-            <a href="/donor/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
-            <a href="/donor/findEvent" class="nav-link"><i class="fas fa-search w-25"></i> Find Events</a>
-            <a href="/donor/history" class="nav-link"><i class="fas fa-history w-25"></i> My History</a>
-            <a href="/donor/feedback" class="nav-link"><i class="fas fa-comment-dots w-25"></i> Feedback</a>
-            <a href="/donor/profile" class="nav-link active"><i class="fas fa-user-circle w-25"></i> Profile</a>
+            <a href="/donor/dashboard" class="nav-link"><span class="nav-icon"><i class="fas fa-chart-pie w-25"></i></span> Dashboard</a>
+            <a href="/donor/findEvent" class="nav-link"><span class="nav-icon"><i class="fas fa-search w-25"></i></span> Find Events</a>
+            <a href="/donor/history" class="nav-link"><span class="nav-icon"><i class="fas fa-history w-25"></i></span> My History</a>
+            <a href="/donor/feedback" class="nav-link"><span class="nav-icon"><i class="fas fa-comment-dots w-25"></i></span> Feedback</a>
+            <a href="/donor/profile" class="nav-link active"><span class="nav-icon"><i class="fas fa-user-circle w-25"></i></span> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
-            <div class="d-flex align-items-center gap-3 p-2 rounded hover-bg-light">
-                <div class="bg-light rounded-3 p-2 text-secondary"><i class="fas fa-sign-out-alt"></i></div>
-                <div>
-                    <div class="fw-bold text-dark small">Donor</div>
-                    <div class="text-label text-danger">Sign Out</div>
+            <a href="/logout" class="logout-link">
+                <div class="d-flex align-items-center gap-3 p-2 rounded logout-item">
+                    <div class="icon-box">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold text-dark small">{{ $user->name }}</div>
+                        <div class="logout-text">Sign Out</div>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 

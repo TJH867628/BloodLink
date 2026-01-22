@@ -22,3 +22,15 @@ Route::middleware(['role:DONOR','auth'])->group(function () {
     Route::post('donor/updateProfile', [App\Http\Controllers\DonorController::class, 'updateProfile'])->name('donor.updateProfile');
     Route::post('donor/submitFeedback', [App\Http\Controllers\DonorController::class, 'submitFeedback'])->name('donor.submitFeedback');
 });
+Route::middleware(['role:STAFF','auth'])->group(function () {
+    Route::get('hospital/dashboard', [App\Http\Controllers\HospitalController::class, 'hospitalDashboard'])->name('hospital.dashboard');
+    Route::get('hospital/inventory', [App\Http\Controllers\HospitalController::class, 'inventory_and_report'])->name('hospital.inventory');
+    Route::get('hospital/donationManagement', [App\Http\Controllers\HospitalController::class, 'donationManagement'])->name('hospital.donationManagement');
+
+});
+Route::middleware(['role:ORGANIZER','auth'])->group(function () {
+    Route::get('event/dashboard', [App\Http\Controllers\EventController::class, 'eventDashboard'])->name('event.dashboard');
+    Route::get('event/management', [App\Http\Controllers\EventController::class, 'eventManagement'])->name('event.management');
+    Route::get('event/participation', [App\Http\Controllers\EventController::class, 'participation'])->name('event.participation');
+
+});

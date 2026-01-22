@@ -171,10 +171,9 @@
 
                 <div class="mb-4 position-relative">
                     <i class="bi bi-envelope input-icon"></i>
-                    <input type="phone" name="phone_number" class="form-control form-control-custom"
+                    <input type="phone" name="phone" class="form-control form-control-custom"
                         placeholder="Phone Number" required>
                 </div>
-
 
                 <div class="mb-4 position-relative">
                     <i class="bi bi-lock input-icon"></i>
