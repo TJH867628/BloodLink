@@ -33,8 +33,9 @@ Route::middleware(['role:STAFF','auth'])->group(function () {
 });
 Route::middleware(['role:ORGANIZER','auth'])->group(function () {
     Route::get('event_organizer/dashboard', [EventOrganizerController::class, 'eventOrganizerDashboard'])->name('event_organizer.dashboard');
-    Route::get('event_organizer/management', [EventOrganizerController::class, 'eventOrganizerManagement'])->name('event_organizer.management');
+    Route::get('event_organizer/eventManagement', [EventOrganizerController::class, 'eventManagement'])->name('event_organizer.eventManagement');
     Route::get('event_organizer/participation', [EventOrganizerController::class, 'participation'])->name('event_organizer.participation');
+    Route::post('event_organizer/createEvent', [EventOrganizerController::class, 'createEvent'])->name('event_organizer.createEvent'); 
+    Route::post('event_organizer/deleteEvent', [EventOrganizerController::class, 'deleteEvent'])->name('event_organizer.deleteEvent'); 
 
 });
-// Route::post('event_organizer/createEvent', [EventOrganizerController::class, 'createEvent'])->name('event_organizer.createEvent');

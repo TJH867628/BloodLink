@@ -14,9 +14,10 @@ class EventOrganizerController extends Controller
         $user = auth()->user();
         return view('Event_Organizer.dashboard', compact('user'));
     }
-    public function eventOrganizerManagement()
+    public function eventManagement()
     {
-        return view('Event_Organizer.eventManagement');
+        $events = EventModel::where('organizer_id', auth()->id())->get();
+        return view('Event_Organizer.eventManagement',compact('events'));
     }
     public function participation()
     {
@@ -47,7 +48,7 @@ class EventOrganizerController extends Controller
             // 'organizer_id' => 2
         ]);
 
-        return redirect()->route('event_organizer.management')->with('success', 'Event created successfully.');
+        return redirect()->route('event_organizer.eventManagement')->with('success', 'Event created successfully.');
     }
 
     public function editEvent(Request $request, $eventId)
@@ -74,5 +75,14 @@ class EventOrganizerController extends Controller
         ]);
 
         return redirect()->route('event_organizer.management')->with('success', 'Event updated successfully.');
+    }
+
+    public function deleteEvent(Request $request)
+    {
+        $eventId = $request->input('event_id');
+        $event = EventModel::findOrFail($eventId);
+        $event->delete();
+
+        return redirect()->route('event_organizer.management')->with('success', 'Event deleted successfully.');
     }
 }

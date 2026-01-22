@@ -225,6 +225,18 @@
             </div>
         </header>
 
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @elseif(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         <div class="custom-card">
             <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
                 <h5 class="fw-bold mb-0">Managed Events</h5>
@@ -242,60 +254,78 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="px-4 py-3">
-                                <div class="fw-bold text-dark">Red Cross Annual Drive</div>
-                                <div class="small text-muted">10 Jan 2026 • 09:00 AM - 05:00 PM</div>
-                            </td>
-                            <td class="px-4 py-3 text-muted fw-medium"><i class="fas fa-map-pin me-1 text-danger"></i> City Hall</td>
-                            <td class="px-4 py-3">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="progress flex-grow-1" style="height: 6px; width: 100px;">
-                                        <div class="progress-bar bg-primary" style="width: 76%"></div>
+                    @foreach($events as $event)
+                    @php
+                        $used = $event->total_slots - $event->available_slots;
+                        $percent = $event->total_slots > 0 ? ($used / $event->total_slots) * 100 : 0;
+                    @endphp
+
+                    <tr @if($event->status == 'COMPLETED') class="opacity-50" @endif>
+                        <td class="px-4 py-3">
+                            <div class="fw-bold text-dark">{{ $event->name }}</div>
+                            <div class="small text-muted">
+                                {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }} • {{ $event->time }}
+                            </div>
+                        </td>
+
+                        <td class="px-4 py-3 text-muted fw-medium">
+                            <i class="fas fa-map-pin me-1 text-danger"></i> {{ $event->location }}
+                        </td>
+
+                        <td class="px-4 py-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="progress flex-grow-1" style="height: 6px; width: 100px;">
+                                    <div class="progress-bar
+                                        @if($percent > 70) bg-danger
+                                        @elseif($percent > 40) bg-warning
+                                        @else bg-primary @endif"
+                                        style="width: {{ $percent }}%">
                                     </div>
-                                    <span class="small fw-bold">38/50</span>
                                 </div>
-                            </td>
-                            <td class="px-4 py-3"><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Active</span></td>
-                            <td class="px-4 py-3 text-end">
-                                <button class="btn btn-light btn-sm text-secondary" title="Edit Event" data-bs-toggle="modal" data-bs-target="#editEventModal"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-light btn-sm text-danger" title="Delete Event"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-3">
-                                <div class="fw-bold text-dark">Community Health Fair</div>
-                                <div class="small text-muted">15 Jan 2026 • 10:00 AM - 03:00 PM</div>
-                            </td>
-                            <td class="px-4 py-3 text-muted fw-medium"><i class="fas fa-map-pin me-1 text-danger"></i> Downtown Plaza</td>
-                            <td class="px-4 py-3">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="progress flex-grow-1" style="height: 6px; width: 100px;">
-                                        <div class="progress-bar bg-warning" style="width: 13%"></div>
-                                    </div>
-                                    <span class="small fw-bold">4/30</span>
-                                </div>
-                            </td>
-                            <td class="px-4 py-3"><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Active</span></td>
-                            <td class="px-4 py-3 text-end">
-                                <button class="btn btn-light btn-sm text-secondary" data-bs-toggle="modal" data-bs-target="#editEventModal"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-light btn-sm text-danger"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-3 opacity-50">
-                                <div class="fw-bold text-dark">University Donation Day</div>
-                                <div class="small text-muted">20 Dec 2025 • Completed</div>
-                            </td>
-                            <td class="px-4 py-3 text-muted fw-medium opacity-50">Campus Gym</td>
-                            <td class="px-4 py-3 opacity-50">
-                                <span class="small fw-bold">100/100</span>
-                            </td>
-                            <td class="px-4 py-3"><span class="badge bg-secondary text-white rounded-pill">Completed</span></td>
-                            <td class="px-4 py-3 text-end">
-                                <button class="btn btn-light btn-sm text-secondary" disabled><i class="fas fa-lock"></i></button>
-                            </td>
-                        </tr>
+                                <span class="small fw-bold">{{ $used }}/{{ $event->total_slots }}</span>
+                            </div>
+                        </td>
+
+                        <td class="px-4 py-3">
+                            @if($event->status == 'ACTIVE')
+                                <span class="badge bg-success-subtle text-success rounded-pill">Active</span>
+                            @elseif($event->status == 'FULL')
+                                <span class="badge bg-warning-subtle text-warning rounded-pill">Full</span>
+                            @else
+                                <span class="badge bg-secondary rounded-pill">Completed</span>
+                            @endif
+                        </td>
+
+                        <td class="px-4 py-3 text-end">
+                            @if($event->status != 'COMPLETED')
+                                <button class="btn btn-light btn-sm text-secondary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editEventModal"
+                                    data-id="{{ $event->id }}"
+                                    data-name="{{ $event->name }}"
+                                    data-date="{{ $event->date }}"
+                                    data-time="{{ $event->time }}"
+                                    data-location="{{ $event->location }}"
+                                    data-slots="{{ $event->total_slots }}"
+                                    data-description="{{ $event->details }}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+
+                                <form method="POST" action="{{ route('event_organizer.deleteEvent', $event->id) }}" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-light btn-sm text-danger">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            @else
+                                <button class="btn btn-light btn-sm text-secondary" disabled>
+                                    <i class="fas fa-lock"></i>
+                                </button>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
                     </tbody>
                 </table>
             </div>
@@ -311,30 +341,35 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <form>
+                    <form method="post" action="{{ route('event_organizer.createEvent') }}">
+                        @csrf
                         <div class="mb-3">
                             <label class="text-muted fw-bold small text-uppercase mb-1">Event Name</label>
-                            <input type="text" class="form-control" placeholder="e.g. City Mall Blood Drive">
+                            <input type="text" class="form-control" name="event_name" placeholder="e.g. City Mall Blood Drive">
                         </div>
                         <div class="mb-3">
                             <label class="text-muted fw-bold small text-uppercase mb-1">Venue / Location</label>
-                            <input type="text" class="form-control" placeholder="e.g. Main Atrium">
+                            <input type="text" class="form-control"  name="location" placeholder="e.g. Main Atrium">
                         </div>
                         <div class="row g-3 mb-3">
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Date</label>
-                                <input type="date" class="form-control">
+                                <input type="date"  name="event_date" class="form-control">
                             </div>
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Time</label>
-                                <input type="time" class="form-control">
+                                <input type="time"  name="event_time" class="form-control">
+                            </div>
+                            <div class="col-6">
+                                <label class="text-muted fw-bold small text-uppercase mb-1">Description</label>
+                                <input type="text" name="description" class="form-control">
                             </div>
                         </div>
                         <div class="mb-4">
                             <label class="text-muted fw-bold small text-uppercase mb-1">Maximum Donors</label>
-                            <input type="number" class="form-control" placeholder="e.g. 50">
+                            <input type="number" class="form-control" name="total_slots" placeholder="e.g. 50">
                         </div>
-                        <button type="button" class="btn btn-danger w-100 py-3 rounded-pill fw-bold shadow-sm" data-bs-dismiss="modal">Save Event</button>
+                        <button type="submit" class="btn btn-danger w-100 py-3 rounded-pill fw-bold shadow-sm" data-bs-dismiss="modal">Save Event</button>
                     </form>
                 </div>
             </div>
@@ -350,7 +385,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <form>
+                    <form method="post" action="{{  }}">
                         <div class="alert alert-light border border-secondary-subtle d-flex align-items-center mb-4 rounded-3 p-3">
                             <i class="fas fa-info-circle text-primary me-3 fs-5"></i>
                             <div class="small text-muted lh-sm">
@@ -360,25 +395,25 @@
 
                         <div class="mb-3">
                             <label class="text-muted fw-bold small text-uppercase mb-1">Event Name</label>
-                            <input type="text" class="form-control fw-bold" value="Red Cross Annual Drive">
+                            <input type="text" class="form-control fw-bold" name="event_name" value="Red Cross Annual Drive">
                         </div>
                         <div class="mb-3">
                             <label class="text-muted fw-bold small text-uppercase mb-1">Venue / Location</label>
-                            <input type="text" class="form-control" value="City Hall, Main Wing">
+                            <input type="text" class="form-control" name="location" value="City Hall, Main Wing">
                         </div>
                         <div class="row g-3 mb-3">
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Date</label>
-                                <input type="date" class="form-control" value="2026-01-10">
+                                <input type="date" class="form-control" name="event_time" value="2026-01-10">
                             </div>
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Time</label>
-                                <input type="time" class="form-control" value="09:00">
+                                <input type="time" class="form-control" name="event_time" value="09:00">
                             </div>
                         </div>
                         <div class="mb-4">
                             <label class="text-muted fw-bold small text-uppercase mb-1">Maximum Donors</label>
-                            <input type="number" class="form-control" value="50">
+                            <input type="number" class="form-control" name="total_slots" value="50">
                         </div>
 
                         <div class="d-flex gap-2">
