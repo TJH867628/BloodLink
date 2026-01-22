@@ -198,7 +198,7 @@
             <a href="/event_organizer/participation" class="nav-link"><span class="nav-icon"><i class="fas fa-users w-25"></i></span> Participation</a>
         </nav>
         <div class="mt-auto border-top p-3">
-            <a href="#" class="logout-link">
+            <a href="/logout" class="logout-link">
                 <div class="d-flex align-items-center gap-3 p-2 rounded logout-item">
                     <div class="icon-box"><i class="fas fa-sign-out-alt"></i></div>
                     <div>
