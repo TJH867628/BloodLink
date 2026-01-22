@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\DonorHealthDetails;
-use App\Models\DonorHealthDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -31,13 +30,11 @@ class UserController extends Controller
         }
 
         $user = User::create(
-        $user = User::create(
             [
                 'name' => $name,
                 'email' => $email,
                 'phone' => $phone,
                 'password' => $password,
-                'role' => 'DONOR'
                 'role' => 'DONOR'
             ]
         );
@@ -77,15 +74,9 @@ class UserController extends Controller
                 case 'DONOR':
                     return redirect()->route('donor.dashboard');
                 case 'ORGANIZER':
-<<<<<<< Updated upstream
                     return redirect()->route('event_organizer.dashboard');
                 case 'STAFF':
                     return redirect()->route('hospital.dashboard');
-=======
-                    return redirect()->route('organizer.dashboard');
-                case 'STAFF':
-                    return redirect()->route('staff.dashboard');
->>>>>>> Stashed changes
                 default:
                     Auth::logout();
                     return redirect()->route('login')->with('error', 'Invalid role.');
