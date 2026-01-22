@@ -15,6 +15,7 @@ Route::get('login',[UserController::class, 'loginPage']) -> name('login');
 Route::post('login',[UserController::class, 'authLogin']) -> name('auth.login');
 Route::get('logout',[UserController::class, 'logout']) -> name('logout');
 Route::middleware(['role:DONOR','auth'])->group(function () {
+<<<<<<< Updated upstream
     Route::get('donor/dashboard', [DonorController::class, 'donorDashboard'])->name('donor.dashboard');
     Route::get('donor/findEvent', [DonorController::class, 'findEvent'])->name('donor.findEvent');
     Route::get('donor/history', [DonorController::class, 'history'])->name('donor.history');
@@ -41,4 +42,12 @@ Route::middleware(['role:ORGANIZER','auth'])->group(function () {
     Route::post('event_organizer/deleteEvent/{id}', [EventOrganizerController::class, 'deleteEvent'])->name('event_organizer.deleteEvent');
     Route::post('event_organizer/acceptAppointment/{id}', [EventOrganizerController::class, 'acceptAppointment'])->name('event_organizer.acceptAppointment');
     Route::post('event_organizer/rejectAppointment/{id}', [EventOrganizerController::class, 'rejectAppointment'])->name('event_organizer.rejectAppointment');
+=======
+    Route::get('donor/dashboard', [App\Http\Controllers\DonorController::class, 'donorDashboard'])->name('donor.dashboard');
+    Route::get('donor/findEvent', [App\Http\Controllers\DonorController::class, 'findEvent'])->name('donor.findEvent');
+    Route::get('donor/history', [App\Http\Controllers\DonorController::class, 'history'])->name('donor.history');
+    Route::get('donor/feedback', [App\Http\Controllers\DonorController::class, 'feedback'])->name('donor.feedback');
+    Route::post('donor/bookEvent/{eventId}', [App\Http\Controllers\DonorController::class, 'bookEvent'])->name('donor.bookEvent');
+    Route::post('donor/submitFeedback', [App\Http\Controllers\DonorController::class, 'submitFeedback'])->name('donor.submitFeedback');
+>>>>>>> Stashed changes
 });

@@ -279,6 +279,7 @@
             </a>
         </nav>
         <div class="mt-auto border-top p-3">
+<<<<<<< Updated upstream
             <a href="/logout" class="logout-link">
                 <div class="d-flex align-items-center gap-3 p-2 rounded logout-item">
                     <div class="icon-box">
@@ -287,6 +288,14 @@
                     <div>
                         <div class="fw-bold text-dark small">{{ $user->name }}</div>
                         <div class="logout-text">Sign Out</div>
+=======
+            <a href="/logout" style="text-decoration:none">
+                <div class="d-flex align-items-center gap-3 p-2 rounded hover-bg-light">
+                    <div class="bg-light rounded-3 p-2 text-secondary"><i class="fas fa-sign-out-alt"></i></div>
+                    <div>
+                        <div class="fw-bold text-dark small">{{ $user->name }}</div>
+                        <div class="text-label text-danger" style="cursor:pointer">Sign Out</div>
+>>>>>>> Stashed changes
                     </div>
                 </div>
             </a>
@@ -316,7 +325,11 @@
                     <!-- Event Selection -->
                     <div class="mb-4">
                         <label class="text-label mb-2 d-block">Select Donation Event</label>
+<<<<<<< Updated upstream
                         <select name="donation_id" class="form-select">
+=======
+                        <select name="donation_id" class="form-select" required>
+>>>>>>> Stashed changes
                             <option value="" disabled selected>Choose a recent visit...</option>
 
                             @foreach($donations as $donation)

@@ -370,6 +370,7 @@
             <a href="/donor/profile" class="nav-link"><span class="nav-icon"><i class="fas fa-user-circle w-25"></i></span> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
+<<<<<<< Updated upstream
             <a href="/logout" class="logout-link">
                 <div class="d-flex align-items-center gap-3 p-2 rounded logout-item">
                     <div class="icon-box">
@@ -378,6 +379,14 @@
                     <div>
                         <div class="fw-bold text-dark small">{{ $user->name }}</div>
                         <div class="logout-text">Sign Out</div>
+=======
+            <a href="/logout" style="text-decoration:none">
+                <div class="d-flex align-items-center gap-3 p-2 rounded hover-bg-light">
+                    <div class="bg-light rounded-3 p-2 text-secondary"><i class="fas fa-sign-out-alt"></i></div>
+                    <div>
+                        <div class="fw-bold text-dark small">{{ $user->name }}</div>
+                        <div class="text-label text-danger" style="cursor:pointer">Sign Out</div>
+>>>>>>> Stashed changes
                     </div>
                 </div>
             </a>
@@ -422,7 +431,11 @@
         <div class="vstack gap-3">
             {{-- Successful donations --}}
             @foreach($donations as $donation)
+<<<<<<< Updated upstream
             <div class="history-card" data-status="completed">
+=======
+            <div class="history-card">
+>>>>>>> Stashed changes
                 <div class="date-box">
                     <div class="date-day">{{ $donation->created_at->format('d') }}</div>
                     <div class="date-month">{{ $donation->created_at->format('M Y') }}</div>
@@ -462,9 +475,16 @@
             </div>
             @endforeach
 
+<<<<<<< Updated upstream
             {{-- Appointments (pending / cancelled) --}}
             @foreach($appointments as $app)
             <div class="history-card" data-status="{{ strtolower($app->status) }}">
+=======
+
+            {{-- Appointments (pending / cancelled) --}}
+            @foreach($appointments as $app)
+            <div class="history-card">
+>>>>>>> Stashed changes
                 <div class="date-box">
                     <div class="date-day">{{ \Carbon\Carbon::parse($app->date)->format('d') }}</div>
                     <div class="date-month">{{ \Carbon\Carbon::parse($app->date)->format('M Y') }}</div>
@@ -473,6 +493,7 @@
                 <div class="history-content">
                     <div class="history-header">
                         <h5>{{ $app->event_name }}</h5>
+<<<<<<< Updated upstream
                         <div class="text-end d-flex flex-column align-items-end">
                             <span class="status-badge
                                 @if($app->status == 'PENDING' || $app->status == 'ACCEPTED')
@@ -495,6 +516,12 @@
                                 </form>
                             @endif
                         </div>
+=======
+                        <span class="status-badge 
+                            {{ $app->status == 'APPROVED' || $app->status == 'PENDING' ? 'pending' : 'badge-failed' }}">
+                            {{ $app->status }}
+                        </span>
+>>>>>>> Stashed changes
                     </div>
 
                     <div class="history-meta">
@@ -512,6 +539,7 @@
                 </div>
             </div>
             @endforeach
+<<<<<<< Updated upstream
         </div>
         <div id="empty-state" class="text-center py-5 d-none">
             <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
@@ -519,6 +547,8 @@
             <p class="text-muted small">
                 There are no records under this status.
             </p>
+=======
+>>>>>>> Stashed changes
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

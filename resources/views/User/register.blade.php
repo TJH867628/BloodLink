@@ -171,10 +171,18 @@
 
                 <div class="mb-4 position-relative">
                     <i class="bi bi-envelope input-icon"></i>
+<<<<<<< Updated upstream
                     <input type="phone" name="phone" class="form-control form-control-custom"
                         placeholder="Phone Number" required>
                 </div>
 
+=======
+                    <input type="phone" name="phone_number" class="form-control form-control-custom"
+                        placeholder="Phone Number" required>
+                </div>
+
+
+>>>>>>> Stashed changes
                 <div class="mb-4 position-relative">
                     <i class="bi bi-lock input-icon"></i>
                     <input type="password" name="password" class="form-control form-control-custom"

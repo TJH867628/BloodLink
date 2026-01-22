@@ -9,15 +9,19 @@ use App\Models\Event;
 use App\Models\Appointment;
 use App\Models\DonationRecord;
 use App\Models\Feedback;
+<<<<<<< Updated upstream
 use App\Models\BloodType;
 use Carbon\Carbon;
 use DB;
+=======
+>>>>>>> Stashed changes
 
 class DonorController extends Controller
 {
     public function donorDashboard(){
         $user = Auth::user();
         $donorHealthDetails = $user->donorHealthDetails;
+<<<<<<< Updated upstream
         $recentActivities = DB::table('appointment')
             ->join('event', 'appointment.event_id', '=', 'event.id')
             ->where('appointment.donor_id', auth()->id())
@@ -32,12 +36,19 @@ class DonorController extends Controller
             )
             ->get();
         return view('donor.dashboard',compact('user', 'donorHealthDetails','recentActivities'));
+=======
+        $lastDonation = DonationRecord::where('donor_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        return view('donor.dashboard',compact('user','donorHealthDetails', 'lastDonation'));
+>>>>>>> Stashed changes
     }
 
     public function findEvent() {
         $user = Auth::user();
         $donorHealthDetails = $user->donorHealthDetails;
         $events = Event::all();
+<<<<<<< Updated upstream
         $bookedEventId= Appointment::where('donor_id', $user->id)
             ->whereIn('status', ['PENDING', 'ACCEPTED'])
             ->pluck('event_id')
@@ -50,6 +61,9 @@ class DonorController extends Controller
             ->value('event.date');
         
         return view('donor.findEvent',compact('user','donorHealthDetails','events','bookedEventId','lastAcceptedDate'));
+=======
+        return view('donor.findEvent',compact('user','donorHealthDetails','events'));
+>>>>>>> Stashed changes
     }
 
     public function history() {
@@ -103,6 +117,65 @@ class DonorController extends Controller
         ->get();
 
         return view('donor.feedback',compact('user','donations','feedbacks'));
+<<<<<<< Updated upstream
+=======
+    }
+
+    public function submitFeedback(Request $request) {
+        $user = Auth::user();
+        $donationId = $request->input('donation_id');
+        $rating = $request->input('rating');
+        $comment = $request->input('comments');
+
+
+        $donation = DonationRecord::join('event','donation_record.event_id','=','event.id')
+            ->where('donation_record.id', $donationId)
+            ->select('event.name as event_name')
+            ->first();
+
+        $message = 
+            "Feedback for Donation ID: $donationId\n" .
+            "Event: " . ($donation ? $donation->event_name : 'Unknown') . "\n" .
+            "Rating: $rating\n" .
+            "Comment:\n $comment";
+            
+        Feedback::create([
+            'user_id' => $user->id,
+            'message' => $message,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->back()->with('success', 'Feedback submitted successfully!');
+    }
+
+    public function bookEvent(Request $request, $eventId) {
+        $user = Auth::user();
+        $existingAppointment = Appointment::where('donor_id', $user->id)
+            ->where('event_id', $eventId)
+            ->exists();
+
+        if ($existingAppointment) {
+            return redirect()->back()->with('error', 'You have already booked this event.');
+        }
+
+        $event = Event::find($eventId);
+        if (!$event || $event->status != 'ACTIVE' || $event->available_slots <= 0) {
+            return redirect()->back()->with('error', 'This event is not available for booking.');
+        }
+
+        Appointment::create([
+            'donor_id' => $user->id,
+            'event_id' => $eventId,
+            'status' => 'PENDING',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        
+        $event->decrement('available_slots');
+
+        return redirect()->back()->with('success', 'Event booked successfully!');
+>>>>>>> Stashed changes
     }
 
     public function submitFeedback(Request $request) {

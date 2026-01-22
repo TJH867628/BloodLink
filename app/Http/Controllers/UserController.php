@@ -63,9 +63,15 @@ class UserController extends Controller
                 case 'DONOR':
                     return redirect()->route('donor.dashboard');
                 case 'ORGANIZER':
+<<<<<<< Updated upstream
                     return redirect()->route('event_organizer.dashboard');
                 case 'STAFF':
                     return redirect()->route('hospital.dashboard');
+=======
+                    return redirect()->route('organizer.dashboard');
+                case 'STAFF':
+                    return redirect()->route('staff.dashboard');
+>>>>>>> Stashed changes
                 default:
                     Auth::logout();
                     return redirect()->route('login')->with('error', 'Invalid role.');
