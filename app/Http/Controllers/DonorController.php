@@ -88,17 +88,24 @@ class DonorController extends Controller
         $rating = $request->input('rating');
         $comment = $request->input('comments');
 
+        if($donationId){
+            $donation = DonationRecord::join('event','donation_record.event_id','=','event.id')
+                ->where('donation_record.id', $donationId)
+                ->select('event.name as event_name')
+                ->first();
 
-        $donation = DonationRecord::join('event','donation_record.event_id','=','event.id')
-            ->where('donation_record.id', $donationId)
-            ->select('event.name as event_name')
-            ->first();
-
-        $message = 
-            "Feedback for Donation ID: $donationId\n" .
-            "Event: " . ($donation ? $donation->event_name : 'Unknown') . "\n" .
-            "Rating: $rating\n" .
-            "Comment:\n $comment";
+            $message = 
+                "Feedback for Donation ID: $donationId\n" .
+                "Event: " . ($donation ? $donation->event_name : 'Unknown') . "\n" .
+                "Rating: $rating Star\n" .
+                "Comment:\n $comment";
+        }else{
+            $message = 
+                "Feedback\n" .
+                "Rating: $rating Star\n" .
+                "Comment:\n $comment";
+        }
+       
             
         Feedback::create([
             'user_id' => $user->id,

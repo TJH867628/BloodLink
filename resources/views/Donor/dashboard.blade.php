@@ -243,7 +243,7 @@
             !$donorHealthDetails->weight ||
             !$donorHealthDetails->height ||
             !$donorHealthDetails->blood_pressure ||
-            !$donorHealthDetails->hemoglobin;
+            !$donorHealthDetails->hemoglobin_level;
         @endphp
         @if($missingHealth)
         <div class="alert alert-warning d-flex align-items-center justify-content-between" role="alert">
@@ -332,7 +332,10 @@
                                     No Previous Donations
                                 @endif
                         </div>
-                        <button class="btn w-100 btn-light text-danger fw-bold mt-2 border">Update Details</button>
+                        <a href="{{ route('donor.profile') }}"
+                            class="btn w-100 btn-light text-danger fw-bold mt-2 border">
+                            Update Details
+                        </a>
                     </div>
                 </div>
             </div>

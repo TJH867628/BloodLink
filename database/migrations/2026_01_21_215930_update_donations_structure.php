@@ -31,8 +31,6 @@ return new class extends Migration
         // Add relations
         Schema::table('donation_record', function (Blueprint $table) {
             $table->unsignedBigInteger('appointment_id')->nullable()->after('id');
-            $table->unsignedBigInteger('donor_id')->nullable()->after('appointment_id');
-            $table->unsignedBigInteger('event_id')->nullable()->after('donor_id');
             $table->unsignedBigInteger('facility_id')->nullable()->after('event_id');
             $table->unsignedBigInteger('staff_id')->nullable()->after('facility_id');
         });
@@ -40,8 +38,6 @@ return new class extends Migration
         // Foreign keys
         Schema::table('donation_record', function (Blueprint $table) {
             $table->foreign('appointment_id')->references('id')->on('appointment')->onDelete('cascade');
-            $table->foreign('donor_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('event_id')->references('id')->on('event')->onDelete('cascade');
             $table->foreign('facility_id')->references('id')->on('medical_facilities')->onDelete('cascade');
             $table->foreign('staff_id')->references('id')->on('users')->onDelete('cascade');
         });

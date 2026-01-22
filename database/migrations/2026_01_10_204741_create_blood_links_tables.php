@@ -112,7 +112,7 @@ return new class extends Migration {
             $table->string('name', 100);
             $table->string('value', 255);
             $table->string('role', 50);
-            $table->integer('status');
+            $table->boolean('isActive');
         });
     }
 

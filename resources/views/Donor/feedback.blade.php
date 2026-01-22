@@ -248,7 +248,7 @@
                     <!-- Event Selection -->
                     <div class="mb-4">
                         <label class="text-label mb-2 d-block">Select Donation Event</label>
-                        <select name="donation_id" class="form-select" required>
+                        <select name="donation_id" class="form-select">
                             <option value="" disabled selected>Choose a recent visit...</option>
 
                             @foreach($donations as $donation)
