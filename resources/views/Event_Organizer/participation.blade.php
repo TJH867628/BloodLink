@@ -232,8 +232,9 @@
                         <i class="fas fa-filter text-muted"></i>
                         <select class="form-select">
                             <option selected>All Events</option>
-                            <option>Red Cross Annual Drive</option>
-                            <option>Community Health Fair</option>
+                            @foreach($events as $event)
+                                <option value="{{ $event->id }}">{{ $event->name }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <button class="btn btn-outline-secondary rounded-pill px-4 fw-bold"><i class="fas fa-download me-2"></i> Export Data</button>
@@ -256,63 +257,53 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach($appoinments as $app)
                         <tr>
                             <td class="px-4 py-3">
                                 <div class="d-flex align-items-center gap-3">
-                                    <div class="bg-danger-subtle text-danger rounded p-1 fw-bold small text-center" style="width: 32px;">O+</div>
+                                    <div class="bg-danger-subtle text-danger rounded p-1 fw-bold small text-center" style="width: 32px;">
+                                        {{ strtoupper(substr($app->donor_name,0,1)) }}
+                                    </div>
                                     <div>
-                                        <div class="fw-bold text-dark">Tan Jing Heng</div>
-                                        <div class="small text-muted">ID: D-501</div>
+                                        <div class="fw-bold text-dark">{{ $app->donor_name }}</div>
+                                        <div class="small text-muted">ID: {{ $app->id }}</div>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-4 py-3 fw-bold text-dark">Red Cross Annual Drive</td>
-                            <td class="px-4 py-3 text-muted">09:30 AM</td>
-                            <td class="px-4 py-3 small"><i class="fas fa-phone me-1 text-muted"></i> +60 12-345 6789</td>
-                            <td class="px-4 py-3"><span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill">Confirmed</span></td>
-                            <td class="px-4 py-3 text-end">
-                                <button class="btn btn-light btn-sm text-success" title="Mark Checked-in"><i class="fas fa-check"></i></button>
-                                <button class="btn btn-light btn-sm text-danger" title="Cancel"><i class="fas fa-times"></i></button>
+
+                            <td class="px-4 py-3 fw-bold text-dark">{{ $app->event_name }}</td>
+                            <td class="px-4 py-3 text-muted">{{ \Carbon\Carbon::parse($app->event_date)->format('d M Y') }} . {{ $app->event_time }}</td>
+                            <td class="px-4 py-3 small">
+                                <i class="fas fa-phone me-1 text-muted"></i> {{ $app->phone }}
                             </td>
-                        </tr>
-                        <tr>
+
                             <td class="px-4 py-3">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="bg-danger-subtle text-danger rounded p-1 fw-bold small text-center" style="width: 32px;">A-</div>
-                                    <div>
-                                        <div class="fw-bold text-dark">Chai Yu Xuan</div>
-                                        <div class="small text-muted">ID: D-502</div>
-                                    </div>
-                                </div>
+                                @if($app->status == 'ACCEPTED')
+                                    <span class="badge bg-primary-subtle text-primary rounded-pill">ACCEPTED</span>
+                                @elseif($app->status == 'PENDING')
+                                    <span class="badge bg-warning-subtle text-warning rounded-pill">Pending</span>
+                                @elseif($app->status == 'REJECTED')
+                                    <span class="badge bg-danger-subtle text-danger rounded-pill">Rejected</span>
+                                @endif
                             </td>
-                            <td class="px-4 py-3 fw-bold text-dark">Red Cross Annual Drive</td>
-                            <td class="px-4 py-3 text-muted">10:15 AM</td>
-                            <td class="px-4 py-3 small"><i class="fas fa-phone me-1 text-muted"></i> +60 11-223 4455</td>
-                            <td class="px-4 py-3"><span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill">Confirmed</span></td>
+
                             <td class="px-4 py-3 text-end">
-                                <button class="btn btn-light btn-sm text-success"><i class="fas fa-check"></i></button>
-                                <button class="btn btn-light btn-sm text-danger"><i class="fas fa-times"></i></button>
+                                <form method="POST" action="/event_organizer/acceptAppointment/{{ $app->id }}" class="d-inline">
+                                    @csrf
+                                    <button class="btn btn-light btn-sm text-success">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                </form>
+
+                                <form method="POST" action="/event_organizer/rejectAppointment/{{ $app->id }}" class="d-inline">
+                                    @csrf
+                                    <button class="btn btn-light btn-sm text-danger">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
-                        <tr>
-                            <td class="px-4 py-3">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="bg-danger-subtle text-danger rounded p-1 fw-bold small text-center" style="width: 32px;">B+</div>
-                                    <div>
-                                        <div class="fw-bold text-dark">Nesandra Ann</div>
-                                        <div class="small text-muted">ID: D-504</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-4 py-3 fw-bold text-dark">Community Health Fair</td>
-                            <td class="px-4 py-3 text-muted">10:00 AM</td>
-                            <td class="px-4 py-3 small"><i class="fas fa-phone me-1 text-muted"></i> +60 14-332 0099</td>
-                            <td class="px-4 py-3"><span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill">Pending</span></td>
-                            <td class="px-4 py-3 text-end">
-                                <button class="btn btn-light btn-sm text-success"><i class="fas fa-check"></i></button>
-                                <button class="btn btn-light btn-sm text-danger"><i class="fas fa-times"></i></button>
-                            </td>
-                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

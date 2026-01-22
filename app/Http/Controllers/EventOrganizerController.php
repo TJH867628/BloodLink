@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Event;
 use Illuminate\Http\Request;
 use App\Models\Event as EventModel;
+use App\Models\Appointment;
 
 class EventOrganizerController extends Controller
 {
@@ -21,7 +22,25 @@ class EventOrganizerController extends Controller
     }
     public function participation()
     {
-        return view('Event_Organizer.participation');
+        $appoinments = \DB::table('appointment')
+        ->join('event', 'appointment.event_id', '=', 'event.id')
+        ->join('users', 'appointment.donor_id', '=', 'users.id')
+        ->where('event.organizer_id', auth()->id())
+        ->select(
+            'appointment.id',
+            'appointment.status',
+            'event.name as event_name',
+            'event.date as event_date',
+            'event.time as event_time',
+            'users.name as donor_name',
+            'users.phone'
+        )
+        ->orderBy('event.name')
+        ->get();
+
+        $events = EventModel::where('organizer_id', auth()->id())->get();
+        
+        return view('Event_Organizer.participation',compact('appoinments','events'));
     }
 
     public function createEvent(Request $request)
@@ -91,5 +110,23 @@ class EventOrganizerController extends Controller
         $event->delete();
 
         return redirect()->route('event_organizer.eventManagement')->with('success', 'Event deleted successfully.');
+    }
+
+    public function acceptAppointment($appointmentId)
+    {
+        $appointment = Appointment::findOrFail($appointmentId);
+        $appointment->status = 'ACCEPTED';
+        $appointment->save();
+
+        return redirect()->back()->with('success', 'Appointment accepted successfully.');
+    }
+
+    public function rejectAppointment($appointmentId)
+    {
+        $appointment = Appointment::findOrFail($appointmentId);
+        $appointment->status = 'REJECTED';
+        $appointment->save();
+
+        return redirect()->back()->with('success', 'Appointment rejected successfully.');
     }
 }

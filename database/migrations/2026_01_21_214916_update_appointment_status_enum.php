@@ -10,7 +10,7 @@ return new class extends Migration
     {
         DB::statement("
             ALTER TABLE appointment
-            MODIFY status ENUM('PENDING','APPROVED','COMPLETED','CANCELLED')
+            MODIFY status ENUM('PENDING','ACCEPTED','COMPLETED','CANCELLED','REJECTED')
             DEFAULT 'PENDING'
         ");
     }
