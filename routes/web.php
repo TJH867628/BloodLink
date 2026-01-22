@@ -29,8 +29,8 @@ Route::middleware(['role:STAFF','auth'])->group(function () {
 
 });
 Route::middleware(['role:ORGANIZER','auth'])->group(function () {
-    Route::get('event/dashboard', [App\Http\Controllers\EventController::class, 'eventDashboard'])->name('event.dashboard');
-    Route::get('event/management', [App\Http\Controllers\EventController::class, 'eventManagement'])->name('event.management');
-    Route::get('event/participation', [App\Http\Controllers\EventController::class, 'participation'])->name('event.participation');
+    Route::get('event_organizer/dashboard', [App\Http\Controllers\EventController::class, 'eventDashboard'])->name('event_organizer.dashboard');
+    Route::get('event_organizer/eventManagement', [App\Http\Controllers\EventController::class, 'eventManagement'])->name('event_organizer.eventManagement');
+    Route::get('event_organizer/participation', [App\Http\Controllers\EventController::class, 'participation'])->name('event_organizer.participation');
 
 });

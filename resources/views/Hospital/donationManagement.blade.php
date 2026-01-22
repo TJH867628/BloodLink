@@ -318,7 +318,7 @@
                                         <div class="d-flex align-items-center gap-3">
                                             <div class="bg-danger-subtle text-danger rounded p-1 fw-bold small text-center" style="width: 32px;">B-</div>
                                             <div>
-                                                <div class="fw-bold">Praveena Nair</div>
+                                                <div class="fw-bold">Organizer</div>
                                                 <div class="small text-muted">ID: D-203</div>
                                             </div>
                                         </div>
