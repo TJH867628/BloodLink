@@ -238,11 +238,6 @@
         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
                 <h2 class="fw-black mb-0">Dashboard</h2>
-                <div class="d-flex align-items-center gap-2 mt-1">
-                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3">
-                        <i class="fas fa-check-circle me-1"></i> Account Active
-                    </span>
-                </div>
             </div>
             <div class="d-flex align-items-center gap-4">
                 <button class="btn border-0 position-relative text-secondary">
@@ -266,8 +261,8 @@
                 <div class="stat-card">
                     <div class="text-label">Active Events</div>
                     <div class="d-flex align-items-end justify-content-between mt-2">
-                        <h2 class="fw-black mb-0">02</h2>
-                        <span class="text-muted small fw-bold">Drives</span>
+                        <h2 class="fw-black mb-0">{{ count($events) }}</h2>
+                        <span class="text-muted small fw-bold">Event</span>
                     </div>
                     <div class="mt-3 text-muted" style="font-size: 0.75rem;">Currently accepting donors</div>
                 </div>
@@ -276,7 +271,7 @@
                 <div class="stat-card">
                     <div class="text-label text-primary">Total Registered</div>
                     <div class="d-flex align-items-end justify-content-between mt-2">
-                        <h2 class="fw-black mb-0 text-primary">42</h2>
+                        <h2 class="fw-black mb-0 text-primary">{{ $totalRegisteredDonors }}</h2>
                         <span class="text-muted small fw-bold">Donors</span>
                     </div>
                     <div class="mt-3 text-muted" style="font-size: 0.75rem;">Across all upcoming events</div>
@@ -286,7 +281,7 @@
                 <div class="stat-card">
                     <div class="text-label text-success">Slot Capacity</div>
                     <div class="d-flex align-items-end justify-content-between mt-2">
-                        <h2 class="fw-black mb-0 text-success">85%</h2>
+                        <h2 class="fw-black mb-0 text-success">{{ $slotCapacity }}%</h2>
                         <span class="text-muted small fw-bold">Filled</span>
                     </div>
                     <div class="progress progress-thin">
@@ -298,7 +293,7 @@
                 <div class="stat-card border-warning">
                     <div class="text-label text-warning">Pending Actions</div>
                     <div class="d-flex align-items-end justify-content-between mt-2">
-                        <h2 class="fw-black mb-0 text-warning">04</h2>
+                        <h2 class="fw-black mb-0 text-warning">{{ $totalPendingAcceptDonors }}</h2>
                         <span class="badge bg-warning-subtle text-warning">Review</span>
                     </div>
                     <div class="mt-3 text-muted" style="font-size: 0.75rem;">New donor registrations</div>

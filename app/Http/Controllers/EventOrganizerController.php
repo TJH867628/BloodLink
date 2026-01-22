@@ -13,7 +13,37 @@ class EventOrganizerController extends Controller
     public function eventOrganizerDashboard()
     {
         $user = auth()->user();
-        return view('Event_Organizer.dashboard', compact('user'));
+        $today = now()->toDateString();
+        $events = EventModel::where('organizer_id', auth()->id())->where('event.date', '>=', $today)->get();
+        $totalRegisteredDonors = EventModel::where('organizer_id', auth()->id())
+            ->where('event.status', 'ACTIVE')
+            ->where('event.date', '>=', $today)
+            ->join('appointment', 'event.id', '=', 'appointment.event_id')
+            ->where('appointment.status', 'ACCEPTED')
+            ->count();
+
+        $totalPendingAcceptDonors = EventModel::where('organizer_id', auth()->id())
+            ->where('event.status', 'ACTIVE')
+            ->where('event.date', '>=', $today)
+            ->join('appointment', 'event.id', '=', 'appointment.event_id')
+            ->where('appointment.status', 'PENDING')
+            ->count();
+
+        $totalSlotCapacity = EventModel::where('organizer_id', auth()->id())
+            ->where('event.status', 'ACTIVE')
+            ->where('event.date', '>=', $today)
+            ->sum('total_slots');
+
+        $totalBookedSlots = EventModel::where('organizer_id', auth()->id())
+            ->where('event.status', 'ACTIVE')
+            ->where('event.date', '>=', $today)
+            ->join('appointment', 'event.id', '=', 'appointment.event_id')
+            ->whereIn('appointment.status', ['ACCEPTED', 'PENDING'])
+            ->count();
+
+        $slotCapacityInPercent = $totalSlotCapacity > 0 ? ($totalBookedSlots / $totalSlotCapacity) * 100 : 0;
+        $slotCapacity = round($slotCapacityInPercent, 2);
+        return view('Event_Organizer.dashboard', compact('user','events','totalRegisteredDonors','totalPendingAcceptDonors','slotCapacity'));
     }
     public function eventManagement()
     {
