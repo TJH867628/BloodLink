@@ -316,8 +316,9 @@
                             <span class="text-label text-success">
                                 {{ $event->available_slots }} Slots Left
                             </span>
-
-                            @if(in_array($event->id, $bookedEventId))
+                            @if($event->available_slots == 0 || $event->status != 'ACTIVE')
+                            <button class="btn btn-secondary btn-sm" disabled>Closed</button>
+                            @elseif(in_array($event->id, $bookedEventId))
                             <button class="btn btn-success btn-sm" disabled>Booked</button>
                             @elseif($donorHealthDetails && $donorHealthDetails->last_donation_date && \Carbon\Carbon::parse($event->date)->lt(\Carbon\Carbon::parse($donorHealthDetails->last_donation_date)->addMonths(3)))
                             <button class="btn btn-warning btn-sm" disabled>
