@@ -260,6 +260,7 @@
                     </div>
                 </div>
             </a>
+            </a>
         </div>
     </div>
 
@@ -269,6 +270,8 @@
             <h2 class="fw-black mb-0">Find Events</h2>
             <div class="d-flex align-items-center gap-3">
                 <div class="text-end d-none d-md-block">
+                    <div class="fw-bold small">{{ $user->name }}</div>
+                    <div class="text-label text-success">Donor</div>
                     <div class="fw-bold small">{{ $user->name }}</div>
                     <div class="text-label text-success">Donor</div>
                 </div>
@@ -313,6 +316,7 @@
 
         <div class="row g-4">
         @foreach($events as $event)
+        @foreach($events as $event)
             <div class="col-md-6 col-xl-4">
 >>>>>>> Stashed changes
                 <div class="custom-card h-100 d-flex flex-column">
@@ -324,16 +328,31 @@
                             {{ $event->status == 'ACTIVE' ? 'badge-success' : 'bg-secondary text-white' }}">
                             {{ $event->status }}
                         </span>
+
+                    <div class="bg-light p-4 d-flex justify-content-center align-items-center position-relative" style="height:160px; background: linear-gradient(135deg, #dc2626, #b91c1c);">
+                        <i class="fas fa-hospital fa-3x text-white opacity-75"></i>
+
+                        <span class="position-absolute top-0 end-0 m-3 status-badge 
+                            {{ $event->status == 'ACTIVE' ? 'badge-success' : 'bg-secondary text-white' }}">
+                            {{ $event->status }}
+                        </span>
                     </div>
 
+
                     <div class="p-4 grow d-flex flex-column">
+                        <h5 class="fw-bold mb-3">{{ $event->name }}</h5>
+
                         <h5 class="fw-bold mb-3">{{ $event->name }}</h5>
 
                         <div class="vstack gap-2 mb-4 text-secondary small fw-bold">
                             <div><i class="fas fa-map-marker-alt me-2 width-20"></i> {{ $event->location }}</div>
                             <div><i class="fas fa-calendar me-2 width-20"></i> {{ $event->date }}</div>
                             <div><i class="fas fa-clock me-2 width-20"></i> {{ $event->time }}</div>
+                            <div><i class="fas fa-map-marker-alt me-2 width-20"></i> {{ $event->location }}</div>
+                            <div><i class="fas fa-calendar me-2 width-20"></i> {{ $event->date }}</div>
+                            <div><i class="fas fa-clock me-2 width-20"></i> {{ $event->time }}</div>
                         </div>
+
 
                         <div class="mt-auto border-top pt-3 d-flex justify-content-between align-items-center">
                             <span class="text-label text-success">

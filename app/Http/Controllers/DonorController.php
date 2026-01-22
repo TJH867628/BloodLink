@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App;
+use App;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Event;
@@ -67,6 +68,35 @@ class DonorController extends Controller
     }
 
     public function history() {
+        $user = Auth::user();
+
+        // Completed donations
+        $donations = DonationRecord::join('event', 'donation_record.event_id', '=', 'event.id')
+        ->leftJoin('medical_facilities', 'donation_record.facility_id', '=', 'medical_facilities.id')
+        ->where('donation_record.donor_id', $user->id)
+        ->select(
+            'donation_record.*',
+            'event.name as event_name',
+            'medical_facilities.name as facility_name'
+        )
+        ->orderBy('donation_record.created_at', 'desc')
+        ->get();
+
+        // All appointments (pending / approved / cancelled)
+        $appointments = Appointment::join('event', 'appointment.event_id', '=', 'event.id')
+        ->where('appointment.donor_id', $user->id)
+        ->whereNotIn('appointment.status', ['COMPLETED'])
+        ->select(
+            'appointment.*',
+            'event.name as event_name',
+            'event.location',
+            'event.date',
+            'event.time'
+        )
+        ->orderBy('appointment.created_at', 'desc')
+        ->get();
+
+        return view('donor.history',compact('user','appointments','donations'));
         $user = Auth::user();
 
         // Completed donations

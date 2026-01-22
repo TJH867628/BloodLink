@@ -342,6 +342,8 @@
                     <div class="text-end d-none d-md-block">
                         <div class="fw-bold small">{{ $user->name }}</div>
                         <div class="text-label text-success">Donor</div>
+                        <div class="fw-bold small">{{ $user->name }}</div>
+                        <div class="text-label text-success">Donor</div>
                     </div>
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Donor" class="rounded-3 border" width="40" height="40" alt="Avatar">
                 </div>
@@ -375,6 +377,7 @@
                         <div class="d-flex justify-content-between border-bottom pb-3">
                             <span class="text-label">Blood Type</span>
                             <span class="fw-bold text-danger fs-5">{{ $donorHealthDetails->blood_type ?? "Pending For Update" }}</span>
+                            <span class="fw-bold text-danger fs-5">{{ $donorHealthDetails->blood_type ?? "Pending For Update" }}</span>
                         </div>
                         <div class="d-flex justify-content-between border-bottom pb-3">
                             <span class="text-label">Weight</span>
@@ -390,7 +393,11 @@
                         <div class="d-flex justify-content-between border-bottom pb-3">
                             <span class="text-label">Eligibility</span>
                             @if( $donorHealthDetails->is_eligible ?? false)
+                            @if( $donorHealthDetails->is_eligible ?? false)
                             <span class="status-badge badge-eligible">Eligible</span>
+                            @else
+                            <span class="status-badge badge-deffered">Not Eligible</span>
+                            @endif
                             @else
                             <span class="status-badge badge-deffered">Not Eligible</span>
                             @endif

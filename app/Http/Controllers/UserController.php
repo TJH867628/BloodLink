@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DonorHealthDetails;
+use App\Models\DonorHealthDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -30,14 +31,27 @@ class UserController extends Controller
         }
 
         $user = User::create(
+        $user = User::create(
             [
                 'name' => $name,
                 'email' => $email,
                 'phone' => $phone,
                 'password' => $password,
                 'role' => 'DONOR'
+                'role' => 'DONOR'
             ]
         );
+
+        DonorHealthDetails::create([
+            'donor_id' =>  $user->id,
+            'height' => $request->height,
+            'weight' => $request->weight,
+            'blood_pressure' => $request->blood_pressure,
+            'hemoglobin_level' => $request->hemoglobin_level,
+            'medical_conditions' => $request->medical_conditions,
+            'last_checkup_date' => $request->last_checkup_date,
+        ]);
+
 
         DonorHealthDetails::create([
             'donor_id' =>  $user->id,

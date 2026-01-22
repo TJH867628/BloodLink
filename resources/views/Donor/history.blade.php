@@ -390,6 +390,7 @@
                     </div>
                 </div>
             </a>
+            </a>
         </div>
     </div>
 
@@ -399,6 +400,8 @@
             <h2 class="fw-black mb-0">Donation History</h2>
             <div class="d-flex align-items-center gap-3">
                 <div class="text-end d-none d-md-block">
+                    <div class="fw-bold small">{{ $user->name }}</div>
+                    <div class="text-label text-success">Donor</div>
                     <div class="fw-bold small">{{ $user->name }}</div>
                     <div class="text-label text-success">Donor</div>
                 </div>
@@ -439,10 +442,13 @@
                 <div class="date-box">
                     <div class="date-day">{{ $donation->created_at->format('d') }}</div>
                     <div class="date-month">{{ $donation->created_at->format('M Y') }}</div>
+                    <div class="date-day">{{ $donation->created_at->format('d') }}</div>
+                    <div class="date-month">{{ $donation->created_at->format('M Y') }}</div>
                 </div>
 
                 <div class="history-content">
                     <div class="history-header">
+                        <h5>{{ $donation->event->name ?? 'Blood Donation' }}</h5>
                         <h5>{{ $donation->event->name ?? 'Blood Donation' }}</h5>
                         <span class="status-badge success">Successful</span>
                     </div>
@@ -455,9 +461,15 @@
                         <div class="meta-item">
                             <i class="fas fa-clock"></i>
                             {{ $donation->created_at->format('h:i A')   }}
+                            {{ $donation->facility->name ?? 'Medical Facility' }}
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            {{ $donation->created_at->format('h:i A')   }}
                         </div>
                         <div class="meta-item">
                             <i class="fas fa-tint"></i>
+                            {{ $donation->unit }} Bag(s)
                             {{ $donation->unit }} Bag(s)
                         </div>
                     </div>
@@ -486,6 +498,8 @@
             <div class="history-card">
 >>>>>>> Stashed changes
                 <div class="date-box">
+                    <div class="date-day">{{ \Carbon\Carbon::parse($app->date)->format('d') }}</div>
+                    <div class="date-month">{{ \Carbon\Carbon::parse($app->date)->format('M Y') }}</div>
                     <div class="date-day">{{ \Carbon\Carbon::parse($app->date)->format('d') }}</div>
                     <div class="date-month">{{ \Carbon\Carbon::parse($app->date)->format('M Y') }}</div>
                 </div>
@@ -528,8 +542,11 @@
                         <div class="meta-item">
                             <i class="fas fa-map-marker-alt"></i>
                             {{ $app->location }}
+                            {{ $app->location }}
                         </div>
                         <div class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            {{ \Carbon\Carbon::parse($app->time)->format('h:i A') }}
                             <i class="fas fa-clock"></i>
                             {{ \Carbon\Carbon::parse($app->time)->format('h:i A') }}
                         </div>
