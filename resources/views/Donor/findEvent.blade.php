@@ -240,7 +240,6 @@
             <a href="/donor/profile" class="nav-link"><span class="nav-icon"><i class="fas fa-user-circle w-25"></i></span> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
-<<<<<<< Updated upstream
             <a href="/logout" class="logout-link">
                 <div class="d-flex align-items-center gap-3 p-2 rounded logout-item">
                     <div class="icon-box">
@@ -249,14 +248,6 @@
                     <div>
                         <div class="fw-bold text-dark small">{{ $user->name }}</div>
                         <div class="logout-text">Sign Out</div>
-=======
-            <a href="/logout" style="text-decoration:none">
-                <div class="d-flex align-items-center gap-3 p-2 rounded hover-bg-light">
-                    <div class="bg-light rounded-3 p-2 text-secondary"><i class="fas fa-sign-out-alt"></i></div>
-                    <div>
-                        <div class="fw-bold text-dark small">{{ $user->name }}</div>
-                        <div class="text-label text-danger" style="cursor:pointer">Sign Out</div>
->>>>>>> Stashed changes
                     </div>
                 </div>
             </a>
@@ -272,8 +263,6 @@
                 <div class="text-end d-none d-md-block">
                     <div class="fw-bold small">{{ $user->name }}</div>
                     <div class="text-label text-success">Donor</div>
-                    <div class="fw-bold small">{{ $user->name }}</div>
-                    <div class="text-label text-success">Donor</div>
                 </div>
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Donor" class="rounded-3 border" width="40" height="40" alt="Avatar">
             </div>
@@ -287,7 +276,6 @@
         </div>
 
         @if(session('success'))
-<<<<<<< Updated upstream
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -302,32 +290,7 @@
         <div class="row g-4">
             @foreach($events as $event)
             <div class="col-md-6 col-xl-4 event-card" data-search="{{ strtolower($event->name . ' ' . $event->location) }}">
-=======
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @elseif(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        <div class="row g-4">
-        @foreach($events as $event)
-        @foreach($events as $event)
-            <div class="col-md-6 col-xl-4">
->>>>>>> Stashed changes
                 <div class="custom-card h-100 d-flex flex-column">
-
-                    <div class="bg-light p-4 d-flex justify-content-center align-items-center position-relative" style="height:160px; background: linear-gradient(135deg, #dc2626, #b91c1c);">
-                        <i class="fas fa-hospital fa-3x text-white opacity-75"></i>
-
-                        <span class="position-absolute top-0 end-0 m-3 status-badge 
-                            {{ $event->status == 'ACTIVE' ? 'badge-success' : 'bg-secondary text-white' }}">
-                            {{ $event->status }}
-                        </span>
 
                     <div class="bg-light p-4 d-flex justify-content-center align-items-center position-relative" style="height:160px; background: linear-gradient(135deg, #dc2626, #b91c1c);">
                         <i class="fas fa-hospital fa-3x text-white opacity-75"></i>
@@ -342,12 +305,7 @@
                     <div class="p-4 grow d-flex flex-column">
                         <h5 class="fw-bold mb-3">{{ $event->name }}</h5>
 
-                        <h5 class="fw-bold mb-3">{{ $event->name }}</h5>
-
                         <div class="vstack gap-2 mb-4 text-secondary small fw-bold">
-                            <div><i class="fas fa-map-marker-alt me-2 width-20"></i> {{ $event->location }}</div>
-                            <div><i class="fas fa-calendar me-2 width-20"></i> {{ $event->date }}</div>
-                            <div><i class="fas fa-clock me-2 width-20"></i> {{ $event->time }}</div>
                             <div><i class="fas fa-map-marker-alt me-2 width-20"></i> {{ $event->location }}</div>
                             <div><i class="fas fa-calendar me-2 width-20"></i> {{ $event->date }}</div>
                             <div><i class="fas fa-clock me-2 width-20"></i> {{ $event->time }}</div>
@@ -359,7 +317,6 @@
                                 {{ $event->available_slots }} Slots Left
                             </span>
 
-<<<<<<< Updated upstream
                             @if(in_array($event->id, $bookedEventId))
                             <button class="btn btn-success btn-sm" disabled>Booked</button>
                             @elseif($donorHealthDetails && $donorHealthDetails->last_donation_date && \Carbon\Carbon::parse($event->date)->lt(\Carbon\Carbon::parse($donorHealthDetails->last_donation_date)->addMonths(3)))
@@ -377,25 +334,12 @@
                             </form>
                             @else
                             <button class="btn btn-secondary btn-sm" disabled>Closed</button>
-=======
-                            @if($event->status == 'ACTIVE' && $event->available_slots > 0)
-                                <form method="POST" action="{{ route('donor.bookEvent', $event->id) }}">
-                                    @csrf
-                                    <button class="btn btn-primary-custom btn-sm">Book Visit</button>
-                                </form>
-                            @else
-                                <button class="btn btn-secondary btn-sm" disabled>Closed</button>
->>>>>>> Stashed changes
                             @endif
                         </div>
                     </div>
                 </div>
             </div>
-<<<<<<< Updated upstream
             @endforeach
-=======
-        @endforeach
->>>>>>> Stashed changes
         </div>
 
         <div id="noResults" class="text-center py-5 d-none">

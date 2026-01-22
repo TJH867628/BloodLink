@@ -279,7 +279,6 @@
             </a>
         </nav>
         <div class="mt-auto border-top p-3">
-<<<<<<< Updated upstream
             <a href="/logout" class="logout-link">
                 <div class="d-flex align-items-center gap-3 p-2 rounded logout-item">
                     <div class="icon-box">
@@ -288,14 +287,6 @@
                     <div>
                         <div class="fw-bold text-dark small">{{ $user->name }}</div>
                         <div class="logout-text">Sign Out</div>
-=======
-            <a href="/logout" style="text-decoration:none">
-                <div class="d-flex align-items-center gap-3 p-2 rounded hover-bg-light">
-                    <div class="bg-light rounded-3 p-2 text-secondary"><i class="fas fa-sign-out-alt"></i></div>
-                    <div>
-                        <div class="fw-bold text-dark small">{{ $user->name }}</div>
-                        <div class="text-label text-danger" style="cursor:pointer">Sign Out</div>
->>>>>>> Stashed changes
                     </div>
                 </div>
             </a>
@@ -314,8 +305,6 @@
                 <div class="text-end d-none d-md-block">
                     <div class="fw-bold small">{{ $user->name }}</div>
                     <div class="text-label text-success">Donor</div>
-                    <div class="fw-bold small">{{ $user->name }}</div>
-                    <div class="text-label text-success">Donor</div>
                 </div>
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Donor" class="rounded-3 border" width="40" height="40" alt="Avatar">
             </div>
@@ -325,16 +314,10 @@
             <div class="custom-card p-4 p-md-5">
                 <form id="feedbackForm" method="POST" action="{{ route('donor.submitFeedback') }}">
                     @csrf
-                <form id="feedbackForm" method="POST" action="{{ route('donor.submitFeedback') }}">
-                    @csrf
                     <!-- Event Selection -->
                     <div class="mb-4">
                         <label class="text-label mb-2 d-block">Select Donation Event</label>
-<<<<<<< Updated upstream
                         <select name="donation_id" class="form-select">
-=======
-                        <select name="donation_id" class="form-select" required>
->>>>>>> Stashed changes
                             <option value="" disabled selected>Choose a recent visit...</option>
 
                             @foreach($donations as $donation)
@@ -366,36 +349,7 @@
                     <div class="mb-4">
                         <label class="text-label mb-2 d-block">Your Comments</label>
                         <textarea class="form-control" name="comments" rows="5" placeholder="Tell us about the facility, staff, or any suggestions you have..." required></textarea>
-                        <textarea class="form-control" name="comments" rows="5" placeholder="Tell us about the facility, staff, or any suggestions you have..." required></textarea>
                     </div>
-                    {{-- Success message --}}
-                    @if(session('success'))
-                        <div class="alert alert-success alert-dismissible fade show mb-4">
-                            <i class="fas fa-check-circle me-2"></i>
-                            {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    @endif
-
-                    {{-- Error message --}}
-                    @if(session('error'))
-                        <div class="alert alert-danger alert-dismissible fade show mb-4">
-                            <i class="fas fa-exclamation-circle me-2"></i>
-                            {{ session('error') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    @endif
-
-                    {{-- Validation errors --}}
-                    @if($errors->any())
-                        <div class="alert alert-danger mb-4">
-                            <ul class="mb-0">
-                                @foreach($errors->all() as $err)
-                                    <li>{{ $err }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
                     {{-- Success message --}}
                     @if(session('success'))
                         <div class="alert alert-success alert-dismissible fade show mb-4">
@@ -438,36 +392,6 @@
                 <div class="small fw-medium text-primary-emphasis">
                     As per our safety guidelines, if you experienced any adverse health effects after your donation, please contact the clinic directly at <strong>+60 1234 56789</strong>.
                 </div>
-            </div>
-
-            {{-- Feedback History --}}
-            <div class="mt-5">
-                <h4 class="fw-bold mb-3">Your Feedback History</h4>
-
-                @if($feedbacks->count())
-                    <div class="vstack gap-3">
-                        @foreach($feedbacks as $fb)
-                            <div class="p-4 bg-white border rounded-4 shadow-sm">
-                                <div class="d-flex justify-content-between mb-2">
-                                    <strong>Feedback</strong>
-                                    <small class="text-muted">
-                                        {{ $fb->created_at->format('d M Y, h:i A') }}
-                                    </small>
-                                </div>
-
-                                <p class="mb-0 text-secondary" style="white-space: pre-line;">
-                                    {{ $fb->message }}
-                                </p>
-                            </div>
-                        @endforeach
-                    </div>
-                @else
-                    <div class="p-4 bg-light border rounded-4 text-center text-muted">
-                        <i class="fas fa-comment-slash fa-2x mb-2"></i>
-                        <div class="fw-bold">No feedback submitted yet</div>
-                        <small>Your submitted feedback will appear here.</small>
-                    </div>
-                @endif
             </div>
 
             {{-- Feedback History --}}

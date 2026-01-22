@@ -279,7 +279,6 @@
             </a>
         </nav>
         <div class="mt-auto border-top p-3">
-<<<<<<< Updated upstream
             <a href="/logout" class="logout-link">
                 <div class="d-flex align-items-center gap-3 p-2 rounded logout-item">
                     <div class="icon-box">
@@ -288,14 +287,6 @@
                     <div>
                         <div class="fw-bold text-dark small">{{ $user->name }}</div>
                         <div class="logout-text">Sign Out</div>
-=======
-            <a href="/logout" style="text-decoration:none">
-                <div class="d-flex align-items-center gap-3 p-2 rounded hover-bg-light">
-                    <div class="bg-light rounded-3 p-2 text-secondary"><i class="fas fa-sign-out-alt"></i></div>
-                    <div>
-                        <div class="fw-bold text-dark small">{{ $user->name }}</div>
-                        <div class="text-label text-danger" style="cursor:pointer">Sign Out</div>
->>>>>>> Stashed changes
                     </div>
                 </div>
             </a>
@@ -342,8 +333,6 @@
                     <div class="text-end d-none d-md-block">
                         <div class="fw-bold small">{{ $user->name }}</div>
                         <div class="text-label text-success">Donor</div>
-                        <div class="fw-bold small">{{ $user->name }}</div>
-                        <div class="text-label text-success">Donor</div>
                     </div>
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Donor" class="rounded-3 border" width="40" height="40" alt="Avatar">
                 </div>
@@ -377,18 +366,14 @@
                         <div class="d-flex justify-content-between border-bottom pb-3">
                             <span class="text-label">Blood Type</span>
                             <span class="fw-bold text-danger fs-5">{{ $donorHealthDetails->blood_type ?? "Pending For Update" }}</span>
-                            <span class="fw-bold text-danger fs-5">{{ $donorHealthDetails->blood_type ?? "Pending For Update" }}</span>
                         </div>
                         <div class="d-flex justify-content-between border-bottom pb-3">
                             <span class="text-label">Weight</span>
                             <span class="fw-bold text-dark">{{ $donorHealthDetails->weight ?? "Pending For Update"}}</span>
-<<<<<<< Updated upstream
                         </div>
                         <div class="d-flex justify-content-between border-bottom pb-3">
                             <span class="text-label">Height</span>
                             <span class="fw-bold text-dark">172 cm</span>
-=======
->>>>>>> Stashed changes
                         </div>
                         <div class="d-flex justify-content-between border-bottom pb-3">
                             <span class="text-label">Eligibility</span>
@@ -405,13 +390,8 @@
                         <div class="d-flex justify-content-between border-bottom pb-3">
                             <span class="text-label">Last Donation</span>
                             <span class="fw-bold text-dark">
-<<<<<<< Updated upstream
                                 @if($donorHealthDetails->last_donation_date)
                                     {{ \Carbon\Carbon::parse($donorHealthDetails->last_donation_date)->format('d M Y') }}
-=======
-                                @if($lastDonation)
-                                    {{ \Carbon\Carbon::parse($lastDonation->created_at)->format('d M Y') }}
->>>>>>> Stashed changes
                                 @else
                                     No Previous Donations
                                 @endif

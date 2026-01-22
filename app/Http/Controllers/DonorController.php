@@ -18,10 +18,20 @@ class DonorController extends Controller
     public function donorDashboard(){
         $user = Auth::user();
         $donorHealthDetails = $user->donorHealthDetails;
-        $lastDonation = DonationRecord::where('donor_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->first();
-        return view('donor.dashboard',compact('user','donorHealthDetails', 'lastDonation'));
+        $recentActivities = DB::table('appointment')
+            ->join('event', 'appointment.event_id', '=', 'event.id')
+            ->where('appointment.donor_id', auth()->id())
+            ->orderBy('appointment.updated_at', 'desc')
+            ->limit(5)
+            ->select(
+                'event.name',
+                'event.date',
+                'event.time',
+                'appointment.status',
+                'appointment.updated_at'
+            )
+            ->get();
+        return view('donor.dashboard',compact('user', 'donorHealthDetails','recentActivities'));
     }
 
     public function findEvent() {
