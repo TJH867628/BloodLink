@@ -341,7 +341,15 @@
             </div>
             @endforeach
         </div>
-
+        @if($events->isEmpty())
+        <div id="noResults" class="text-center py-5">
+            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+            <h5 class="fw-bold text-muted">No events found</h5>
+            <p class="text-muted small">
+                Try searching with a different keyword or location.
+            </p>
+        </div>
+        @endif
         <div id="noResults" class="text-center py-5 d-none">
             <i class="fas fa-search fa-3x text-muted mb-3"></i>
             <h5 class="fw-bold text-muted">No events found</h5>
@@ -349,7 +357,6 @@
                 Try searching with a different keyword or location.
             </p>
         </div>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

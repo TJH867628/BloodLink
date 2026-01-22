@@ -327,6 +327,12 @@
                     @endforeach
                     </tbody>
                 </table>
+                @if($events->isEmpty())
+                <div class="text-center py-5"> <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                    <h5 class="fw-bold text-muted">No records found</h5>
+                    <p class="text-muted small"> There are no participants for the selected event. </p>
+                </div>
+                @endif
             </div>
         </div>
     </div>
@@ -353,7 +359,7 @@
                         <div class="row g-3 mb-3">
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Date</label>
-                                <input type="date"  name="event_date" class="form-control" required>
+                                <input type="date"  name="event_date" min="{{ \Carbon\Carbon::tomorrow()->toDateString() }}" class="form-control" required>
                             </div>
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Time</label>
@@ -381,7 +387,7 @@
             <div class="modal-content border-0 shadow" style="border-radius: 24px;">
                 <div class="modal-header border-0 p-4 pb-0">
                     <h5 class="modal-title fw-bold text-dark">Update Event Details</h5>
-                    <button type="button" class="btn-close" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
                     <form method="post" id="editEventForm">
@@ -404,7 +410,7 @@
                         <div class="row g-3 mb-3">
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Date</label>
-                                <input type="date" class="form-control" name="event_date" value="2026-01-10" required>
+                                <input type="date" class="form-control" name="event_date" min="{{ \Carbon\Carbon::tomorrow()->toDateString() }}" value="2026-01-10" required>
                             </div>
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Time</label>
@@ -458,7 +464,7 @@ document.getElementById('editEventModal').addEventListener('show.bs.modal', func
 function confirmDelete(e) {
     e.preventDefault();   // stop form submission
 
-    if (confirm("! Are you sure you want to delete this event?\nThis action cannot be undone.")) {
+    if (confirm("Are you sure you want to delete this event?\nThis action cannot be undone.")) {
         e.target.submit();   // user clicked OK → submit
     }
 
