@@ -64,7 +64,8 @@
         }
 
         .nav-icon {
-            width: 32px;              /* FIXED WIDTH */
+            width: 32px;
+            /* FIXED WIDTH */
             display: flex;
             justify-content: center;
             font-size: 1rem;
@@ -153,8 +154,8 @@
             transform: translateY(-1px);
         }
 
-                /* Remove default link styles */
-                .logout-link {
+        /* Remove default link styles */
+        .logout-link {
             text-decoration: none;
             color: inherit;
         }
@@ -302,10 +303,10 @@
                                 <label class="form-label small fw-bold text-muted">Blood Type</label>
                                 <select class="form-select" name="blood_type">
                                     @foreach($bloodTypes as $bt)
-                                        <option value="{{ $bt->value }}"
-                                            {{ ($donorHealthDetails->blood_type ?? '') == $bt->value ? 'selected' : '' }}>
-                                            {{ $bt->value }}
-                                        </option>
+                                    <option value="{{ $bt->value }}"
+                                        {{ ($donorHealthDetails->blood_type ?? '') == $bt->value ? 'selected' : '' }}>
+                                        {{ $bt->value }}
+                                    </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -357,6 +358,15 @@
                                     max="20"
                                     value="{{ $donorHealthDetails->hemoglobin_level ?? "" }}"
                                     required>
+                            </div>
+                            <!-- Last Donation Date -->
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted">Last Donation Date</label>
+                                <input type="date"
+                                    class="form-control"
+                                    name="last_donation_date"
+                                    value="{{ $donorHealthDetails->last_donation_date ?? '' }}"
+                                    max="{{ now()->toDateString() }}">
                             </div>
                         </div>
                         <div class="d-flex justify-content-end gap-3">
