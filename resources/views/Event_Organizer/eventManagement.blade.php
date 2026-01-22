@@ -344,31 +344,31 @@
                         @csrf
                         <div class="mb-3">
                             <label class="text-muted fw-bold small text-uppercase mb-1">Event Name</label>
-                            <input type="text" class="form-control" name="event_name" placeholder="e.g. City Mall Blood Drive">
+                            <input type="text" class="form-control" name="event_name" placeholder="e.g. City Mall Blood Drive" required>
                         </div>
                         <div class="mb-3">
                             <label class="text-muted fw-bold small text-uppercase mb-1">Venue / Location</label>
-                            <input type="text" class="form-control"  name="location" placeholder="e.g. Main Atrium">
+                            <input type="text" class="form-control"  name="location" placeholder="e.g. Main Atrium" required>
                         </div>
                         <div class="row g-3 mb-3">
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Date</label>
-                                <input type="date"  name="event_date" class="form-control">
+                                <input type="date"  name="event_date" class="form-control" required>
                             </div>
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Time</label>
-                                <input type="time"  name="event_time" class="form-control">
+                                <input type="time"  name="event_time" class="form-control" required>
                             </div>
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Description</label>
-                                <input type="text" name="description" class="form-control">
+                                <input type="text" name="description" class="form-control" required>
                             </div>
                         </div>
                         <div class="mb-4">
                             <label class="text-muted fw-bold small text-uppercase mb-1">Maximum Donors</label>
-                            <input type="number" class="form-control" name="total_slots" placeholder="e.g. 50">
+                            <input type="number" class="form-control" name="total_slots" placeholder="e.g. 50" required>
                         </div>
-                        <button type="submit" class="btn btn-danger w-100 py-3 rounded-pill fw-bold shadow-sm" data-bs-dismiss="modal">Save Event</button>
+                        <button type="submit" class="btn btn-danger w-100 py-3 rounded-pill fw-bold shadow-sm">Save Event</button>
                     </form>
                 </div>
             </div>
@@ -381,7 +381,7 @@
             <div class="modal-content border-0 shadow" style="border-radius: 24px;">
                 <div class="modal-header border-0 p-4 pb-0">
                     <h5 class="modal-title fw-bold text-dark">Update Event Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
                     <form method="post" id="editEventForm">
@@ -395,30 +395,30 @@
 
                         <div class="mb-3">
                             <label class="text-muted fw-bold small text-uppercase mb-1">Event Name</label>
-                            <input type="text" class="form-control fw-bold" name="event_name" value="Red Cross Annual Drive">
+                            <input type="text" class="form-control fw-bold" name="event_name" value="Red Cross Annual Drive" required>
                         </div>
                         <div class="mb-3">
                             <label class="text-muted fw-bold small text-uppercase mb-1">Venue / Location</label>
-                            <input type="text" class="form-control" name="location" value="City Hall, Main Wing">
+                            <input type="text" class="form-control" name="location" value="City Hall, Main Wing" required>
                         </div>
                         <div class="row g-3 mb-3">
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Date</label>
-                                <input type="date" class="form-control" name="event_date" value="2026-01-10">
+                                <input type="date" class="form-control" name="event_date" value="2026-01-10" required>
                             </div>
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Time</label>
-                                <input type="time" class="form-control" name="event_time" value="09:00">
+                                <input type="time" class="form-control" name="event_time" value="09:00" required>
                             </div>
                         </div>
                         <div class="mb-4">
                             <label class="text-muted fw-bold small text-uppercase mb-1">Maximum Donors</label>
-                            <input type="number" class="form-control" name="total_slots" value="50">
+                            <input type="number" class="form-control" name="total_slots" value="50" required>
                         </div>
 
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-light w-50 py-3 rounded-pill fw-bold border" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-dark w-50 py-3 rounded-pill fw-bold shadow-sm" data-bs-dismiss="modal">Save Changes</button>
+                            <button type="submit" class="btn btn-light w-50 py-3 rounded-pill fw-bold border">Cancel</button>
+                            <button type="submit" class="btn btn-dark w-50 py-3 rounded-pill fw-bold shadow-sm">Save Changes</button>
                         </div>
                     </form>
                 </div>

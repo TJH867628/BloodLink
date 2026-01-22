@@ -339,7 +339,7 @@
             </div>
         </div>
     </div>
-
+        
     <!-- Record Result Modal -->
     <div class="modal fade" id="recordModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
