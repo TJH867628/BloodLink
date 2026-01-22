@@ -311,10 +311,9 @@
                                     <i class="fas fa-edit"></i>
                                 </button>
 
-                                <form method="POST" action="{{ route('event_organizer.deleteEvent', $event->id) }}" class="d-inline">
+                                <form action="/event_organizer/deleteEvent/{{ $event->id }}" method="POST" style="display:inline" onsubmit="return confirmDelete(event)">
                                     @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-light btn-sm text-danger">
+                                    <button type="submit" class="btn btn-light btn-sm text-danger">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </form>
@@ -385,7 +384,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <form method="post" action="{{  }}">
+                    <form method="post" id="editEventForm">
+                        @csrf
                         <div class="alert alert-light border border-secondary-subtle d-flex align-items-center mb-4 rounded-3 p-3">
                             <i class="fas fa-info-circle text-primary me-3 fs-5"></i>
                             <div class="small text-muted lh-sm">
@@ -404,7 +404,7 @@
                         <div class="row g-3 mb-3">
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Date</label>
-                                <input type="date" class="form-control" name="event_time" value="2026-01-10">
+                                <input type="date" class="form-control" name="event_date" value="2026-01-10">
                             </div>
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Time</label>
@@ -417,8 +417,8 @@
                         </div>
 
                         <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-light w-50 py-3 rounded-pill fw-bold border" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-dark w-50 py-3 rounded-pill fw-bold shadow-sm" data-bs-dismiss="modal">Save Changes</button>
+                            <button type="submit" class="btn btn-light w-50 py-3 rounded-pill fw-bold border" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-dark w-50 py-3 rounded-pill fw-bold shadow-sm" data-bs-dismiss="modal">Save Changes</button>
                         </div>
                     </form>
                 </div>
@@ -430,3 +430,38 @@
 </body>
 
 </html>
+<script>
+document.getElementById('editEventModal').addEventListener('show.bs.modal', function (event) {
+    let button = event.relatedTarget;
+
+    let id = button.getAttribute('data-id');
+    let name = button.getAttribute('data-name');
+    let date = button.getAttribute('data-date');
+    let time = button.getAttribute('data-time');
+    let location = button.getAttribute('data-location');
+    let slots = button.getAttribute('data-slots');
+    let description = button.getAttribute('data-description');
+
+    let form = document.getElementById('editEventForm');
+    console.log(form);
+    form.action = "/event_organizer/editEvent/" + id;
+
+    // Fill the inputs
+    form.querySelector('[name="event_name"]').value = name;
+    form.querySelector('[name="event_date"]').value = date;
+    form.querySelector('[name="event_time"]').value = time;
+    form.querySelector('[name="location"]').value = location;
+    form.querySelector('[name="total_slots"]').value = slots;
+    form.querySelector('[name="description"]').value = description ?? '';
+});
+
+function confirmDelete(e) {
+    e.preventDefault();   // stop form submission
+
+    if (confirm("! Are you sure you want to delete this event?\nThis action cannot be undone.")) {
+        e.target.submit();   // user clicked OK → submit
+    }
+
+    return false; // cancel if user clicks Cancel
+}
+</script>

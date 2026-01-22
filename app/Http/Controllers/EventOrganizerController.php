@@ -74,15 +74,22 @@ class EventOrganizerController extends Controller
             'available_slots' => $event->available_slots + ($request->input('total_slots') - $event->total_slots),
         ]);
 
-        return redirect()->route('event_organizer.management')->with('success', 'Event updated successfully.');
+        return redirect()->route('event_organizer.eventManagement')->with('success', 'Event updated successfully.');
     }
 
-    public function deleteEvent(Request $request)
+    public function deleteEvent(Request $request, $eventId)
     {
-        $eventId = $request->input('event_id');
         $event = EventModel::findOrFail($eventId);
+
+        if ($event->organizer_id !== auth()->id()) {
+            return redirect()->route('event_organizer.eventManagement')->with('error', 'Unauthorized action.');
+        }
+
+        if ($event->available_slots < $event->total_slots) {
+            return redirect()->route('event_organizer.eventManagement')->with('error', 'Cannot delete event with existing bookings.');
+        }
         $event->delete();
 
-        return redirect()->route('event_organizer.management')->with('success', 'Event deleted successfully.');
+        return redirect()->route('event_organizer.eventManagement')->with('success', 'Event deleted successfully.');
     }
 }
