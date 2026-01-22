@@ -314,7 +314,17 @@
                                 {{ $event->available_slots }} Slots Left
                             </span>
 
-                            @if($event->status == 'ACTIVE' && $event->available_slots > 0)
+                            @if(in_array($event->id, $bookedEventId))
+                            <button class="btn btn-success btn-sm" disabled>Booked</button>
+                            @elseif($donorHealthDetails && $donorHealthDetails->last_donation_date && \Carbon\Carbon::parse($event->date)->lt(\Carbon\Carbon::parse($donorHealthDetails->last_donation_date)->addMonths(3)))
+                            <button class="btn btn-warning btn-sm" disabled>
+                                Not Eligible
+                            </button>
+                            @elseif($lastAcceptedDate && \Carbon\Carbon::parse($event->date)->lt(\Carbon\Carbon::parse($lastAcceptedDate)->addMonths(3)))
+                            <button class="btn btn-warning btn-sm" disabled>
+                                Not Eligible
+                            </button>
+                            @elseif($event->status == 'ACTIVE' && $event->available_slots > 0)
                             <form method="POST" action="{{ route('donor.bookEvent', $event->id) }}">
                                 @csrf
                                 <button class="btn btn-primary-custom btn-sm">Book Visit</button>

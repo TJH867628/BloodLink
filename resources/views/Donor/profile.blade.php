@@ -359,6 +359,15 @@
                                     value="{{ $donorHealthDetails->hemoglobin_level ?? "" }}"
                                     required>
                             </div>
+                            <!-- Last Checkup Date -->
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted">Last Checkup Date</label>
+                                <input type="date"
+                                    class="form-control"
+                                    name="last_checkup_date"
+                                    value="{{ $donorHealthDetails->last_checkup_date ?? '' }}"
+                                    max="{{ now()->toDateString() }}">
+                            </div>
                             <!-- Last Donation Date -->
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-muted">Last Donation Date</label>

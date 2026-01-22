@@ -6,6 +6,8 @@ use Event;
 use Illuminate\Http\Request;
 use App\Models\Event as EventModel;
 use App\Models\Appointment;
+use Carbon\Carbon;
+use DB;
 
 class EventOrganizerController extends Controller
 {
@@ -65,7 +67,7 @@ class EventOrganizerController extends Controller
             'users.name as donor_name',
             'users.phone'
         )
-        ->orderBy('event.name')
+        ->orderBy('appointment.created_at', 'desc')
         ->get();
 
         $events = EventModel::where('organizer_id', auth()->id())->get();
@@ -147,7 +149,24 @@ class EventOrganizerController extends Controller
         $appointment = Appointment::findOrFail($appointmentId);
         $appointment->status = 'ACCEPTED';
         $appointment->save();
+        $event = EventModel::where('id', $appointment->event_id)->first();
+        $eventDate = Carbon::parse($event->date);
+        $start = $eventDate->copy()->subMonths(3);
+        $end   = $eventDate->copy()->addMonths(3);
 
+        DB::table('appointment')
+            ->join('event', 'appointment.event_id', '=', 'event.id')
+            ->where('appointment.donor_id', $appointment->donor_id)
+            ->where('appointment.status', 'PENDING')
+            ->whereBetween('event.date', [
+                $start->toDateString(),
+                $end->toDateString()
+            ])
+            ->where('appointment.id', '!=', $appointment->id)   // do not reject the accepted one
+            ->update([
+                'appointment.status' => 'REJECTED'
+            ]);
+        
         return redirect()->back()->with('success', 'Appointment accepted successfully.');
     }
 

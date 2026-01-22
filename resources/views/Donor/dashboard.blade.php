@@ -386,8 +386,8 @@
                         <div class="d-flex justify-content-between border-bottom pb-3">
                             <span class="text-label">Last Donation</span>
                             <span class="fw-bold text-dark">
-                                @if($lastDonation)
-                                    {{ \Carbon\Carbon::parse($lastDonation->created_at)->format('d M Y') }}
+                                @if($donorHealthDetails->last_donation_date)
+                                    {{ \Carbon\Carbon::parse($donorHealthDetails->last_donation_date)->format('d M Y') }}
                                 @else
                                     No Previous Donations
                                 @endif
@@ -408,39 +408,47 @@
                         <a href="/donor/history" class="view-all-link">View All</a>
                     </div>
                     <div class="vstack gap-3">
-                        <!-- Status Successful -->
-                        <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-4">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="bg-white p-3 rounded-3 text-danger shadow-sm"><i class="fas fa-hospital"></i></div>
-                                <div>
-                                    <div class="fw-bold">General Hospital Walk-in</div>
-                                    <div class="text-label">2025-12-30 • 10:30 AM</div>
+                    @forelse($recentActivities as $a)
+
+                    <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-white p-3 rounded-3 shadow-sm
+                                @if($a->status == 'COMPLETED') text-danger
+                                @else text-secondary
+                                @endif">
+                                
+                                @if($a->status == 'COMPLETED')
+                                    <i class="fas fa-hospital"></i>
+                                @elseif($a->status == 'ACCEPTED' || $a->status == 'PENDING')
+                                    <i class="fas fa-calendar-check"></i>
+                                @else
+                                    <i class="fas fa-times-circle"></i>
+                                @endif
+                            </div>
+
+                            <div>
+                                <div class="fw-bold">{{ $a->name }}</div>
+                                <div class="text-label">
+                                    {{ \Carbon\Carbon::parse($a->date)->format('d M Y') }} •
+                                    {{ \Carbon\Carbon::parse($a->time)->format('h:i A') }}
                                 </div>
                             </div>
-                            <span class="status-badge badge-success">Successful</span>
                         </div>
-                        <!-- Status Pending -->
-                        <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-4">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="bg-white p-3 rounded-3 text-secondary shadow-sm"><i class="fas fa-calendar-check"></i></div>
-                                <div>
-                                    <div class="fw-bold">Appointment Scheduled</div>
-                                    <div class="text-label">2025-12-20 • System</div>
-                                </div>
-                            </div>
-                            <span class="status-badge badge-eligible">Pending</span>
-                        </div>
-                        <!-- Status Deferred -->
-                        <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-4">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="bg-white p-3 rounded-3 text-secondary shadow-sm"><i class="fas fa-calendar-check"></i></div>
-                                <div>
-                                    <div class="fw-bold">Appointment Scheduled</div>
-                                    <div class="text-label">2025-12-20 • System</div>
-                                </div>
-                            </div>
-                            <span class="status-badge badge-deffered">Deferred</span>
-                        </div>
+
+                        <span class="status-badge
+                            @if($a->status == 'COMPLETED') badge-success
+                            @elseif($a->status == 'ACCEPTED' || $a->status == 'PENDING') badge-eligible
+                            @else badge-deffered
+                            @endif">
+                            {{ $a->status == 'COMPLETED' ? 'Successful' : ($a->status == 'ACCEPTED' || $a->status == 'PENDING' ? 'Pending' : 'Deferred') }}
+                        </span>
+                    </div>
+
+                    @empty
+                    <div class="text-center text-muted py-4">
+                        No recent activity
+                    </div>
+                    @endforelse
                     </div>
                 </div>
             </div>

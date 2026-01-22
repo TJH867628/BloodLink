@@ -397,11 +397,22 @@
             </div>
         </header>
 
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @elseif(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <!-- Filters -->
         <div class="d-flex flex-wrap gap-2 mb-4">
             <button class="filter-btn active" data-filter="all">All Records</button>
             <button class="filter-btn" data-filter="completed">Completed</button>
-            <button class="filter-btn" data-filter="approved">Approved</button>
+            <button class="filter-btn" data-filter="accepted">Accepted</button>
             <button class="filter-btn" data-filter="pending">Pending</button>
             <button class="filter-btn" data-filter="cancelled">Cancelled</button>
             <button class="filter-btn" data-filter="rejected">Rejected</button>
@@ -462,10 +473,28 @@
                 <div class="history-content">
                     <div class="history-header">
                         <h5>{{ $app->event_name }}</h5>
-                        <span class="status-badge 
-                            {{ $app->status == 'APPROVED' || $app->status == 'PENDING' ? 'pending' : 'badge-failed' }}">
-                            {{ $app->status }}
-                        </span>
+                        <div class="text-end d-flex flex-column align-items-end">
+                            <span class="status-badge
+                                @if($app->status == 'PENDING' || $app->status == 'ACCEPTED')
+                                    pending
+                                @elseif($app->status == 'COMPLETED')
+                                    badge-success
+                                @else
+                                    badge-failed
+                                @endif
+                            ">
+                                {{ $app->status }}
+                            </span>
+
+                            @if(in_array($app->status, ['PENDING','ACCEPTED']) && \Carbon\Carbon::parse($app->date.' '.$app->time)->isFuture())
+                                <form method="POST" action="{{ route('donor.cancelAppointment', $app->id) }}" class="mt-2">
+                                    @csrf
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-times me-1"></i> Cancel
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
                     </div>
 
                     <div class="history-meta">

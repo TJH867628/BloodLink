@@ -24,6 +24,7 @@ Route::middleware(['role:DONOR','auth'])->group(function () {
     Route::post('donor/bookEvent/{eventId}', [DonorController::class, 'bookEvent'])->name('donor.bookEvent');
     Route::post('donor/updateProfile', [DonorController::class, 'updateProfile'])->name('donor.updateProfile');
     Route::post('donor/submitFeedback', [DonorController::class, 'submitFeedback'])->name('donor.submitFeedback');
+    Route::post('donor/cancelAppointment/{appointmentId}', [DonorController::class, 'cancelAppointment'])->name('donor.cancelAppointment');
 });
 Route::middleware(['role:STAFF','auth'])->group(function () {
     Route::get('hospital/dashboard', [HospitalController::class, 'hospitalDashboard'])->name('hospital.dashboard');
