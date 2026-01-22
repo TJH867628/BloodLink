@@ -54,22 +54,14 @@
         .nav-link {
             display: flex;
             align-items: center;
+            gap: 12px;
             padding: 12px 24px;
-            margin: 4px 16px;
-            border-radius: 12px;
             color: var(--text-muted);
             font-weight: 500;
+            margin: 4px 16px;
+            border-radius: 12px;
+            transition: all 0.2s;
             text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .nav-icon {
-            width: 32px;              /* FIXED WIDTH */
-            display: flex;
-            justify-content: center;
-            font-size: 1rem;
-            margin-right: 12px;
-            color: inherit;
         }
 
         .nav-link:hover {
@@ -142,26 +134,16 @@
             background-color: white;
         }
 
-        .text-label {
-            font-size: 0.7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            color: #94A3B8;
-            letter-spacing: 0.05em;
-        }
-
-                /* Remove default link styles */
-                .logout-link {
+        /* Logout Styles */
+        .logout-link {
             text-decoration: none;
             color: inherit;
         }
 
-        /* Hover container */
         .logout-item {
             transition: all 0.25s ease;
         }
 
-        /* Icon box */
         .icon-box {
             background: #f1f5f9;
             padding: 10px;
@@ -170,14 +152,12 @@
             transition: all 0.25s ease;
         }
 
-        /* Text */
         .logout-text {
             color: #dc2626;
             font-weight: 600;
             transition: all 0.25s ease;
         }
 
-        /* Hover Effects */
         .logout-item:hover {
             background: #fff1f2;
         }
@@ -196,7 +176,7 @@
 </head>
 
 <body>
-    <!-- Mobile Nav -->
+
     <nav class="navbar navbar-light bg-white border-bottom mobile-nav d-none fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
@@ -205,24 +185,23 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="mobileMenu">
                 <ul class="navbar-nav mt-3">
-                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="/hospital/dashboard">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/hospital/inventory">Inventory & Reports</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/hospital/donationManagement">Donation Management</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/hospital/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="hospital_inventory.html">Inventory & Reports</a></li>
+                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="/hospital/donationManagement">Donation Management</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Sidebar -->
     <div class="sidebar d-none d-lg-flex">
         <div class="brand-section">
             <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span class="fs-4 fw-bolder text-dark">BloodLink</span>
         </div>
         <nav class="nav flex-column mt-2 w-100">
             <div class="px-4 pb-2 text-label" style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Hospital Portal</div>
-            <a href="/hospital/dashboard" class="nav-link"><span class="nav-icon"><i class="fas fa-chart-pie w-25"></i></span> Dashboard</a>
-            <a href="/hospital/inventory" class="nav-link"><span class="nav-icon"><i class="fas fa-box-open w-25"></i></span> Inventory & Reports</a>
-            <a href="/hospital/donationManagement" class="nav-link active"><span class="nav-icon"><i class="fas fa-user-nurse w-25"></i></span> Donation Mgmt</a>
+            <a href="/hospital/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
+            <a href="/hospital/inventory" class="nav-link"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
+            <a href="/hospital/donationManagement" class="nav-link active"><i class="fas fa-user-nurse w-25"></i> Donation Mgmt</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">
@@ -239,18 +218,17 @@
         </div>
     </div>
 
-    <!-- Main Content -->
     <div class="main-content">
         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
                 <h2 class="fw-black mb-0">Donation Management</h2>
-                    <div class="d-flex align-items-center gap-2 mt-1">
-                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3">
-                        <i class="fas fa-check-circle me-1"></i> System Operational
-                    </span>
-                </div>
+                <p class="text-muted small fw-medium mt-1 mb-0">Process today's donor queue and record clinical results.</p>
             </div>
             <div class="d-flex align-items-center gap-4">
+                <div class="position-relative d-none d-md-block" style="width: 250px;">
+                    <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
+                    <input type="text" class="form-control rounded-pill ps-5" placeholder="Search donor...">
+                </div>
                 <div class="d-none d-md-block border-start h-50 mx-2"></div>
                 <div class="d-flex align-items-center gap-3">
                     <div class="text-end d-none d-md-block">
@@ -318,7 +296,7 @@
                                         <div class="d-flex align-items-center gap-3">
                                             <div class="bg-danger-subtle text-danger rounded p-1 fw-bold small text-center" style="width: 32px;">B-</div>
                                             <div>
-                                                <div class="fw-bold">Organizer</div>
+                                                <div class="fw-bold">Praveena Nair</div>
                                                 <div class="small text-muted">ID: D-203</div>
                                             </div>
                                         </div>
@@ -355,7 +333,8 @@
                             <span class="badge bg-warning text-dark border-0">Deferred</span>
                         </div>
                     </div>
-                    <button class="btn btn-link text-danger text-decoration-none fw-bold text-uppercase w-100 mt-3" style="font-size: 0.75rem; letter-spacing: 0.1em;">View Full History</button>
+                    <!-- Updated Button to Trigger Modal -->
+                    <button class="btn btn-link text-danger text-decoration-none fw-bold text-uppercase w-100 mt-3" style="font-size: 0.75rem; letter-spacing: 0.1em;" data-bs-toggle="modal" data-bs-target="#historyModal">View Full History</button>
                 </div>
             </div>
         </div>
@@ -399,6 +378,100 @@
                         </div>
                         <button type="button" class="btn btn-danger w-100 py-3 rounded-pill fw-bold shadow-sm" data-bs-dismiss="modal">Save Record & Update Inventory</button>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full History Modal (New Addition) -->
+    <div class="modal fade" id="historyModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow" style="border-radius: 24px;">
+                <div class="modal-header border-0 p-4 pb-0">
+                    <h5 class="modal-title fw-bold">Donation History Log</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Simple Filters -->
+                    <div class="d-flex gap-2 mb-3">
+                        <input type="text" class="form-control form-control-sm w-auto" placeholder="Search Donor ID">
+                        <select class="form-select form-select-sm w-auto">
+                            <option>All Results</option>
+                            <option>Successful</option>
+                            <option>Deferred</option>
+                        </select>
+                        <button class="btn btn-dark btn-sm rounded-pill px-3 fw-bold">Filter</button>
+                    </div>
+
+                    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light sticky-top">
+                                <tr>
+                                    <th class="small fw-bold text-muted text-uppercase ps-3">Date</th>
+                                    <th class="small fw-bold text-muted text-uppercase">Donor</th>
+                                    <th class="small fw-bold text-muted text-uppercase">Type</th>
+                                    <th class="small fw-bold text-muted text-uppercase">Vitals (Hb/BP)</th>
+                                    <th class="small fw-bold text-muted text-uppercase text-end pe-3">Result</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="small text-muted ps-3">2025-12-29</td>
+                                    <td>
+                                        <div class="fw-bold small">Michael Chen</div>
+                                        <div class="small text-muted">D-105</div>
+                                    </td>
+                                    <td><span class="badge bg-light text-dark border">O+</span></td>
+                                    <td class="small">14.2 / 110/70</td>
+                                    <td class="text-end pe-3"><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Successful</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="small text-muted ps-3">2025-12-29</td>
+                                    <td>
+                                        <div class="fw-bold small">Sarah Lee</div>
+                                        <div class="small text-muted">D-109</div>
+                                    </td>
+                                    <td><span class="badge bg-light text-dark border">A-</span></td>
+                                    <td class="small">11.0 / 120/80</td>
+                                    <td class="text-end pe-3"><span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill">Deferred</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="small text-muted ps-3">2025-12-28</td>
+                                    <td>
+                                        <div class="fw-bold small">James Wong</div>
+                                        <div class="small text-muted">D-112</div>
+                                    </td>
+                                    <td><span class="badge bg-light text-dark border">B+</span></td>
+                                    <td class="small">13.8 / 115/75</td>
+                                    <td class="text-end pe-3"><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Successful</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="small text-muted ps-3">2025-12-27</td>
+                                    <td>
+                                        <div class="fw-bold small">Priya M.</div>
+                                        <div class="small text-muted">D-115</div>
+                                    </td>
+                                    <td><span class="badge bg-light text-dark border">AB+</span></td>
+                                    <td class="small">12.9 / 118/72</td>
+                                    <td class="text-end pe-3"><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Successful</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="small text-muted ps-3">2025-12-25</td>
+                                    <td>
+                                        <div class="fw-bold small">Ahmad Z.</div>
+                                        <div class="small text-muted">D-120</div>
+                                    </td>
+                                    <td><span class="badge bg-light text-dark border">O-</span></td>
+                                    <td class="small">15.1 / 122/81</td>
+                                    <td class="text-end pe-3"><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Successful</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill fw-bold px-4" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-secondary rounded-pill fw-bold px-4"><i class="fas fa-print me-2"></i> Print Log</button>
                 </div>
             </div>
         </div>
