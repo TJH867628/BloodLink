@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DonorController;
+use App\Http\Controllers\HospitalController;
+use App\Http\Controllers\EventOrganizerController;
 
 Route::get('/', function () {
     return view('User.Main');
@@ -12,25 +15,26 @@ Route::get('login',[UserController::class, 'loginPage']) -> name('login');
 Route::post('login',[UserController::class, 'authLogin']) -> name('auth.login');
 Route::get('logout',[UserController::class, 'logout']) -> name('logout');
 Route::middleware(['role:DONOR','auth'])->group(function () {
-    Route::get('donor/dashboard', [App\Http\Controllers\DonorController::class, 'donorDashboard'])->name('donor.dashboard');
-    Route::get('donor/findEvent', [App\Http\Controllers\DonorController::class, 'findEvent'])->name('donor.findEvent');
-    Route::get('donor/history', [App\Http\Controllers\DonorController::class, 'history'])->name('donor.history');
-    Route::get('donor/feedback', [App\Http\Controllers\DonorController::class, 'feedback'])->name('donor.feedback');
-    Route::get('donor/profile', [App\Http\Controllers\DonorController::class, 'profile'])->name('donor.profile');
+    Route::get('donor/dashboard', [DonorController::class, 'donorDashboard'])->name('donor.dashboard');
+    Route::get('donor/findEvent', [DonorController::class, 'findEvent'])->name('donor.findEvent');
+    Route::get('donor/history', [DonorController::class, 'history'])->name('donor.history');
+    Route::get('donor/feedback', [DonorController::class, 'feedback'])->name('donor.feedback');
+    Route::get('donor/profile', [DonorController::class, 'profile'])->name('donor.profile');
 
-    Route::post('donor/bookEvent/{eventId}', [App\Http\Controllers\DonorController::class, 'bookEvent'])->name('donor.bookEvent');
-    Route::post('donor/updateProfile', [App\Http\Controllers\DonorController::class, 'updateProfile'])->name('donor.updateProfile');
-    Route::post('donor/submitFeedback', [App\Http\Controllers\DonorController::class, 'submitFeedback'])->name('donor.submitFeedback');
+    Route::post('donor/bookEvent/{eventId}', [DonorController::class, 'bookEvent'])->name('donor.bookEvent');
+    Route::post('donor/updateProfile', [DonorController::class, 'updateProfile'])->name('donor.updateProfile');
+    Route::post('donor/submitFeedback', [DonorController::class, 'submitFeedback'])->name('donor.submitFeedback');
 });
 Route::middleware(['role:STAFF','auth'])->group(function () {
-    Route::get('hospital/dashboard', [App\Http\Controllers\HospitalController::class, 'hospitalDashboard'])->name('hospital.dashboard');
-    Route::get('hospital/inventory', [App\Http\Controllers\HospitalController::class, 'inventory_and_report'])->name('hospital.inventory');
-    Route::get('hospital/donationManagement', [App\Http\Controllers\HospitalController::class, 'donationManagement'])->name('hospital.donationManagement');
+    Route::get('hospital/dashboard', [HospitalController::class, 'hospitalDashboard'])->name('hospital.dashboard');
+    Route::get('hospital/inventory', [HospitalController::class, 'inventory_and_report'])->name('hospital.inventory');
+    Route::get('hospital/donationManagement', [HospitalController::class, 'donationManagement'])->name('hospital.donationManagement');
 
 });
 Route::middleware(['role:ORGANIZER','auth'])->group(function () {
-    Route::get('event/dashboard', [App\Http\Controllers\EventController::class, 'eventDashboard'])->name('event.dashboard');
-    Route::get('event/management', [App\Http\Controllers\EventController::class, 'eventManagement'])->name('event.management');
-    Route::get('event/participation', [App\Http\Controllers\EventController::class, 'participation'])->name('event.participation');
+    Route::get('event_organizer/dashboard', [EventOrganizerController::class, 'eventOrganizerDashboard'])->name('event_organizer.dashboard');
+    Route::get('event_organizer/management', [EventOrganizerController::class, 'eventOrganizerManagement'])->name('event_organizer.management');
+    Route::get('event_organizer/participation', [EventOrganizerController::class, 'participation'])->name('event_organizer.participation');
 
 });
+// Route::post('event_organizer/createEvent', [EventOrganizerController::class, 'createEvent'])->name('event_organizer.createEvent');
