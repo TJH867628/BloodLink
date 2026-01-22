@@ -147,7 +147,7 @@ class EventOrganizerController extends Controller
     public function acceptAppointment($appointmentId)
     {
         $appointment = Appointment::findOrFail($appointmentId);
-        $appointment->status = 'ACCEPTED';
+        $appointment->status = 'APPROVED';
         $appointment->save();
         $event = EventModel::where('id', $appointment->event_id)->first();
         $eventDate = Carbon::parse($event->date);
@@ -173,8 +173,11 @@ class EventOrganizerController extends Controller
     public function rejectAppointment($appointmentId)
     {
         $appointment = Appointment::findOrFail($appointmentId);
+        $event = EventModel::findOrFail($appointment->event_id);
         $appointment->status = 'REJECTED';
+        $event->available_slots += 1;
         $appointment->save();
+        $event->save();
 
         return redirect()->back()->with('success', 'Appointment rejected successfully.');
     }

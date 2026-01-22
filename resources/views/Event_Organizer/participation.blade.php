@@ -230,10 +230,10 @@
                 <div class="custom-card p-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
                     <div class="d-flex align-items-center gap-3 w-100 w-md-50">
                         <i class="fas fa-filter text-muted"></i>
-                        <select class="form-select">
-                            <option selected>All Events</option>
+                        <select class="form-select" id="eventFilter">
+                            <option value="all">All Events</option>
                             @foreach($events as $event)
-                                <option value="{{ $event->id }}">{{ $event->name }}</option>
+                            <option value="{{ $event->id }}">{{ $event->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -258,7 +258,7 @@
                     </thead>
                     <tbody>
                         @foreach($appoinments as $app)
-                        <tr>
+                        <tr class="appointment-row" data-event-id="{{ $app->id }}">
                             <td class="px-4 py-3">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="bg-danger-subtle text-danger rounded p-1 fw-bold small text-center" style="width: 32px;">
@@ -271,46 +271,103 @@
                                 </div>
                             </td>
 
-                            <td class="px-4 py-3 fw-bold text-dark">{{ $app->event_name }}</td>
+                            <td class="px-4 py-3 fw-bold text-dark event-name">{{ $app->event_name }}</td>
                             <td class="px-4 py-3 text-muted">{{ \Carbon\Carbon::parse($app->event_date)->format('d M Y') }} . {{ $app->event_time }}</td>
                             <td class="px-4 py-3 small">
                                 <i class="fas fa-phone me-1 text-muted"></i> {{ $app->phone }}
                             </td>
 
                             <td class="px-4 py-3">
-                                @if($app->status == 'ACCEPTED')
-                                    <span class="badge bg-primary-subtle text-primary rounded-pill">ACCEPTED</span>
+                                @if($app->status == 'COMPLETED')
+                                <span class="badge bg-success-subtle text-success rounded-pill">Completed</span>
+                                @elseif($app->status == 'APPROVED')
+                                <span class="badge bg-primary-subtle text-primary rounded-pill">Approved</span>
                                 @elseif($app->status == 'PENDING')
-                                    <span class="badge bg-warning-subtle text-warning rounded-pill">Pending</span>
+                                <span class="badge bg-warning-subtle text-warning rounded-pill">Pending</span>
+                                @elseif($app->status == 'CANCELLED')
+                                <span class="badge bg-danger-subtle text-danger rounded-pill">Cancelled</span>
                                 @elseif($app->status == 'REJECTED')
-                                    <span class="badge bg-danger-subtle text-danger rounded-pill">Rejected</span>
+                                <span class="badge bg-danger-subtle text-danger rounded-pill">Rejected</span>
                                 @endif
                             </td>
 
                             <td class="px-4 py-3 text-end">
+                                @if($app->status === 'PENDING')
+                                <!-- ACCEPT -->
                                 <form method="POST" action="/event_organizer/acceptAppointment/{{ $app->id }}" class="d-inline">
                                     @csrf
                                     <button class="btn btn-light btn-sm text-success">
                                         <i class="fas fa-check"></i>
                                     </button>
                                 </form>
-
+                                <!-- REJECT -->
                                 <form method="POST" action="/event_organizer/rejectAppointment/{{ $app->id }}" class="d-inline">
                                     @csrf
                                     <button class="btn btn-light btn-sm text-danger">
                                         <i class="fas fa-times"></i>
                                     </button>
                                 </form>
+                                @else
+                                <!-- Disabled buttons -->
+                                <button class="btn btn-light btn-sm text-secondary" disabled>
+                                    <i class="fas fa-check"></i>
+                                </button>
+
+                                <button class="btn btn-light btn-sm text-secondary" disabled>
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
+                <div id="noResults" class="text-center py-5 d-none">
+                    <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                    <h5 class="fw-bold text-muted">No records found</h5>
+                    <p class="text-muted small">No appointments for selected event.</p>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const filter = document.getElementById('eventFilter');
+            const rows = document.querySelectorAll('.appointment-row');
+            const noData = document.getElementById('noResults');
+
+            filter.addEventListener('change', () => {
+                const selectedText = filter.options[filter.selectedIndex].text;
+                let visible = 0;
+
+                rows.forEach(row => {
+                    const eventCell = row.querySelector('.event-name');
+
+                    if (!eventCell) {
+                        row.style.display = 'none';
+                        return;
+                    }
+
+                    const eventName = eventCell.innerText.trim().toLowerCase();
+                    const selectedText = filter.options[filter.selectedIndex].text.toLowerCase();
+
+                    if (filter.value === 'all' || eventName === selectedText) {
+                        row.style.display = '';
+                        visible++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                if (noData) {
+                    noData.classList.toggle('d-none', visible !== 0);
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>
