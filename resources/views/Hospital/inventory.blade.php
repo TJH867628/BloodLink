@@ -169,18 +169,16 @@
             letter-spacing: 0.05em;
         }
 
-                /* Remove default link styles */
-                .logout-link {
+        /* Logout Styles */
+        .logout-link {
             text-decoration: none;
             color: inherit;
         }
 
-        /* Hover container */
         .logout-item {
             transition: all 0.25s ease;
         }
 
-        /* Icon box */
         .icon-box {
             background: #f1f5f9;
             padding: 10px;
@@ -189,14 +187,12 @@
             transition: all 0.25s ease;
         }
 
-        /* Text */
         .logout-text {
             color: #dc2626;
             font-weight: 600;
             transition: all 0.25s ease;
         }
 
-        /* Hover Effects */
         .logout-item:hover {
             background: #fff1f2;
         }
@@ -210,6 +206,23 @@
         .logout-item:hover .logout-text {
             color: #b91c1c;
             text-decoration: underline;
+        }
+
+        /* Form inputs in modals */
+        .form-control,
+        .form-select {
+            border-radius: 12px;
+            padding: 10px 16px;
+            border: 2px solid #F1F5F9;
+            background-color: #F8FAFC;
+            font-weight: 500;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #FECACA;
+            box-shadow: none;
+            background-color: white;
         }
     </style>
 </head>
@@ -238,9 +251,9 @@
         </div>
         <nav class="nav flex-column mt-2 w-100">
             <div class="px-4 pb-2 text-label" style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Hospital Portal</div>
-            <a href="/hospital/dashboard" class="nav-link"><span class="nav-icon"><i class="fas fa-chart-pie w-25"></i></span> Dashboard</a>
-            <a href="/hospital/inventory" class="nav-link active"><span class="nav-icon"><i class="fas fa-box-open w-25"></i></span> Inventory & Reports</a>
-            <a href="/hospital/donationManagement" class="nav-link"><span class="nav-icon"><i class="fas fa-user-nurse w-25"></i></span> Donation Mgmt</a>
+            <a href="/hospital/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
+            <a href="/hospital/inventory" class="nav-link active"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
+            <a href="/hospital/donationManagement" class="nav-link"><i class="fas fa-user-nurse w-25"></i> Donation Mgmt</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">
@@ -266,14 +279,18 @@
                     <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3">
                         <i class="fas fa-check-circle me-1"></i> System Operational
                     </span>
-                </div>  
+                </div>
             </div>
             <div class="d-flex align-items-center gap-4">
+                <button class="btn border-0 position-relative text-secondary">
+                    <i class="fas fa-bell fa-lg"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                </button>
                 <div class="d-none d-md-block border-start h-50 mx-2"></div>
                 <div class="d-flex align-items-center gap-3">
                     <div class="text-end d-none d-md-block">
                         <div class="fw-bold small">Hospital Staff</div>
-                        <div class="text-label text-success" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Verified Staff</div>
+                        <div class="text-label text-success">Verified Staff</div>
                     </div>
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hospital" class="rounded-3 border" width="40" height="40" alt="Avatar">
                 </div>
@@ -285,7 +302,7 @@
             <div class="col-xl-8">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="fw-bold mb-0">Current Stock Batches</h4>
-                    <button class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm"><i class="fas fa-plus me-2"></i> Add Batch</button>
+                    <button class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#addBatchModal"><i class="fas fa-plus me-2"></i> Add Batch</button>
                 </div>
 
                 <div class="custom-card">
@@ -306,28 +323,28 @@
                                     <td class="px-4 py-3 fw-bold">12 Units</td>
                                     <td class="px-4 py-3 text-danger fw-bold">15 Jan 2026</td>
                                     <td class="px-4 py-3"><span class="status-badge badge-critical">Low</span></td>
-                                    <td class="px-4 py-3 text-end"><button class="btn btn-light btn-sm"><i class="fas fa-edit text-muted"></i></button></td>
+                                    <td class="px-4 py-3 text-end"><button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#editBatchModal"><i class="fas fa-edit text-muted"></i></button></td>
                                 </tr>
                                 <tr>
                                     <td class="px-4 py-3 fw-black fs-5">A+</td>
                                     <td class="px-4 py-3 fw-bold">45 Units</td>
                                     <td class="px-4 py-3 text-dark">10 Feb 2026</td>
                                     <td class="px-4 py-3"><span class="status-badge badge-optimal">Optimal</span></td>
-                                    <td class="px-4 py-3 text-end"><button class="btn btn-light btn-sm"><i class="fas fa-edit text-muted"></i></button></td>
+                                    <td class="px-4 py-3 text-end"><button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#editBatchModal"><i class="fas fa-edit text-muted"></i></button></td>
                                 </tr>
                                 <tr>
                                     <td class="px-4 py-3 fw-black fs-5">AB-</td>
                                     <td class="px-4 py-3 fw-bold">03 Units</td>
                                     <td class="px-4 py-3 text-danger fw-bold">05 Jan 2026</td>
                                     <td class="px-4 py-3"><span class="status-badge badge-critical">Critical</span></td>
-                                    <td class="px-4 py-3 text-end"><button class="btn btn-light btn-sm"><i class="fas fa-edit text-muted"></i></button></td>
+                                    <td class="px-4 py-3 text-end"><button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#editBatchModal"><i class="fas fa-edit text-muted"></i></button></td>
                                 </tr>
                                 <tr>
                                     <td class="px-4 py-3 fw-black fs-5">B+</td>
                                     <td class="px-4 py-3 fw-bold">28 Units</td>
                                     <td class="px-4 py-3 text-dark">22 Mar 2026</td>
                                     <td class="px-4 py-3"><span class="status-badge badge-optimal">Optimal</span></td>
-                                    <td class="px-4 py-3 text-end"><button class="btn btn-light btn-sm"><i class="fas fa-edit text-muted"></i></button></td>
+                                    <td class="px-4 py-3 text-end"><button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#editBatchModal"><i class="fas fa-edit text-muted"></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -356,6 +373,13 @@
                             </div>
                             <i class="fas fa-download"></i>
                         </button>
+                        <button class="report-btn">
+                            <div class="d-flex align-items-center gap-3">
+                                <i class="fas fa-users text-warning"></i>
+                                <span class="fw-bold small">Donor Turnout</span>
+                            </div>
+                            <i class="fas fa-download"></i>
+                        </button>
                     </div>
 
                     <div class="border-top border-secondary pt-4">
@@ -366,6 +390,89 @@
                         </div>
                         <button class="btn btn-danger w-100 mt-3 fw-bold py-2">Generate Custom PDF</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Batch Modal -->
+    <div class="modal fade" id="addBatchModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow" style="border-radius: 24px;">
+                <div class="modal-header border-0 p-4 pb-0">
+                    <h5 class="modal-title fw-bold">Add New Batch</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form>
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <label class="text-muted fw-bold small text-uppercase mb-1">Blood Type</label>
+                                <select class="form-select">
+                                    <option selected disabled>Select...</option>
+                                    <option>A+</option>
+                                    <option>A-</option>
+                                    <option>B+</option>
+                                    <option>B-</option>
+                                    <option>AB+</option>
+                                    <option>AB-</option>
+                                    <option>O+</option>
+                                    <option>O-</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="text-muted fw-bold small text-uppercase mb-1">Quantity (Units)</label>
+                                <input type="number" class="form-control" placeholder="0">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="text-muted fw-bold small text-uppercase mb-1">Expiration Date</label>
+                            <input type="date" class="form-control">
+                        </div>
+                        <button type="button" class="btn btn-danger w-100 py-3 rounded-pill fw-bold shadow-sm" data-bs-dismiss="modal">Confirm Addition</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Batch Modal -->
+    <div class="modal fade" id="editBatchModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow" style="border-radius: 24px;">
+                <div class="modal-header border-0 p-4 pb-0">
+                    <h5 class="modal-title fw-bold">Edit Batch Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form>
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <label class="text-muted fw-bold small text-uppercase mb-1">Blood Type</label>
+                                <input type="text" class="form-control" value="O-" disabled>
+                            </div>
+                            <div class="col-6">
+                                <label class="text-muted fw-bold small text-uppercase mb-1">Quantity (Units)</label>
+                                <input type="number" class="form-control" value="12">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-muted fw-bold small text-uppercase mb-1">Expiration Date</label>
+                            <input type="date" class="form-control" value="2026-01-15">
+                        </div>
+                        <div class="mb-4">
+                            <label class="text-muted fw-bold small text-uppercase mb-1">Status</label>
+                            <select class="form-select">
+                                <option>Optimal</option>
+                                <option selected>Low</option>
+                                <option>Critical</option>
+                            </select>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-light w-50 py-3 rounded-pill fw-bold border" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-dark w-50 py-3 rounded-pill fw-bold shadow-sm" data-bs-dismiss="modal">Save Changes</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
