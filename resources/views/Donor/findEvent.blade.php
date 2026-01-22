@@ -65,7 +65,8 @@
         }
 
         .nav-icon {
-            width: 32px;              /* FIXED WIDTH */
+            width: 32px;
+            /* FIXED WIDTH */
             display: flex;
             justify-content: center;
             font-size: 1rem;
@@ -160,8 +161,8 @@
             text-align: center;
         }
 
-                /* Remove default link styles */
-                .logout-link {
+        /* Remove default link styles */
+        .logout-link {
             text-decoration: none;
             color: inherit;
         }
@@ -269,25 +270,25 @@
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
             <div class="position-relative w-100 w-md-50" style="max-width: 400px;">
                 <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
-                <input type="text" class="form-control rounded-pill ps-5 py-2 border-0 shadow-sm" placeholder="Search Event...">
+                <input type="text" id="eventSearch" class="form-control rounded-pill ps-5 py-2 border-0 shadow-sm" placeholder="Search Event...">
             </div>
         </div>
 
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         @elseif(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         @endif
 
         <div class="row g-4">
-        @foreach($events as $event)
-            <div class="col-md-6 col-xl-4">
+            @foreach($events as $event)
+            <div class="col-md-6 col-xl-4 event-card" data-search="{{ strtolower($event->name . ' ' . $event->location) }}">
                 <div class="custom-card h-100 d-flex flex-column">
 
                     <div class="bg-light p-4 d-flex justify-content-center align-items-center position-relative" style="height:160px; background: linear-gradient(135deg, #dc2626, #b91c1c);">
@@ -314,22 +315,59 @@
                             </span>
 
                             @if($event->status == 'ACTIVE' && $event->available_slots > 0)
-                                <form method="POST" action="{{ route('donor.bookEvent', $event->id) }}">
-                                    @csrf
-                                    <button class="btn btn-primary-custom btn-sm">Book Visit</button>
-                                </form>
+                            <form method="POST" action="{{ route('donor.bookEvent', $event->id) }}">
+                                @csrf
+                                <button class="btn btn-primary-custom btn-sm">Book Visit</button>
+                            </form>
                             @else
-                                <button class="btn btn-secondary btn-sm" disabled>Closed</button>
+                            <button class="btn btn-secondary btn-sm" disabled>Closed</button>
                             @endif
                         </div>
                     </div>
                 </div>
             </div>
-        @endforeach
+            @endforeach
         </div>
+
+        <div id="noResults" class="text-center py-5 d-none">
+            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+            <h5 class="fw-bold text-muted">No events found</h5>
+            <p class="text-muted small">
+                Try searching with a different keyword or location.
+            </p>
+        </div>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const searchInput = document.getElementById('eventSearch');
+        const eventCards = document.querySelectorAll('.event-card');
+        const noResults = document.getElementById('noResults');
+
+        searchInput.addEventListener('input', function() {
+            const keyword = this.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            eventCards.forEach(card => {
+                const text = card.dataset.search;
+
+                if (text.includes(keyword)) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Show or hide empty message
+            if (visibleCount === 0) {
+                noResults.classList.remove('d-none');
+            } else {
+                noResults.classList.add('d-none');
+            }
+        });
+    </script>
 </body>
 
 </html>

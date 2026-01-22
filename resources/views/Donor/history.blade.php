@@ -291,8 +291,8 @@
             border-color: var(--text-dark);
         }
 
-                /* Remove default link styles */
-                .logout-link {
+        /* Remove default link styles */
+        .logout-link {
             text-decoration: none;
             color: inherit;
         }
@@ -399,17 +399,19 @@
 
         <!-- Filters -->
         <div class="d-flex flex-wrap gap-2 mb-4">
-            <button class="filter-btn active">All Records</button>
-            <button class="filter-btn">Successful</button>
-            <button class="filter-btn">Pending</button>
-            <button class="filter-btn">Deferred</button>
+            <button class="filter-btn active" data-filter="all">All Records</button>
+            <button class="filter-btn" data-filter="completed">Completed</button>
+            <button class="filter-btn" data-filter="approved">Approved</button>
+            <button class="filter-btn" data-filter="pending">Pending</button>
+            <button class="filter-btn" data-filter="cancelled">Cancelled</button>
+            <button class="filter-btn" data-filter="rejected">Rejected</button>
         </div>
 
         <!-- History List -->
         <div class="vstack gap-3">
             {{-- Successful donations --}}
             @foreach($donations as $donation)
-            <div class="history-card">
+            <div class="history-card" data-status="completed">
                 <div class="date-box">
                     <div class="date-day">{{ $donation->created_at->format('d') }}</div>
                     <div class="date-month">{{ $donation->created_at->format('M Y') }}</div>
@@ -449,10 +451,9 @@
             </div>
             @endforeach
 
-
             {{-- Appointments (pending / cancelled) --}}
             @foreach($appointments as $app)
-            <div class="history-card">
+            <div class="history-card" data-status="{{ strtolower($app->status) }}">
                 <div class="date-box">
                     <div class="date-day">{{ \Carbon\Carbon::parse($app->date)->format('d') }}</div>
                     <div class="date-month">{{ \Carbon\Carbon::parse($app->date)->format('M Y') }}</div>
@@ -483,8 +484,50 @@
             </div>
             @endforeach
         </div>
+        <div id="empty-state" class="text-center py-5 d-none">
+            <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+            <h5 class="fw-bold text-muted">No records found</h5>
+            <p class="text-muted small">
+                There are no records under this status.
+            </p>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const historyCards = document.querySelectorAll('.history-card');
+    const emptyState = document.getElementById('empty-state');
+
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+
+            // Set active button
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filters = btn.dataset.filter.split(',');
+            let visibleCount = 0;
+
+            historyCards.forEach(card => {
+                const status = card.dataset.status;
+
+                if (filters.includes('all') || filters.includes(status)) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Show or hide empty state
+            if (visibleCount === 0) {
+                emptyState.classList.remove('d-none');
+            } else {
+                emptyState.classList.add('d-none');
+            }
+        });
+    });
+</script>
 </body>
 
 </html>
