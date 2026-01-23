@@ -5,24 +5,24 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\MedicalFacility;
 
-class HospitalController extends Controller
+class MedicalFacilitiesController extends Controller
 {
     //
-    public function hospitalDashboard()
+    public function medicalFacilitiesDashboard()
     {
         $user = auth()->user();
         $medical_facility_id = $user->facility_id;
         $medical_facility = MedicalFacility::find($medical_facility_id)->first();
-        return view('hospital.dashboard',compact('user','medical_facility'));
+        return view('MedicalFacilities.dashboard',compact('user','medical_facility'));
     }
 
     public function inventory_and_report()
     {
-        return view('hospital.inventory');
+        return view('MedicalFacilities.inventory');
     }
 
     public function donationManagement()
     {
-        return view('hospital.donationManagement');
+        return view('MedicalFacilities.donationManagement');
     }
 }

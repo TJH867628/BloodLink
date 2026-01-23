@@ -428,6 +428,16 @@
                                 <tr>
                                     <td class="small text-muted ps-3">2025-12-29</td>
                                     <td>
+                                        <div class="fw-bold small">Michael Chen</div>
+                                        <div class="small text-muted">D-105</div>
+                                    </td>
+                                    <td><span class="badge bg-light text-dark border">O+</span></td>
+                                    <td class="small">14.2 / 110/70</td>
+                                    <td class="text-end pe-3"><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Successful</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="small text-muted ps-3">2025-12-29</td>
+                                    <td>
                                         <div class="fw-bold small">Sarah Lee</div>
                                         <div class="small text-muted">D-109</div>
                                     </td>

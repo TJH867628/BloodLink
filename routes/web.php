@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MedicalFacilitiesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DonorController;
@@ -27,9 +28,9 @@ Route::middleware(['role:DONOR','auth'])->group(function () {
     Route::post('donor/cancelAppointment/{appointmentId}', [DonorController::class, 'cancelAppointment'])->name('donor.cancelAppointment');
 });
 Route::middleware(['role:STAFF','auth'])->group(function () {
-    Route::get('hospital/dashboard', [HospitalController::class, 'hospitalDashboard'])->name('hospital.dashboard');
-    Route::get('hospital/inventory', [HospitalController::class, 'inventory_and_report'])->name('hospital.inventory');
-    Route::get('hospital/donationManagement', [HospitalController::class, 'donationManagement'])->name('hospital.donationManagement');
+    Route::get('medicalFacilities/dashboard', [MedicalFacilitiesController::class, 'medicalFacilitiesDashboard'])->name('medicalFacilities.dashboard');
+    Route::get('medicalFacilities/inventory', [MedicalFacilitiesController::class, 'inventory_and_report'])->name('medicalFacilities.inventory');
+    Route::get('medicalFacilities/donationManagement', [MedicalFacilitiesController::class, 'donationManagement'])->name('medicalFacilities.donationManagement');
 
 });
 Route::middleware(['role:ORGANIZER','auth'])->group(function () {

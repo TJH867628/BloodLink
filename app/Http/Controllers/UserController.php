@@ -76,7 +76,7 @@ class UserController extends Controller
                 case 'ORGANIZER':
                     return redirect()->route('event_organizer.dashboard');
                 case 'STAFF':
-                    return redirect()->route('hospital.dashboard');
+                    return redirect()->route('medicalFacilities.dashboard');
                 default:
                     Auth::logout();
                     return redirect()->route('login')->with('error', 'Invalid role.');
