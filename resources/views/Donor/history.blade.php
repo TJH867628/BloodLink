@@ -291,6 +291,14 @@
             border-color: var(--text-dark);
         }
 
+        .text-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #94A3B8;
+            letter-spacing: 0.05em;
+        }
+
         /* Remove default link styles */
         .logout-link {
             text-decoration: none;

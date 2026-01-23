@@ -184,8 +184,8 @@
             letter-spacing: 0.05em;
         }
 
-                /* Remove default link styles */
-                .logout-link {
+        /* Remove default link styles */
+        .logout-link {
             text-decoration: none;
             color: inherit;
         }

@@ -42,3 +42,10 @@ Route::middleware(['role:ORGANIZER','auth'])->group(function () {
     Route::post('event_organizer/acceptAppointment/{id}', [EventOrganizerController::class, 'acceptAppointment'])->name('event_organizer.acceptAppointment');
     Route::post('event_organizer/rejectAppointment/{id}', [EventOrganizerController::class, 'rejectAppointment'])->name('event_organizer.rejectAppointment');
 });
+Route::middleware(['role:ADMIN','auth'])->group(function () {
+    Route::get('admin/dashboard', [App\Http\Controllers\AdminController::class, 'adminDashboard'])->name('admin.dashboard');
+    Route::get('admin/userManagement', [App\Http\Controllers\AdminController::class, 'userManagement'])->name('admin.userManagement');
+    Route::get('admin/hospitalManagement', [App\Http\Controllers\AdminController::class, 'hospitalManagement'])->name('admin.hospitalManagement');
+    Route::get('admin/systemModification', [App\Http\Controllers\AdminController::class, 'systemModification'])->name('admin.systemModification');
+    Route::get('admin/auditReport', [App\Http\Controllers\AdminController::class, 'auditReport'])->name('admin.auditReport');
+});

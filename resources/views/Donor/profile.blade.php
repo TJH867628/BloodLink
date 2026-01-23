@@ -174,6 +174,14 @@
             transition: all 0.25s ease;
         }
 
+        .text-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #94A3B8;
+            letter-spacing: 0.05em;
+        }
+
         /* Text */
         .logout-text {
             color: #dc2626;
@@ -246,9 +254,18 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <header class="mb-5">
-            <h2 class="fw-black mb-0">My Profile</h2>
-            <p class="text-muted small fw-medium mt-1">Manage your personal information and health details.</p>
+        <header class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h2 class="fw-black mb-0">My Profile</h2>
+                <p class="text-muted small fw-medium mt-1">Manage your personal information and health details.</p>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="text-end d-none d-md-block">
+                    <div class="fw-bold small">{{ $user->name }}</div>
+                    <div class="text-label text-success">Donor</div>
+                </div>
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Donor" class="rounded-3 border" width="40" height="40" alt="Avatar">
+            </div>
         </header>
 
         <div class="row g-4">
