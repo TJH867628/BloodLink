@@ -281,7 +281,7 @@
                                 @if($app->status == 'COMPLETED')
                                 <span class="badge bg-success-subtle text-success rounded-pill">Completed</span>
                                 @elseif($app->status == 'ACCEPTED')
-                                <span class="badge bg-primary-subtle text-primary rounded-pill">ACCEPTED</span>
+                                <span class="badge bg-primary-subtle text-primary rounded-pill">Accepted</span>
                                 @elseif($app->status == 'PENDING')
                                 <span class="badge bg-warning-subtle text-warning rounded-pill">Pending</span>
                                 @elseif($app->status == 'CANCELLED')
