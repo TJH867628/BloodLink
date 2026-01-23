@@ -280,8 +280,8 @@
                             <td class="px-4 py-3">
                                 @if($app->status == 'COMPLETED')
                                 <span class="badge bg-success-subtle text-success rounded-pill">Completed</span>
-                                @elseif($app->status == 'APPROVED')
-                                <span class="badge bg-primary-subtle text-primary rounded-pill">Approved</span>
+                                @elseif($app->status == 'ACCEPTED')
+                                <span class="badge bg-primary-subtle text-primary rounded-pill">ACCEPTED</span>
                                 @elseif($app->status == 'PENDING')
                                 <span class="badge bg-warning-subtle text-warning rounded-pill">Pending</span>
                                 @elseif($app->status == 'CANCELLED')

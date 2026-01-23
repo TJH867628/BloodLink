@@ -147,7 +147,7 @@ class EventOrganizerController extends Controller
     public function acceptAppointment($appointmentId)
     {
         $appointment = Appointment::findOrFail($appointmentId);
-        $appointment->status = 'APPROVED';
+        $appointment->status = 'ACCEPTED';
         $appointment->save();
         $event = EventModel::where('id', $appointment->event_id)->first();
         $eventDate = Carbon::parse($event->date);
