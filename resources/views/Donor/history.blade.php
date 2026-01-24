@@ -448,14 +448,13 @@
                             <i class="fas fa-map-marker-alt"></i>
                             {{ $donation->facility->name ?? 'Medical Facility' }}
                         </div>
-                        </div>
                         <div class="meta-item">
                             <i class="fas fa-clock"></i>
                             {{ $donation->created_at->format('h:i A')   }}
                         </div>
                         <div class="meta-item">
                             <i class="fas fa-tint"></i>
-                            {{ $donation->unit }} Bag(s)
+                            {{ $donation->unit }} unit(bag)
                         </div>
                     </div>
                 </div>
@@ -470,6 +469,7 @@
                     </div>
                 </div>
             </div>
+        </div>
             @endforeach
 
             {{-- Appointments (pending / cancelled) --}}

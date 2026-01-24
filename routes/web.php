@@ -21,9 +21,10 @@ Route::middleware(['role:DONOR','auth'])->group(function () {
     Route::get('donor/history', [DonorController::class, 'history'])->name('donor.history');
     Route::get('donor/feedback', [DonorController::class, 'feedback'])->name('donor.feedback');
     Route::get('donor/profile', [DonorController::class, 'profile'])->name('donor.profile');
+    Route::get('donor/notification', [DonorController::class, 'notification'])->name('donor.notification');
 
     Route::post('donor/bookEvent/{eventId}', [DonorController::class, 'bookEvent'])->name('donor.bookEvent');
-    Route::post('donor/updateProfile', [DonorController::class, 'updateProfile'])->name('donor.updateProfile');
+    Route::post('donor/notification', [DonorController::class, 'updateProfile'])->name('donor.updateProfile');
     Route::post('donor/submitFeedback', [DonorController::class, 'submitFeedback'])->name('donor.submitFeedback');
     Route::post('donor/cancelAppointment/{appointmentId}', [DonorController::class, 'cancelAppointment'])->name('donor.cancelAppointment');
 });
@@ -33,6 +34,7 @@ Route::middleware(['role:STAFF','auth'])->group(function () {
     Route::get('medical_facilities/donationManagement', [MedicalFacilitiesController::class, 'donationManagement'])->name('medical_facilities.donationManagement');
     Route::get('medical_facilities/bloodtypeManagement', [MedicalFacilitiesController::class, 'bloodtypeManagement'])->name('medical_facilities.bloodtypeManagement');
     Route::get('medical_facilities/profile', [MedicalFacilitiesController::class, 'profile'])->name('medical_facilities.profile');
+    Route::post('medical_facilities/notification', [MedicalFacilitiesController::class, 'notification'])->name('medical_facilities.notification');
 
     Route::post('medical_facilities/recordDonationResult/{appointment_id}', [MedicalFacilitiesController::class, 'recordDonationResult'])->name('medical_facilities.recordDonationResult');
 });
@@ -41,6 +43,7 @@ Route::middleware(['role:ORGANIZER','auth'])->group(function () {
     Route::get('event_organizer/eventManagement', [EventOrganizerController::class, 'eventManagement'])->name('event_organizer.eventManagement');
     Route::get('event_organizer/participation', [EventOrganizerController::class, 'participation'])->name('event_organizer.participation');
     Route::get('event_organizer/profile', [EventOrganizerController::class, 'profile'])->name('event_organizer.profile');
+    Route::get('event_organizer/notification', [EventOrganizerController::class, 'notification'])->name('event_organizer.notification');
 
     Route::post('event_organizer/createEvent', [EventOrganizerController::class, 'createEvent'])->name('event_organizer.createEvent'); 
     Route::post('event_organizer/editEvent/{id}', [EventOrganizerController::class, 'editEvent'])->name('event_organizer.editEvent');

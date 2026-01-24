@@ -216,4 +216,10 @@ class EventOrganizerController extends Controller
 
         return redirect()->back()->with('success', 'Appointment rejected successfully.');
     }
+
+    public function notification ()
+    {
+        $user = auth()->user();
+        return view('Event_Organizer.notification', compact('user'));
+    }
 }

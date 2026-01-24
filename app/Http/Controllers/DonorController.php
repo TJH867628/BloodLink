@@ -317,4 +317,10 @@ class DonorController extends Controller
 
         return redirect()->back()->with('success', 'Profile updated successfully!');
     }   
+
+    public function notification () {
+        $user = Auth::user();
+
+        return view('donor.notification', compact('user'));
+    }
 }
