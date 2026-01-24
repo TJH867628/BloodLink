@@ -254,6 +254,7 @@
             <a href="/medical_facilities/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
             <a href="/medical_facilities/inventory" class="nav-link active"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
             <a href="/medical_facilities/donationManagement" class="nav-link"><i class="fas fa-user-nurse w-25"></i> Donation Management</a>
+            <a href="/medical_facilities/bloodtypeManagement" class="nav-link"><span class="nav-icon"><i class="fas fa-exchange-alt w-25"></i></span> Blood Logistics</a>
             <a href="/medical_facilities/profile" class="nav-link"><i class="fas fa-hospital w-25"></i> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
@@ -301,11 +302,6 @@
         <div class="row g-4">
             <!-- Inventory Table Section -->
             <div class="col-xl-8">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="fw-bold mb-0">Current Stock Batches</h4>
-                    <button class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#addBatchModal"><i class="fas fa-plus me-2"></i> Add Batch</button>
-                </div>
-
                 <div class="custom-card">
                     <div class="table-responsive">
                         <table class="table table-hover mb-0 align-middle">
