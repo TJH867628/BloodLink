@@ -31,6 +31,8 @@ Route::middleware(['role:STAFF','auth'])->group(function () {
     Route::get('medical_facilities/dashboard', [MedicalFacilitiesController::class, 'medicalFacilitiesDashboard'])->name('medical_facilities.dashboard');
     Route::get('medical_facilities/inventory', [MedicalFacilitiesController::class, 'inventory_and_report'])->name('medical_facilities.inventory');
     Route::get('medical_facilities/donationManagement', [MedicalFacilitiesController::class, 'donationManagement'])->name('medical_facilities.donationManagement');
+    Route::get('medical_facilities/bloodtypeManagement', [MedicalFacilitiesController::class, 'bloodtypeManagement'])->name('medical_facilities.bloodtypeManagement');
+    Route::get('medical_facilities/profile', [MedicalFacilitiesController::class, 'profile'])->name('medical_facilities.profile');
 
     Route::post('medical_facilities/recordDonationResult/{appointment_id}', [MedicalFacilitiesController::class, 'recordDonationResult'])->name('medical_facilities.recordDonationResult');
 });
@@ -38,6 +40,8 @@ Route::middleware(['role:ORGANIZER','auth'])->group(function () {
     Route::get('event_organizer/dashboard', [EventOrganizerController::class, 'eventOrganizerDashboard'])->name('event_organizer.dashboard');
     Route::get('event_organizer/eventManagement', [EventOrganizerController::class, 'eventManagement'])->name('event_organizer.eventManagement');
     Route::get('event_organizer/participation', [EventOrganizerController::class, 'participation'])->name('event_organizer.participation');
+    Route::get('event_organizer/profile', [EventOrganizerController::class, 'profile'])->name('event_organizer.profile');
+
     Route::post('event_organizer/createEvent', [EventOrganizerController::class, 'createEvent'])->name('event_organizer.createEvent'); 
     Route::post('event_organizer/editEvent/{id}', [EventOrganizerController::class, 'editEvent'])->name('event_organizer.editEvent');
     Route::post('event_organizer/deleteEvent/{id}', [EventOrganizerController::class, 'deleteEvent'])->name('event_organizer.deleteEvent');

@@ -50,11 +50,13 @@ class EventOrganizerController extends Controller
     }
     public function eventManagement()
     {
+        $user = auth()->user();
         $events = EventModel::where('organizer_id', auth()->id())->get();
-        return view('Event_Organizer.eventManagement',compact('events'));
+        return view('Event_Organizer.eventManagement',compact('events', 'user'));
     }
     public function participation()
     {
+        $user = auth()->user();
         $appoinments = DB::table('appointment')
         ->join('event', 'appointment.event_id', '=', 'event.id')
         ->join('users', 'appointment.donor_id', '=', 'users.id')
@@ -73,7 +75,13 @@ class EventOrganizerController extends Controller
 
         $events = EventModel::where('organizer_id', auth()->id())->get();
         
-        return view('Event_Organizer.participation',compact('appoinments','events'));
+        return view('Event_Organizer.participation',compact('appoinments','user', 'events'));
+    }
+
+    public function profile()
+    {
+        $user = auth()->user();
+        return view('Event_Organizer.profile', compact('user'));
     }
 
     public function createEvent(Request $request)

@@ -202,6 +202,7 @@
             <a href="/medical_facilities/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
             <a href="/medical_facilities/inventory" class="nav-link"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
             <a href="/medical_facilities/donationManagement" class="nav-link active"><i class="fas fa-user-nurse w-25"></i> Donation Management</a>
+            <a href="/medical_facilities/profile" class="nav-link"><i class="fas fa-hospital w-25"></i> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">
@@ -210,7 +211,7 @@
                         <i class="fas fa-sign-out-alt"></i>
                     </div>
                     <div>
-                        <div class="fw-bold text-dark small">Dr. Chai Yu Xuan</div>
+                        <div class="fw-bold text-dark small">Dr. {{ $user->name }}</div>
                         <div class="logout-text">Sign Out</div>
                     </div>
                 </div>
@@ -246,7 +247,7 @@
                 <div class="custom-card h-100">
                     <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
                         <h5 class="fw-bold mb-0">Today's Queue</h5>
-                        <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill fw-bold">3 Pending</span>
+                        <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill fw-bold">{{ $donation_today->count() }} Pending</span>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-hover mb-0 align-middle">
@@ -259,7 +260,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($donation_today as $donation)
-                                 <tr>
+                                <tr>
                                     <td class="px-4 py-3">
                                         <div class="d-flex align-items-center gap-3">
                                             <div class="bg-danger-subtle text-danger rounded p-1 fw-bold small text-center" style="width: 32px;">{{ $donation->blood_type }}</div>
@@ -274,6 +275,13 @@
                                     </td>
                                 </tr>
                                 @endforeach
+                                @if(count($donation_today) == 0)
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-4">
+                                        No more donors in the queue
+                                    </td>
+                                </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -285,7 +293,7 @@
                 <div class="custom-card h-100 p-4">
                     <h5 class="fw-bold mb-4">Recent Records</h5>
                     <div class="vstack gap-3">
-                    @forelse($recentRecords as $r)
+                        @forelse($recentRecords as $r)
                         <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-4">
                             <div>
                                 <div class="fw-bold small text-dark">{{ $r->donor_name }}</div>
@@ -295,23 +303,23 @@
                             </div>
 
                             @if($r->status == 'SUCCESSFUL')
-                                <span class="badge bg-success text-white border-0">Successful</span>
+                            <span class="badge bg-success text-white border-0">Successful</span>
                             @else
-                                <span class="badge bg-warning text-dark border-0">Discarded</span>
+                            <span class="badge bg-warning text-dark border-0">Discarded</span>
                             @endif
                         </div>
-                    @empty
+                        @empty
                         <div class="text-center text-muted small py-4">
                             No records yet
                         </div>
-                    @endforelse
+                        @endforelse
                     </div>
                     <button class="btn btn-link text-danger text-decoration-none fw-bold text-uppercase w-100 mt-3" style="font-size: 0.75rem; letter-spacing: 0.1em;" data-bs-toggle="modal" data-bs-target="#historyModal">View Full History</button>
                 </div>
             </div>
         </div>
     </div>
-        
+
     <!-- Record Result Modal -->
     <div class="modal fade" id="recordModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -322,54 +330,54 @@
                 </div>
                 <div class="modal-body p-4">
                     <form method="POST" id="recordDonationForm">
-                    @csrf
+                        @csrf
 
-                    <div class="row g-3 mb-3">
-                        <div class="col-6">
-                            <label>Hemoglobin</label>
-                            <input type="number"
-                            step="0.1"
-                            min="8"
-                            max="20"
-                            class="form-control"
-                            name="hemoglobin_level"
-                            placeholder="e.g. 13.5"
-                            required>
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <label>Hemoglobin</label>
+                                <input type="number"
+                                    step="0.1"
+                                    min="8"
+                                    max="20"
+                                    class="form-control"
+                                    name="hemoglobin_level"
+                                    placeholder="e.g. 13.5"
+                                    required>
+                            </div>
+
+                            <div class="col-6">
+                                <label>Blood Pressure</label>
+                                <input type="text"
+                                    class="form-control"
+                                    name="blood_pressure"
+                                    placeholder="e.g. 120/80"
+                                    pattern="^\d{2,3}\/\d{2,3}$"
+                                    title="Format must be like 120/80"
+                                    required>
+                            </div>
                         </div>
 
-                        <div class="col-6">
-                            <label>Blood Pressure</label>
-                            <input type="text"
-                            class="form-control"
-                            name="blood_pressure"
-                            placeholder="e.g. 120/80"
-                            pattern="^\d{2,3}\/\d{2,3}$"
-                            title="Format must be like 120/80"
-                            required>
+                        <div class="mb-3">
+                            <label>Unit</label>
+                            <input type="number" class="form-control" name="unit" value="1">
                         </div>
-                    </div>
 
-                    <div class="mb-3">
-                        <label>Unit</label>
-                        <input type="number" class="form-control" name="unit" value="1">
-                    </div>
+                        <div class="mb-4">
+                            <label>Final Result</label>
+                            <select class="form-select" name="donation_status">
+                                <option value="SUCCESSFUL">Successful</option>
+                                <option value="DISCARDED">Discarded</option>
+                            </select>
+                        </div>
 
-                    <div class="mb-4">
-                        <label>Final Result</label>
-                        <select class="form-select" name="donation_status">
-                            <option value="SUCCESSFUL">Successful</option>
-                            <option value="DISCARDED">Discarded</option>
-                        </select>
-                    </div>
+                        <div class="mb-3">
+                            <label>Notes</label>
+                            <textarea class="form-control" name="notes"></textarea>
+                        </div>
 
-                    <div class="mb-3">
-                        <label>Notes</label>
-                        <textarea class="form-control" name="notes"></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-danger w-100">
-                        Save Record
-                    </button>
+                        <button type="submit" class="btn btn-danger w-100">
+                            Save Record
+                        </button>
 
                     </form>
                 </div>
@@ -388,13 +396,12 @@
                 <div class="modal-body p-4">
                     <!-- Simple Filters -->
                     <div class="d-flex gap-2 mb-3">
-                        <input type="text" class="form-control form-control-sm w-auto" placeholder="Search Donor ID">
-                        <select class="form-select form-select-sm w-auto">
-                            <option>All Results</option>
-                            <option>Successful</option>
-                            <option>Deferred</option>
+                        <input type="text" id="historySearch" class="form-control form-control-sm w-auto" placeholder="Search Donor ID">
+                        <select id="historyStatus" class="form-select form-select-sm w-auto">
+                            <option value="all">All Results</option>
+                            <option value="SUCCESSFUL">Successful</option>
+                            <option value="DISCARDED">Discarded</option>
                         </select>
-                        <button class="btn btn-dark btn-sm rounded-pill px-3 fw-bold">Filter</button>
                     </div>
 
                     <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
@@ -409,7 +416,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @forelse($donationHistory as $r)
+                                @forelse($donationHistory as $r)
                                 <tr>
                                     <td class="small text-muted ps-3">
                                         {{ \Carbon\Carbon::parse($r->collected_date)->format('d M Y') }}
@@ -432,23 +439,28 @@
 
                                     <td class="text-end pe-3">
                                         @if($r->status == 'SUCCESSFUL')
-                                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">
-                                                Successful
-                                            </span>
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">
+                                            Successful
+                                        </span>
                                         @else
-                                            <span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill">
-                                                Discarded
-                                            </span>
+                                        <span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill">
+                                            Discarded
+                                        </span>
                                         @endif
                                     </td>
                                 </tr>
-                            @empty
+                                @empty
                                 <tr>
                                     <td colspan="5" class="text-center text-muted py-4">
                                         No donation records found
                                     </td>
                                 </tr>
-                            @endforelse
+                                @endforelse 
+                                <tr id="historyNoData" style="display: none;">
+                                    <td colspan="5" class="text-center text-muted py-4">
+                                        No donation records found
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -467,11 +479,52 @@
 </html>
 
 <script>
-document.getElementById('recordModal').addEventListener('show.bs.modal', function (event) {
-    const button = event.relatedTarget;
-    const appointmentId = button.getAttribute('data-appointment');
+    document.getElementById('recordModal').addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const appointmentId = button.getAttribute('data-appointment');
 
-    const form = document.getElementById('recordDonationForm');
-    form.action = "/medical_facilities/recordDonationResult/" + appointmentId;
-});
+        const form = document.getElementById('recordDonationForm');
+        form.action = "/medical_facilities/recordDonationResult/" + appointmentId;
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('historySearch');
+        const statusSelect = document.getElementById('historyStatus');
+        const tbody = document.querySelector('#historyModal tbody');
+        const noDataRow = document.getElementById('historyNoData');
+
+        function filterHistory() {
+            const searchValue = searchInput.value.trim().toLowerCase();
+            const statusValue = statusSelect.value;
+
+            let visibleCount = 0;
+
+            const rows = tbody.querySelectorAll('tr:not(#historyNoData)');
+
+            // 🔁 Reset everything first
+            rows.forEach(row => row.style.display = '');
+
+            rows.forEach(row => {
+                const donorText = row.querySelector('td:nth-child(2)')?.innerText.toLowerCase() || '';
+                const resultBadge = row.querySelector('td:last-child span')?.innerText.trim().toUpperCase() || '';
+
+                const matchSearch = donorText.includes(searchValue);
+                const matchStatus = (statusValue === 'all' || resultBadge === statusValue);
+
+                const show = matchSearch && matchStatus;
+
+                row.style.display = show ? '' : 'none';
+
+                if (show) visibleCount++;
+            });
+
+            // 👇 Toggle "No Records"
+            if (noDataRow) {
+                noDataRow.style.display = (visibleCount === 0) ? '' : 'none';
+            }
+        }
+
+        searchInput.addEventListener('input', filterHistory);
+        statusSelect.addEventListener('change', filterHistory);
+    });
 </script>

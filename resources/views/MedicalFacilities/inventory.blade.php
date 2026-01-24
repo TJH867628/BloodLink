@@ -254,6 +254,7 @@
             <a href="/medical_facilities/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
             <a href="/medical_facilities/inventory" class="nav-link active"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
             <a href="/medical_facilities/donationManagement" class="nav-link"><i class="fas fa-user-nurse w-25"></i> Donation Management</a>
+            <a href="/medical_facilities/profile" class="nav-link"><i class="fas fa-hospital w-25"></i> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">
@@ -262,7 +263,7 @@
                         <i class="fas fa-sign-out-alt"></i>
                     </div>
                     <div>
-                        <div class="fw-bold text-dark small">Dr. Chai Yu Xuan</div>
+                        <div class="fw-bold text-dark small">Dr. {{ $user->name }}</div>
                         <div class="logout-text">Sign Out</div>
                     </div>
                 </div>
@@ -329,8 +330,13 @@
                                     @else
                                     <td class="px-4 py-3"><span class="status-badge badge-critical">Critical</span></td>
                                     @endif
-                                    @endforeach
                                 </tr>
+                                @endforeach
+                                @if($blood_inventories->isEmpty())
+                                <tr>
+                                    <td colspan="3" class="px-4 py-3 text-center text-muted">No inventory data available.</td>
+                                </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>
