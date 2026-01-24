@@ -221,11 +221,42 @@
             <!-- Audit Log Tab -->
             <div class="tab-pane fade show active" id="audit" role="tabpanel">
                 <div class="log-terminal shadow-lg">
-                    <div class="mb-2"><span class="text-secondary">[2025-12-30 14:20:01]</span> <span class="text-white">ADMIN:</span> Modified System Parameter [Blood_Interval] -> 3 Months</div>
-                    <div class="mb-2"><span class="text-secondary">[2025-12-30 12:45:33]</span> <span class="text-white">HOSPITAL_01:</span> Updated Inventory [O- Stock] +12 Units</div>
-                    <div class="mb-2"><span class="text-secondary">[2025-12-30 09:00:15]</span> <span class="text-white">SYSTEM:</span> Scheduled Task [Auto_Notify] sent 15 emails</div>
-                    <div class="mb-2"><span class="text-secondary">[2025-12-29 18:30:22]</span> <span class="text-white">DONOR_55:</span> Failed Login Attempt (IP: 192.168.1.1)</div>
-                    <div class="mt-3 opacity-50">_ Waiting for new events...</div>
+                @foreach($logs as $log)
+                    @php
+                        $role = strtoupper($log->user_role ?? 'SYSTEM');
+
+                        if ($role === 'ADMIN') {
+                            $roleColor = 'text-danger';
+                        } elseif ($role === 'HOSPITAL') {
+                            $roleColor = 'text-primary';
+                        } elseif ($role === 'DONOR') {
+                            $roleColor = 'text-success';
+                        } else {
+                            $roleColor = 'text-warning'; // SYSTEM
+                        }
+                    @endphp
+
+                    <div class="mb-2">
+                        <span class="text-secondary">
+                            [{{ \Carbon\Carbon::parse($log->timestamp)->format('Y-m-d H:i:s') }}]
+                        </span>
+
+                        <span class="{{ $roleColor }} fw-bold">
+                            @if($log->user_id)
+                                {{ $role }}_{{ $log->user_id }} ({{ $log->user_name }}):
+                            @else
+                                SYSTEM:
+                            @endif
+                        </span>
+
+                        <span class="text-white">
+                            {{ $log->action }}
+                        </span>
+                    </div>
+                @endforeach
+
+                <div class="mt-3 opacity-50">_ Waiting for new events...</div>
+
                 </div>
             </div>
 

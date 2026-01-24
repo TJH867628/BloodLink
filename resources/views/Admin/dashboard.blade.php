@@ -264,28 +264,42 @@
                             <th class="small text-muted fw-bold">Time</th>
                             <th class="small text-muted fw-bold">User</th>
                             <th class="small text-muted fw-bold">Action</th>
-                            <th class="small text-muted fw-bold">Target</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @forelse($logs as $log)
                         <tr>
-                            <td>10:30 AM</td>
-                            <td>Dr. Chai Yu Xuan</td>
-                            <td>Updated Inventory</td>
-                            <td>Batch #992</td>
+                            <td class="small text-muted">
+                                {{ \Carbon\Carbon::parse($log->timestamp)->format('h:i A') }}
+                            </td>
+
+                            <td>
+                                <div class="fw-bold">{{ $log->user->name }}</div>
+                                <div class="text-muted small">
+                                    ID {{ $log->user_id }} • 
+                                    <span class="
+                                        @if($log->user->role == 'ADMIN') text-danger
+                                        @elseif($log->user->role == 'HOSPITAL') text-primary
+                                        @elseif($log->user->role == 'DONOR') text-success
+                                        @else text-secondary
+                                        @endif
+                                    ">
+                                        {{ $log->user->role }}
+                                    </span>
+                                </div>
+                            </td>
+
+                            <td class="fw-semibold">
+                                {{ $log->action }}
+                            </td>
                         </tr>
+                        @empty
                         <tr>
-                            <td>10:15 AM</td>
-                            <td>Admin</td>
-                            <td>Modified Settings</td>
-                            <td>Donation Interval</td>
+                            <td colspan="3" class="text-center text-muted py-3">
+                                No activity yet
+                            </td>
                         </tr>
-                        <tr>
-                            <td>09:45 AM</td>
-                            <td>System</td>
-                            <td>Auto-Backup</td>
-                            <td>Database</td>
-                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

@@ -19,7 +19,11 @@ class AdminController extends Controller
         $totalMedicalFacilities = MedicalFacility::count();
         $currentBloodStock = BloodInventory::sum('quantity');
         $emergencyMode = SystemSettings::where('name', 'emergency_mode')->value('value');
-        return view('Admin.dashboard', compact('totalUsers', 'totalMedicalFacilities', 'currentBloodStock', 'emergencyMode'));
+        $logs = AuditLog::with('user')
+        ->orderBy('timestamp', 'desc')
+        ->limit(5)
+        ->get();
+        return view('Admin.dashboard', compact('totalUsers', 'totalMedicalFacilities', 'currentBloodStock', 'emergencyMode', 'logs'));
     }
     public function userManagement()
     {
@@ -42,7 +46,17 @@ class AdminController extends Controller
     public function auditReport()
     {
         $emergencyMode = SystemSettings::where('name', 'emergency_mode')->value('value');
-        $logs = AuditLog::orderBy('timestamp', 'desc')->get();
+        $logs = DB::table('audit_log')
+        ->leftJoin('users', 'audit_log.user_id', '=', 'users.id')
+        ->select(
+            'audit_log.*',
+            'users.id as user_id',
+            'users.name as user_name',
+            'users.role as user_role'
+        )
+        ->orderBy('audit_log.timestamp', 'desc')
+        ->get();
+
         return view('Admin.auditReport', compact('emergencyMode', 'logs'));
     }
 
@@ -51,6 +65,12 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         $user->is_active = !$user->is_active;
         $user->save();
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => ($user->is_active ? 'Activated' : 'Deactivated') . ' user: ' . $user->name . ' (ID: ' . $user->id . ')',
+            'timestamp' => now(),
+        ]);
 
         return redirect()->back()->with('success', 'User activation status updated successfully.');
     }

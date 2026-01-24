@@ -229,6 +229,7 @@
                             <td class="ps-4">
                                 <div class="d-flex align-items-center gap-3">
                                     <div>
+                                        <span class="badge bg-light text-dark border">ID: {{ $user->id }}</span>
                                         <div class="fw-bold">{{ $user->name }}</div>
                                         <div class="text-muted small">{{ $user->email }}</div>
                                     </div>
