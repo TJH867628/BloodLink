@@ -218,7 +218,7 @@
             <a href="/medical_facilities/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
             <a href="/medical_facilities/inventory" class="nav-link"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
             <a href="/medical_facilities/donationManagement" class="nav-link"><i class="fas fa-user-nurse w-25"></i> Donation Management</a>
-            <a href="/medical_facilities/bloodtypeManagement" class="nav-link"><span class="nav-icon"><i class="fas fa-exchange-alt w-25"></i></span> Blood Logistics</a>
+            <a href="/medical_facilities/bloodManagement" class="nav-link"><i class="fas fa-exchange-alt w-25"></i> Blood Management</a>
             <a href="/medical_facilities/profile" class="nav-link active"><i class="fas fa-hospital w-25"></i> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
@@ -273,10 +273,6 @@
                         <div class="p-3 bg-light rounded-4 border">
                             <small class="text-uppercase fw-bold text-muted" style="font-size: 0.7rem;">Address</small>
                             <div class="fw-bold text-dark mt-1">medical facilities的address</div>
-                        </div>
-                        <div class="p-3 bg-light rounded-4 border">
-                            <small class="text-uppercase fw-bold text-muted" style="font-size: 0.7rem;">Primary Contact</small>
-                            <div class="fw-bold text-dark mt-1">medical facilities的phone</div>
                         </div>
                         <div class="p-3 bg-light rounded-4 border">
                             <small class="text-uppercase fw-bold text-muted" style="font-size: 0.7rem;">Operating Hours</small>

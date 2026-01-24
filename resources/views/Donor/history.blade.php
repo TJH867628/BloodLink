@@ -469,7 +469,6 @@
                     </div>
                 </div>
             </div>
-        </div>
             @endforeach
 
             {{-- Appointments (pending / cancelled) --}}
@@ -510,7 +509,6 @@
                     <div class="history-meta">
                         <div class="meta-item">
                             <i class="fas fa-map-marker-alt"></i>
-                            {{ $app->location }}
                             {{ $app->location }}
                         </div>
                         <div class="meta-item">

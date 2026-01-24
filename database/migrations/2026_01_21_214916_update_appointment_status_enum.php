@@ -10,11 +10,7 @@ return new class extends Migration
     {
         DB::statement("
             ALTER TABLE appointment
-<<<<<<< Updated upstream
             MODIFY status ENUM('PENDING','ACCEPTED','COMPLETED','CANCELLED','REJECTED')
-=======
-            MODIFY status ENUM('PENDING','APPROVED','COMPLETED','CANCELLED')
->>>>>>> Stashed changes
             DEFAULT 'PENDING'
         ");
     }

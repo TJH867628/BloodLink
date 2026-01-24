@@ -230,12 +230,13 @@
             <span class="fs-4 fw-bolder text-dark">BloodLink</span>
         </div>
         <nav class="nav flex-column mt-2 w-100">
-            <div class="px-4 pb-2 text-label">Hospital Portal</div>
-            <a href="/medical_facilities/dashboard" class="nav-link active"><span class="nav-icon"><i class="fas fa-chart-pie w-25"></i></span> Dashboard</a>
-            <a href="/medical_facilities/inventory" class="nav-link"><span class="nav-icon"><i class="fas fa-box-open w-25"></i></span> Inventory & Reports</a>
-            <a href="/medical_facilities/donationManagement" class="nav-link"><span class="nav-icon"><i class="fas fa-user-nurse w-25"></i></span> Donation Management</a>
-            <a href="/medical_facilities/bloodtypeManagement" class="nav-link"><span class="nav-icon"><i class="fas fa-exchange-alt w-25"></i></span> Blood Logistics</a>
+            <div class="px-4 pb-2 text-label" style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Hospital Portal</div>
+            <a href="/medical_facilities/dashboard" class="nav-link active"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
+            <a href="/medical_facilities/inventory" class="nav-link"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
+            <a href="/medical_facilities/donationManagement" class="nav-link"><i class="fas fa-user-nurse w-25"></i> Donation Management</a>
+            <a href="/medical_facilities/bloodManagement" class="nav-link"><i class="fas fa-exchange-alt w-25"></i>Blood<br> Management</a>
             <a href="/medical_facilities/profile" class="nav-link"><i class="fas fa-hospital w-25"></i> Profile</a>
+        </nav>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">

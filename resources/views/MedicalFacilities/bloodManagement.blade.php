@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BloodLink - Blood Logistics</title>
+    <title>BloodLink - Blood Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -184,7 +184,7 @@
                 <ul class="navbar-nav mt-3">
                     <li class="nav-item"><a class="nav-link" href="/medical_facilities/dashboard">Dashboard</a></li>
                     <li class="nav-item"><a class="nav-link" href="/medical_facilities/inventory">Inventory & Reports</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/donationManagemen">Donation Management</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/donationManagement">Donation Management</a></li>
                     <li class="nav-item"><a class="nav-link fw-bold text-danger" href="hospital_blood_logistics.html">Blood Logistics</a></li>
                 </ul>
             </div>
@@ -201,7 +201,7 @@
             <a href="/medical_facilities/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
             <a href="/medical_facilities/inventory" class="nav-link"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
             <a href="/medical_facilities/donationManagement" class="nav-link"><i class="fas fa-user-nurse w-25"></i> Donation Management</a>
-            <a href="/medical_facilities/bloodtypeManagement" class="nav-link active"><span class="nav-icon"><i class="fas fa-exchange-alt w-25"></i></span> Blood Logistics</a>
+            <a href="/medical_facilities/bloodManagement" class="nav-link active"><i class="fas fa-exchange-alt w-25"></i> Blood Management</a>
             <a href="/medical_facilities/profile" class="nav-link"><i class="fas fa-hospital w-25"></i> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
@@ -236,66 +236,6 @@
             </div>
         </header>
 
-        <div class="row g-4">
-            <!-- Left: Walk-in Registration (Input) -->
-            <div class="col-xl-8 mx-auto">
-                <div class="custom-card p-4 p-lg-5">
-                    <div class="d-flex align-items-center gap-3 mb-4">
-                        <div class="bg-primary-subtle text-primary p-3 rounded-circle"><i class="fas fa-user-plus fa-lg"></i></div>
-                        <div>
-                            <h4 class="fw-bold mb-0">Walk-in Submmission</h4>
-                            <p class="text-muted small mb-0">Submit unscheduled donors directly into the record.</p>
-                        </div>
-                    </div>
-
-                    <form>
-                        <div class="mb-3">
-                            <label class="text-muted fw-bold small text-uppercase mb-1">Donor Name</label>
-                            <input type="text" class="form-control" placeholder="e.g. John Doe">
-                        </div>
-                        <div class="row g-3 mb-3">
-                            <div class="col-6">
-                                <label class="text-muted fw-bold small text-uppercase mb-1">Blood Pressure</label>
-                                <input type="text" class="form-control" placeholder="120/70">
-                            </div>
-                            <div class="col-6">
-                                <label class="text-muted fw-bold small text-uppercase mb-1">Hemogoblin Level </label>
-                                <input type="tel" class="form-control" placeholder="13.0">
-                            </div>
-                        </div>
-                        <div class="row g-3 mb-4">
-                            <div class="col-6">
-                                <label class="text-muted fw-bold small text-uppercase mb-1">Blood Type</label>
-                                <select class="form-select">
-                                    <option selected disabled>Select...</option>
-                                    <option>A+</option>
-                                    <option>A-</option>
-                                    <option>B+</option>
-                                    <option>B-</option>
-                                    <option>AB+</option>
-                                    <option>AB-</option>
-                                    <option>O+</option>
-                                    <option>O-</option>
-                                </select>
-                            </div>
-                            <div class="col-6">
-                                <label class="text-muted fw-bold small text-uppercase mb-1">unit(s)</label>
-                                <input type="number" class="form-control" placeholder="400">
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label class="text-muted fw-bold small text-uppercase mb-1">Medical Note / Remarks</label>
-                            <textarea class="form-control" rows="2" placeholder="Any known conditions, recent travel, or immediate observations..."></textarea>
-                        </div>
-                        <button type="button" class="btn btn-dark w-100 py-3 rounded-pill fw-bold shadow-sm" onclick="alert('Walk-in donor submmitted to donation record.')">
-                            <i class="fas fa-check me-2"></i> Submit walk-in donor
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quick Log Table -->
         <div class="row mt-4">
             <div class="col-12">
                 <div class="custom-card">

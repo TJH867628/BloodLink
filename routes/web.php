@@ -34,7 +34,7 @@ Route::middleware(['role:STAFF','auth'])->group(function () {
     Route::get('medical_facilities/dashboard', [MedicalFacilitiesController::class, 'medicalFacilitiesDashboard'])->name('medical_facilities.dashboard');
     Route::get('medical_facilities/inventory', [MedicalFacilitiesController::class, 'inventory_and_report'])->name('medical_facilities.inventory');
     Route::get('medical_facilities/donationManagement', [MedicalFacilitiesController::class, 'donationManagement'])->name('medical_facilities.donationManagement');
-    Route::get('medical_facilities/bloodtypeManagement', [MedicalFacilitiesController::class, 'bloodtypeManagement'])->name('medical_facilities.bloodtypeManagement');
+    Route::get('medical_facilities/bloodManagement', [MedicalFacilitiesController::class, 'bloodManagement'])->name('medical_facilities.bloodManagement');
     Route::get('medical_facilities/profile', [MedicalFacilitiesController::class, 'profile'])->name('medical_facilities.profile');
 
     Route::post('medical_facilities/recordDonationResult/{appointment_id}', [MedicalFacilitiesController::class, 'recordDonationResult'])->name('medical_facilities.recordDonationResult');

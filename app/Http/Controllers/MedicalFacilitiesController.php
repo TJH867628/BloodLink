@@ -90,10 +90,10 @@ class MedicalFacilitiesController extends Controller
         return view('MedicalFacilities.profile', compact('user', 'medical_facility'));
     }
 
-    public function bloodtypeManagement()
+    public function bloodManagement()
     {
         $user = auth()->user();
-        return view('MedicalFacilities.bloodtypeManagement', compact('user'));
+        return view('MedicalFacilities.bloodManagement', compact('user'));
     }
 
     public function recordDonationResult(Request $request,int $appointmentId)

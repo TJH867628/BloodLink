@@ -24,9 +24,6 @@ return new class extends Migration
             $table->timestamp('expires_at');
 
             $table->timestamp('used_at')->nullable();
-            $table->foreignId('used_by')->nullable()->constrained('users');
-
-            $table->string('patient_ref')->nullable();
 
             $table->timestamps();
         });
