@@ -27,6 +27,8 @@ Route::middleware(['role:DONOR','auth'])->group(function () {
     Route::post('donor/notification', [DonorController::class, 'updateProfile'])->name('donor.updateProfile');
     Route::post('donor/submitFeedback', [DonorController::class, 'submitFeedback'])->name('donor.submitFeedback');
     Route::post('donor/cancelAppointment/{appointmentId}', [DonorController::class, 'cancelAppointment'])->name('donor.cancelAppointment');
+    Route::post('donor/markNotificationRead/{notificationId}', [DonorController::class, 'markNotificationAsRead'])->name('donor.markNotificationRead');
+    Route::post('donot/markAllNotificationsRead', [DonorController::class, 'markAllNotificationsAsRead'])->name('donor.markAllNotificationsRead');
 });
 Route::middleware(['role:STAFF','auth'])->group(function () {
     Route::get('medical_facilities/dashboard', [MedicalFacilitiesController::class, 'medicalFacilitiesDashboard'])->name('medical_facilities.dashboard');
