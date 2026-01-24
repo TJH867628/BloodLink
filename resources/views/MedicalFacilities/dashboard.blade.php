@@ -242,7 +242,7 @@
                         <i class="fas fa-sign-out-alt"></i>
                     </div>
                     <div>
-                        <div class="fw-bold text-dark small">Dr. Chai Yu Xuan</div>
+                        <div class="fw-bold text-dark small">Dr. {{ $user->name }}</div>
                         <div class="logout-text">Sign Out</div>
                     </div>
                 </div>

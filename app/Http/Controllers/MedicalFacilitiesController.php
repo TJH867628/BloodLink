@@ -24,19 +24,22 @@ class MedicalFacilitiesController extends Controller
 
     public function inventory_and_report()
     {
+        $user = auth()->user();
         $blood_inventories = BloodInventory::where('medical_facilities_id', auth()->user()->facility_id)->get();
-        return view('MedicalFacilities.inventory',compact('blood_inventories'));
+        return view('MedicalFacilities.inventory',compact('user', 'blood_inventories'));
     }
 
     public function donationManagement()
     {
+        $user = auth()->user();
+
         $today = Carbon::today()->toDateString();
         $donation_today = DB::table('appointment')
             ->join('event', 'appointment.event_id', '=', 'event.id')
             ->join('users', 'appointment.donor_id', '=', 'users.id')
             ->join('donor_health_details', 'users.id', '=', 'donor_health_details.donor_id')
             ->whereDate('event.date', $today)
-            ->where('appointment.status', 'ACCEPTED')
+            ->where('appointment.status', 'APPROVED')
             ->select(
                 'appointment.id as appointment_id',
                 'users.name as donor_name',
@@ -75,7 +78,7 @@ class MedicalFacilitiesController extends Controller
         )
         ->get();
 
-        return view('MedicalFacilities.donationManagement', compact('donation_today','donationHistory','recentRecords'));
+        return view('MedicalFacilities.donationManagement', compact('user', 'donation_today','donationHistory','recentRecords'));
     }
 
     public function recordDonationResult(Request $request,int $appointmentId)

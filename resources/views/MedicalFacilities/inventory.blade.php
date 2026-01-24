@@ -262,7 +262,7 @@
                         <i class="fas fa-sign-out-alt"></i>
                     </div>
                     <div>
-                        <div class="fw-bold text-dark small">Dr. Chai Yu Xuan</div>
+                        <div class="fw-bold text-dark small">Dr. {{ $user->name }}</div>
                         <div class="logout-text">Sign Out</div>
                     </div>
                 </div>
@@ -329,8 +329,13 @@
                                     @else
                                     <td class="px-4 py-3"><span class="status-badge badge-critical">Critical</span></td>
                                     @endif
-                                    @endforeach
                                 </tr>
+                                @endforeach
+                                @if($blood_inventories->isEmpty())
+                                <tr>
+                                    <td colspan="3" class="px-4 py-3 text-center text-muted">No inventory data available.</td>
+                                </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>
