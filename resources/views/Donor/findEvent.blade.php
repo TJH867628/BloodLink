@@ -320,11 +320,11 @@
                             <button class="btn btn-secondary btn-sm" disabled>Closed</button>
                             @elseif(in_array($event->id, $bookedEventId))
                             <button class="btn btn-success btn-sm" disabled>Booked</button>
-                            @elseif($donorHealthDetails && $donorHealthDetails->last_donation_date && \Carbon\Carbon::parse($event->date)->lt(\Carbon\Carbon::parse($donorHealthDetails->last_donation_date)->addMonths(3)))
+                            @elseif($donorHealthDetails && $donorHealthDetails->last_donation_date && \Carbon\Carbon::parse($event->date)->lt(\Carbon\Carbon::parse($donorHealthDetails->last_donation_date)->addMonths($intervalMonths)))
                             <button class="btn btn-warning btn-sm" disabled>
                                 Not Eligible
                             </button>
-                            @elseif($lastAcceptedDate && \Carbon\Carbon::parse($event->date)->lt(\Carbon\Carbon::parse($lastAcceptedDate)->addMonths(3)))
+                            @elseif($lastAcceptedDate && \Carbon\Carbon::parse($event->date)->lt(\Carbon\Carbon::parse($lastAcceptedDate)->addMonths($intervalMonths)))
                             <button class="btn btn-warning btn-sm" disabled>
                                 Not Eligible
                             </button>

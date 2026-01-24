@@ -11,6 +11,7 @@ use App\Models\Appointment;
 use App\Models\DonationRecord;
 use App\Models\Feedback;
 use App\Models\BloodType;
+use App\Models\SystemSettings;
 use Carbon\Carbon;
 use DB;
 
@@ -49,8 +50,9 @@ class DonorController extends Controller
             ->where('appointment.status', 'ACCEPTED')
             ->orderBy('event.date', 'desc')
             ->value('event.date');
-        
-        return view('donor.findEvent',compact('user','donorHealthDetails','events','bookedEventId','lastAcceptedDate'));
+        $intervalMonths = SystemSettings::where('name','donation_interval_months')->value('value');
+        $intervalMonths = (int)$intervalMonths ?: 3;
+        return view('donor.findEvent',compact('user','donorHealthDetails','events','bookedEventId','lastAcceptedDate','intervalMonths'));
     }
 
     public function history() {
@@ -197,10 +199,10 @@ class DonorController extends Controller
         if (!$event || $event->status != 'ACTIVE' || $event->available_slots <= 0) {
             return redirect()->back()->with('error', 'This event is not available for booking.');
         }
-
+        $intervalMonths = SystemSettings::where('name','donation_interval_months')->value('value');
         $targetDate = Carbon::parse($event->date);
-        $windowStart = $targetDate->copy()->subMonths(3);
-        $windowEnd = $targetDate->copy()->addMonths(3);
+        $windowStart = $targetDate->copy()->subMonths($intervalMonths);
+        $windowEnd = $targetDate->copy()->addMonths($intervalMonths);
 
         $hasAppointmentConflict = DB::table('appointment')
             ->join('event', 'appointment.event_id', '=', 'event.id')
@@ -239,7 +241,7 @@ class DonorController extends Controller
 
         sendSystemNotification($event->organizer_id, 'A new appointment has been booked for your event "' . $event->name . '" by ' . $user->name . '.');
         sendSystemNotification($user, 'You have successfully booked an appointment for the event "' . $event->name . '" on ' . $event->date . '.');
-        
+
         $event->decrement('available_slots');
 
         return redirect()->back()->with('success', 'Event booked successfully!');
