@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\MedicalFacility;
 use App\Models\Event;
+use App\Models\Appointment;
 use App\Models\DonationRecord;
 use App\Models\BloodBag;
 use App\Models\BloodInventory;
@@ -19,19 +20,19 @@ class DemoBloodLinkSeeder extends Seeder
     {
         $bloodTypes = ['O+','A+','B+','O-','AB+','A-','B-','AB-'];
 
-        // ============================
-        // Medical Facility
-        // ============================
+        /* ============================
+           Medical Facility
+        ============================ */
         $hospital = MedicalFacility::create([
             'name' => 'City Central Hospital',
             'type' => 'Hospital',
             'address' => 'Cyberjaya',
         ]);
 
-        // ============================
-        // ADMIN
-        // ============================
-        $admin = User::create([
+        /* ============================
+           Admin
+        ============================ */
+        User::create([
             'name' => 'System Admin',
             'email' => 'admin@bloodlink.com',
             'password' => Hash::make('password'),
@@ -39,9 +40,9 @@ class DemoBloodLinkSeeder extends Seeder
             'is_active' => 1
         ]);
 
-        // ============================
-        // EVENT ORGANIZER
-        // ============================
+        /* ============================
+           Organizer (creates events)
+        ============================ */
         $organizer = User::create([
             'name' => 'Red Cross Organizer',
             'email' => 'organizer@bloodlink.com',
@@ -50,9 +51,9 @@ class DemoBloodLinkSeeder extends Seeder
             'is_active' => 1
         ]);
 
-        // ============================
-        // HOSPITAL STAFF
-        // ============================
+        /* ============================
+           Hospital Staff
+        ============================ */
         $staff = User::create([
             'name' => 'Dr Chai',
             'email' => 'chai@hospital.com',
@@ -62,13 +63,13 @@ class DemoBloodLinkSeeder extends Seeder
             'is_active' => 1
         ]);
 
-        // ============================
-        // 50 Donors + Health Records
-        // ============================
+        /* ============================
+           80 Donors + Health Profiles
+        ============================ */
         $donors = collect();
 
-        for ($i=1; $i<=50; $i++) {
-            $bloodType = $bloodTypes[array_rand($bloodTypes)];
+        for ($i=1; $i<=80; $i++) {
+            $type = $bloodTypes[array_rand($bloodTypes)];
 
             $donor = User::create([
                 'name' => "Donor $i",
@@ -80,10 +81,10 @@ class DemoBloodLinkSeeder extends Seeder
 
             DonorHealthDetails::create([
                 'donor_id' => $donor->id,
-                'blood_type' => $bloodType,
-                'hemoglobin_level' => rand(120,160)/10,
+                'blood_type' => $type,
+                'hemoglobin_level' => rand(125,160)/10,
                 'blood_pressure' => rand(110,130).'/'.rand(70,90),
-                'height' => rand(155,185),
+                'height' => rand(150,185),
                 'weight' => rand(50,90),
                 'is_eligible' => 1,
                 'last_donation_date' => null
@@ -92,18 +93,18 @@ class DemoBloodLinkSeeder extends Seeder
             $donors->push($donor);
         }
 
-        // ============================
-        // 6 Past Events + 1 Active
-        // Created by ORGANIZER
-        // ============================
+        /* ============================
+           6 Past Events + 1 Active
+        ============================ */
         $events = [];
 
         for ($i=6; $i>=1; $i--) {
             $events[] = Event::create([
-                'name' => "Blood Drive - " . Carbon::now()->subMonths($i)->format('F'),
+                'name' => "Blood Drive " . Carbon::now()->subMonths($i)->format('F'),
                 'date' => Carbon::now()->subMonths($i)->toDateString(),
-                'time' => '09:00',
+                'time' => '09:00:00',
                 'location' => 'City Central Hospital',
+                'total_slots' => 100,
                 'available_slots' => 100,
                 'status' => 'CLOSED',
                 'organizer_id' => $organizer->id
@@ -113,34 +114,52 @@ class DemoBloodLinkSeeder extends Seeder
         $events[] = Event::create([
             'name' => 'Emergency Blood Drive',
             'date' => Carbon::now()->addDays(7)->toDateString(),
-            'time' => '09:00',
+            'time' => '09:00:00',
             'location' => 'City Central Hospital',
+            'total_slots' => 100,
             'available_slots' => 100,
             'status' => 'ACTIVE',
             'organizer_id' => $organizer->id
         ]);
 
-        // ============================
-        // Donations (3-month rule enforced)
-        // ============================
+        /* ============================
+           BOOKINGS → DONATIONS → BAGS
+        ============================ */
         $inventory = [];
 
-        foreach ($donors as $donor) {
+        foreach ($events as $event) {
 
-            $health = $donor->donorHealthDetails;
+            if ($event->status !== 'CLOSED') continue;
 
-            foreach ($events as $event) {
-                if ($event->status !== 'CLOSED') continue;
+            foreach ($donors as $donor) {
 
+                if ($event->available_slots <= 0) break;
+
+                // 70% chance to book
+                if (rand(1,100) > 70) continue;
+
+                $health = $donor->donorHealthDetails;
+
+                // Enforce 3-month rule
                 if ($health->last_donation_date) {
                     $nextEligible = Carbon::parse($health->last_donation_date)->addMonths(3);
                     if (Carbon::parse($event->date)->lt($nextEligible)) continue;
                 }
 
-                if (rand(1,100) > 70) continue;
+                // Create appointment
+                Appointment::create([
+                    'donor_id' => $donor->id,
+                    'event_id' => $event->id,
+                    'status' => 'COMPLETED'
+                ]);
+
+                $event->decrement('available_slots');
+
+                // 90% donors show up
+                if (rand(1,100) > 90) continue;
 
                 $units = rand(1,3);
-                $bloodType = $health->blood_type;
+                $type = $health->blood_type;
 
                 $donation = DonationRecord::create([
                     'donor_id' => $donor->id,
@@ -158,7 +177,7 @@ class DemoBloodLinkSeeder extends Seeder
                 for ($i=0; $i<$units; $i++) {
                     BloodBag::create([
                         'donation_record_id' => $donation->id,
-                        'blood_type' => $bloodType,
+                        'blood_type' => $type,
                         'facility_id' => $hospital->id,
                         'status' => 'STORED',
                         'collected_at' => $event->date,
@@ -166,15 +185,15 @@ class DemoBloodLinkSeeder extends Seeder
                     ]);
                 }
 
-                $inventory[$bloodType] = ($inventory[$bloodType] ?? 0) + $units;
+                $inventory[$type] = ($inventory[$type] ?? 0) + $units;
                 $health->last_donation_date = $event->date;
                 $health->save();
             }
         }
 
-        // ============================
-        // Blood Inventory with Status
-        // ============================
+        /* ============================
+           Blood Inventory Summary
+        ============================ */
         foreach ($inventory as $type => $qty) {
             if ($qty >= 80) $status = 'OPTIMAL';
             elseif ($qty >= 30) $status = 'LOW_STOCK';

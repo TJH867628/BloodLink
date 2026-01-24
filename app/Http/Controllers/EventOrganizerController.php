@@ -19,7 +19,7 @@ class EventOrganizerController extends Controller
     {
         $user = auth()->user();
         $today = now()->toDateString();
-        $events = EventModel::where('organizer_id', auth()->id())->where('event.date', '>=', $today)->get();
+        $events = EventModel::where('organizer_id', auth()->id())->where('event.date', '>=', $today)->limit(5)->get();
         $totalRegisteredDonors = EventModel::where('organizer_id', auth()->id())
             ->where('event.status', 'ACTIVE')
             ->where('event.date', '>=', $today)

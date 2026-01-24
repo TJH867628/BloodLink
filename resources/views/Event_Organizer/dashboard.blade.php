@@ -322,34 +322,34 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($events as $event)
                         <tr>
-                            <td class="px-4 py-3 fw-bold">Red Cross Annual Drive</td>
-                            <td class="px-4 py-3 text-muted small">10 Jan 2026 • 09:00 AM</td>
-                            <td class="px-4 py-3 text-muted small"><i class="fas fa-map-marker-alt me-1"></i> City Hall</td>
+                            <td class="px-4 py-3 fw-bold">{{ $event->name }}</td>
+                            <td class="px-4 py-3 text-muted small">{{ \Carbon\Carbon::parse($event->date)->format('d M Y') }} • {{ \Carbon\Carbon::parse($event->time)->format('h:i A') }}</td>
+                            <td class="px-4 py-3 text-muted small"><i class="fas fa-map-marker-alt me-1"></i> {{ $event->location }}</td>
                             <td class="px-4 py-3">
                                 <div class="d-flex align-items-center gap-2">
                                     <div class="progress grow" style="height: 6px;">
-                                        <div class="progress-bar bg-primary" style="width: 76%"></div>
+                                        @php
+                                            $capacity = max((int)$event->slot_capacity, 1);
+                                            $registered = (int)$event->registered_donors;
+
+                                            $filledPercentage = ($registered / $capacity) * 100;
+                                        @endphp
+                                        <div class="progress-bar {{ $filledPercentage >= 75 ? 'bg-primary' : ($filledPercentage >= 50 ? 'bg-success' : 'bg-warning') }}" style="width: {{ $filledPercentage }}%"></div>
                                     </div>
-                                    <span class="small fw-bold text-primary">38/50</span>
+                                    <span class="small fw-bold {{ $filledPercentage >= 75 ? 'text-primary' : ($filledPercentage >= 50 ? 'text-success' : 'text-warning') }}">{{ $event->available_slots }}/{{ $event->total_slots }}</span>
                                 </div>
                             </td>
-                            <td class="px-4 py-3 text-end"><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Active</span></td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-3 fw-bold">Community Health Fair</td>
-                            <td class="px-4 py-3 text-muted small">15 Jan 2026 • 10:00 AM</td>
-                            <td class="px-4 py-3 text-muted small"><i class="fas fa-map-marker-alt me-1"></i> Downtown</td>
-                            <td class="px-4 py-3">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="progress grow" style="height: 6px;">
-                                        <div class="progress-bar bg-warning" style="width: 15%"></div>
-                                    </div>
-                                    <span class="small fw-bold text-warning">4/30</span>
-                                </div>
+                            <td class="px-4 py-3 text-end">
+                                @if($event->status == 'ACTIVE')
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Active</span>
+                                @else
+                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill">Inactive</span>
+                                @endif
                             </td>
-                            <td class="px-4 py-3 text-end"><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Active</span></td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

@@ -12,10 +12,12 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::call(function () {
-    $now = now();
+    $now = now()->format('Y-m-d H:i:s');
 
-    EventModel::whereRaw("STR_TO_DATE(CONCAT(date, ' ', time), '%Y-%m-%d %H:%i:%s') < ?", [$now])
-        ->update(['status' => 'CLOSED']);
+    EventModel::whereRaw(
+        "TIMESTAMP(`date`, `time`) <= ?",
+        [$now]
+    )->update(['status' => 'CLOSED']);
 
     $targetUnit = SystemSettings::where('name', 'inventory_target_units')->value('value');
     $optimalPct = SystemSettings::where('name', 'inventory_optimal_pct')->value('value');
@@ -40,4 +42,4 @@ Schedule::call(function () {
 
         $inv->save();
     }
-})->everyMinute();
+})->everyThirtySeconds();
