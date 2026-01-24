@@ -218,6 +218,7 @@
             <a href="/medical_facilities/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
             <a href="/medical_facilities/inventory" class="nav-link"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
             <a href="/medical_facilities/donationManagement" class="nav-link"><i class="fas fa-user-nurse w-25"></i> Donation Management</a>
+            <a href="/medical_facilities/bloodtypeManagement" class="nav-link"><span class="nav-icon"><i class="fas fa-exchange-alt w-25"></i></span> Blood Logistics</a>
             <a href="/medical_facilities/profile" class="nav-link active"><i class="fas fa-hospital w-25"></i> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
