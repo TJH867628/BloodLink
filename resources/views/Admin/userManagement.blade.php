@@ -158,8 +158,8 @@
         <nav class="nav flex-column mt-2 w-100">
             <div class="px-4 pb-2 text-label">Admin Portal</div>
             <a href="/admin/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
-            <a href="/admin/userManagement" class="nav-link active"><i class="fas fa-users w-25"></i> User Mgmt</a>
-            <a href="/admin/hospitalManagement" class="nav-link"><i class="fas fa-hospital w-25"></i> Hospital Mgmt</a>
+            <a href="/admin/userManagement" class="nav-link active"><i class="fas fa-users w-25"></i> User Management</a>
+            <a href="/admin/medicalFacilitiesManagement" class="nav-link"><i class="fas fa-hospital w-25"></i>Medical Facilities Management</a>
             <a href="/admin/systemModification" class="nav-link"><i class="fas fa-cogs w-25"></i> System Modification</a>
             <a href="/admin/auditReport" class="nav-link"><i class="fas fa-file-alt w-25"></i> Audit & Reports</a>
         </nav>
@@ -175,7 +175,7 @@
             </a>
         </div>
     </div>
-
+   
     <div class="main-content">
         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
@@ -189,7 +189,25 @@
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" class="rounded-3 border" width="40" height="40" alt="Avatar">
             </div>
         </header>
-
+        @if($emergencyMode == 1)
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <div>
+                <strong>Emergency Mode is Enabled!</strong> The system is currently in emergency mode. Donation intervals have been reduced to 2 months.
+            </div>
+        </div>
+        @endif
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @elseif(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <div class="custom-card">
             <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
                 <input type="text" class="form-control rounded-pill ps-4" style="max-width: 300px;" placeholder="Search users...">
@@ -206,33 +224,49 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($users as $user)
                         <tr>
                             <td class="ps-4">
-                                <div class="fw-bold">Nesandra Ann</div>
-                                <div class="small text-muted">nesandra@donor.com</div>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div>
+                                        <div class="fw-bold">{{ $user->name }}</div>
+                                        <div class="text-muted small">{{ $user->email }}</div>
+                                    </div>
+                                </div>
                             </td>
-                            <td><span class="badge bg-light text-dark border">Donor</span></td>
-                            <td><span class="badge bg-success-subtle text-success rounded-pill">Active</span></td>
-                            <td class="text-end pe-4"><button class="btn btn-sm btn-light text-danger"><i class="fas fa-trash"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td class="ps-4">
-                                <div class="fw-bold">Chai Yu Xuan</div>
-                                <div class="small text-muted">chai@hospital.com</div>
+                            <td>{{ $user->role }}</td>
+                            <td>
+                                @if ($user->is_active == true)
+                                <span class="badge bg-success">Active</span>
+                                @elseif ($user->is_active == false)
+                                <span class="badge bg-danger">Suspended</span>
+                                @else
+                                <span class="badge bg-secondary">Unknown</span>
+                                @endif
                             </td>
-                            <td><span class="badge bg-light text-dark border">Hospital Staff</span></td>
-                            <td><span class="badge bg-success-subtle text-success rounded-pill">Active</span></td>
-                            <td class="text-end pe-4"><button class="btn btn-sm btn-light text-danger"><i class="fas fa-trash"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td class="ps-4">
-                                <div class="fw-bold">Praveena Nair</div>
-                                <div class="small text-muted">praveena@event.org</div>
+                            <td class="text-end pe-4">
+                               @if($user->is_active)
+                                <form method="POST" action="{{ route('admin.toggleUserActivation', $user->id) }}" class="d-inline">
+                                    @csrf
+                                    <button type="submit" 
+                                        class="btn btn-sm btn-outline-danger"
+                                        onclick="return confirm('Suspend this account? The user will no longer be able to log in.')">
+                                        <i class="fas fa-ban me-1"></i> Suspend
+                                    </button>
+                                </form>
+                            @else
+                                <form method="POST" action="{{ route('admin.toggleUserActivation', $user->id) }}" class="d-inline">
+                                    @csrf
+                                    <button type="submit" 
+                                        class="btn btn-sm btn-outline-success"
+                                        onclick="return confirm('Activate this account? The user will be able to log in again.')">
+                                        <i class="fas fa-check me-1"></i> Activate
+                                    </button>
+                                </form>
+                            @endif
                             </td>
-                            <td><span class="badge bg-light text-dark border">Organizer</span></td>
-                            <td><span class="badge bg-warning-subtle text-warning rounded-pill">Pending</span></td>
-                            <td class="text-end pe-4"><button class="btn btn-sm btn-light text-danger"><i class="fas fa-trash"></i></button></td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -247,41 +281,59 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body p-4">
-                        <form>
-                            <div class="mb-3">
-                                <label class="text-muted fw-bold small text-uppercase mb-1">Full Name</label>
-                                <input type="text" class="form-control" placeholder="e.g. John Doe">
+                    <form method="POST" action="{{ route('admin.createUser') }}">
+                        @csrf
+
+                        <div class="mb-3">
+                            <label class="text-muted fw-bold small text-uppercase">Full Name</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="text-muted fw-bold small text-uppercase">Email</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <label class="text-muted fw-bold small text-uppercase">System Role</label>
+                                <select class="form-select" name="role" id="roleSelect" required>
+                                    <option value="DONOR">Donor</option>
+                                    <option value="STAFF">Hospital/Clinic Staff</option>
+                                    <option value="ORGANIZER">Event Organizer</option>
+                                    <option value="ADMIN">Administrator</option>
+                                </select>
                             </div>
-                            <div class="mb-3">
-                                <label class="text-muted fw-bold small text-uppercase mb-1">Email Address</label>
-                                <input type="email" class="form-control" placeholder="name@bloodlink.com">
+
+                            <div class="col-6">
+                                <label class="text-muted fw-bold small text-uppercase">Status</label>
+                                <select class="form-select" name="status">
+                                    <option value="active">Active</option>
+                                    <option value="suspended">Suspended</option>
+                                </select>
                             </div>
-                            <div class="row g-3 mb-3">
-                                <div class="col-6">
-                                    <label class="text-muted fw-bold small text-uppercase mb-1">System Role</label>
-                                    <select class="form-select">
-                                        <option value="Donor">Donor</option>
-                                        <option value="Hospital">Hospital Staff</option>
-                                        <option value="Organizer">Event Organizer</option>
-                                        <option value="Admin">Administrator</option>
-                                    </select>
-                                </div>
-                                <div class="col-6">
-                                    <label class="text-muted fw-bold small text-uppercase mb-1">Status</label>
-                                    <select class="form-select">
-                                        <option value="Active">Active</option>
-                                        <option value="Pending">Pending</option>
-                                        <option value="Suspended">Suspended</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="mb-4">
-                                <label class="text-muted fw-bold small text-uppercase mb-1">Temporary Password</label>
-                                <input type="text" class="form-control" value="Welcome@2026" readonly>
-                                <div class="form-text small">Default password for first-time login.</div>
-                            </div>
-                            <button type="button" class="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow-sm" data-bs-dismiss="modal">Create User Account</button>
-                        </form>
+                        </div>
+
+                        <!-- Facility only for hospital staff -->
+                        <div class="mb-3" id="facilityBox" style="display:none;">
+                            <label class="text-muted fw-bold small text-uppercase">Medical Facility</label>
+                            <select class="form-select" name="facility_id">
+                                <option value="">-- Select Facility --</option>
+                                @foreach($facilities as $facility)
+                                    <option value="{{ $facility->id }}">{{ $facility->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="text-muted fw-bold small text-uppercase">Temporary Password</label>
+                            <input type="text" class="form-control" name="password" value="Welcome@2026" readonly>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 py-3 fw-bold rounded-pill">
+                            Create User Account
+                        </button>
+                    </form>
                     </div>
                 </div>
             </div>
@@ -291,3 +343,18 @@
 </body>
 
 </html>
+<script>
+document.getElementById('roleSelect').addEventListener('change', function () {
+    const facilityBox = document.getElementById('facilityBox');
+    const facilitySelect = document.querySelector('select[name="facility_id"]');
+
+    if (this.value === 'STAFF') {
+        facilityBox.style.display = 'block';
+        facilitySelect.setAttribute('required', 'required'); // make it required
+    } else {
+        facilityBox.style.display = 'none';
+        facilitySelect.removeAttribute('required'); // remove requirement
+        facilitySelect.value = '';
+    }
+});
+</script>

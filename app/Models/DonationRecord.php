@@ -16,6 +16,10 @@ class DonationRecord extends Model
         'staff_id',
         'unit',
         'notes',
+        'hemoglobin_level',
+        'blood_pressure',
+        'status',
+        'staff_id',
         'created_at',
         'updated_at',
     ];

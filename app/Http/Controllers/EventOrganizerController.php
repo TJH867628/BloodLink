@@ -54,7 +54,7 @@ class EventOrganizerController extends Controller
     }
     public function participation()
     {
-        $appoinments = \DB::table('appointment')
+        $appoinments = DB::table('appointment')
         ->join('event', 'appointment.event_id', '=', 'event.id')
         ->join('users', 'appointment.donor_id', '=', 'users.id')
         ->where('event.organizer_id', auth()->id())

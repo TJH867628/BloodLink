@@ -237,9 +237,9 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="mobileMenu">
                 <ul class="navbar-nav mt-3">
-                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="/hospital/dashboard">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/hospital/inventory">Inventory & Reports</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/hospital/donationManagement">Donation Management</a></li>
+                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="/medical_facilities/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/inventory">Inventory & Reports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/donationManagement">Donation Management</a></li>
                 </ul>
             </div>
         </div>
@@ -251,9 +251,9 @@
         </div>
         <nav class="nav flex-column mt-2 w-100">
             <div class="px-4 pb-2 text-label" style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Hospital Portal</div>
-            <a href="/hospital/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
-            <a href="/hospital/inventory" class="nav-link active"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
-            <a href="/hospital/donationManagement" class="nav-link"><i class="fas fa-user-nurse w-25"></i> Donation Mgmt</a>
+            <a href="/medical_facilities/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
+            <a href="/medical_facilities/inventory" class="nav-link active"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
+            <a href="/medical_facilities/donationManagement" class="nav-link"><i class="fas fa-user-nurse w-25"></i> Donation Management</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">
@@ -312,39 +312,24 @@
                                 <tr>
                                     <th class="px-4 py-3 text-muted small fw-bold text-uppercase">Type</th>
                                     <th class="px-4 py-3 text-muted small fw-bold text-uppercase">Quantity</th>
-                                    <th class="px-4 py-3 text-muted small fw-bold text-uppercase">Expiry</th>
                                     <th class="px-4 py-3 text-muted small fw-bold text-uppercase">Status</th>
-                                    <th class="px-4 py-3 text-end text-muted small fw-bold text-uppercase">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($blood_inventories as $inventory)
                                 <tr>
-                                    <td class="px-4 py-3 fw-black fs-5">O-</td>
-                                    <td class="px-4 py-3 fw-bold">12 Units</td>
-                                    <td class="px-4 py-3 text-danger fw-bold">15 Jan 2026</td>
-                                    <td class="px-4 py-3"><span class="status-badge badge-critical">Low</span></td>
-                                    <td class="px-4 py-3 text-end"><button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#editBatchModal"><i class="fas fa-edit text-muted"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 fw-black fs-5">A+</td>
-                                    <td class="px-4 py-3 fw-bold">45 Units</td>
-                                    <td class="px-4 py-3 text-dark">10 Feb 2026</td>
+                                    <td class="px-4 py-3 fw-black fs-5">{{ $inventory->blood_type }}</td>
+                                    <td class="px-4 py-3 fw-bold">{{ $inventory->quantity }} Units</td>
+                                    @if($inventory->status == 'OPTIMAL')
                                     <td class="px-4 py-3"><span class="status-badge badge-optimal">Optimal</span></td>
-                                    <td class="px-4 py-3 text-end"><button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#editBatchModal"><i class="fas fa-edit text-muted"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 fw-black fs-5">AB-</td>
-                                    <td class="px-4 py-3 fw-bold">03 Units</td>
-                                    <td class="px-4 py-3 text-danger fw-bold">05 Jan 2026</td>
+                                    @elseif($inventory->status == 'LOW_STOCK')
+                                    <td class="px-4 py-3"><span class="status-badge badge-low">Low Stock</span></td>
+                                    @elseif($inventory->status == 'CRITICAL')
                                     <td class="px-4 py-3"><span class="status-badge badge-critical">Critical</span></td>
-                                    <td class="px-4 py-3 text-end"><button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#editBatchModal"><i class="fas fa-edit text-muted"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3 fw-black fs-5">B+</td>
-                                    <td class="px-4 py-3 fw-bold">28 Units</td>
-                                    <td class="px-4 py-3 text-dark">22 Mar 2026</td>
-                                    <td class="px-4 py-3"><span class="status-badge badge-optimal">Optimal</span></td>
-                                    <td class="px-4 py-3 text-end"><button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#editBatchModal"><i class="fas fa-edit text-muted"></i></button></td>
+                                    @else
+                                    <td class="px-4 py-3"><span class="status-badge badge-critical">Critical</span></td>
+                                    @endif
+                                    @endforeach
                                 </tr>
                             </tbody>
                         </table>
@@ -390,89 +375,6 @@
                         </div>
                         <button class="btn btn-danger w-100 mt-3 fw-bold py-2">Generate Custom PDF</button>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add Batch Modal -->
-    <div class="modal fade" id="addBatchModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow" style="border-radius: 24px;">
-                <div class="modal-header border-0 p-4 pb-0">
-                    <h5 class="modal-title fw-bold">Add New Batch</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <form>
-                        <div class="row g-3 mb-3">
-                            <div class="col-6">
-                                <label class="text-muted fw-bold small text-uppercase mb-1">Blood Type</label>
-                                <select class="form-select">
-                                    <option selected disabled>Select...</option>
-                                    <option>A+</option>
-                                    <option>A-</option>
-                                    <option>B+</option>
-                                    <option>B-</option>
-                                    <option>AB+</option>
-                                    <option>AB-</option>
-                                    <option>O+</option>
-                                    <option>O-</option>
-                                </select>
-                            </div>
-                            <div class="col-6">
-                                <label class="text-muted fw-bold small text-uppercase mb-1">Quantity (Units)</label>
-                                <input type="number" class="form-control" placeholder="0">
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label class="text-muted fw-bold small text-uppercase mb-1">Expiration Date</label>
-                            <input type="date" class="form-control">
-                        </div>
-                        <button type="button" class="btn btn-danger w-100 py-3 rounded-pill fw-bold shadow-sm" data-bs-dismiss="modal">Confirm Addition</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Batch Modal -->
-    <div class="modal fade" id="editBatchModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow" style="border-radius: 24px;">
-                <div class="modal-header border-0 p-4 pb-0">
-                    <h5 class="modal-title fw-bold">Edit Batch Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <form>
-                        <div class="row g-3 mb-3">
-                            <div class="col-6">
-                                <label class="text-muted fw-bold small text-uppercase mb-1">Blood Type</label>
-                                <input type="text" class="form-control" value="O-" disabled>
-                            </div>
-                            <div class="col-6">
-                                <label class="text-muted fw-bold small text-uppercase mb-1">Quantity (Units)</label>
-                                <input type="number" class="form-control" value="12">
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="text-muted fw-bold small text-uppercase mb-1">Expiration Date</label>
-                            <input type="date" class="form-control" value="2026-01-15">
-                        </div>
-                        <div class="mb-4">
-                            <label class="text-muted fw-bold small text-uppercase mb-1">Status</label>
-                            <select class="form-select">
-                                <option>Optimal</option>
-                                <option selected>Low</option>
-                                <option>Critical</option>
-                            </select>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-light w-50 py-3 rounded-pill fw-bold border" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-dark w-50 py-3 rounded-pill fw-bold shadow-sm" data-bs-dismiss="modal">Save Changes</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>

@@ -215,9 +215,9 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="mobileMenu">
                 <ul class="navbar-nav mt-3">
-                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="/hospital/dashboard">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/hospital/inventory">Inventory & Reports</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/hospital/donationManagement">Donation Management</a></li>
+                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="/medical_facilities/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/inventory">Inventory & Reports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/donationManagement">Donation Management</a></li>
                 </ul>
             </div>
         </div>
@@ -231,9 +231,9 @@
         </div>
         <nav class="nav flex-column mt-2 w-100">
             <div class="px-4 pb-2 text-label">Hospital Portal</div>
-            <a href="/hospital/dashboard" class="nav-link active"><span class="nav-icon"><i class="fas fa-chart-pie w-25"></i></span> Dashboard</a>
-            <a href="/hospital/inventory" class="nav-link"><span class="nav-icon"><i class="fas fa-box-open w-25"></i></span> Inventory & Reports</a>
-            <a href="/hospital/donationManagement" class="nav-link"><span class="nav-icon"><i class="fas fa-user-nurse w-25"></i></span> Donation Mgmt</a>
+            <a href="/medical_facilities/dashboard" class="nav-link active"><span class="nav-icon"><i class="fas fa-chart-pie w-25"></i></span> Dashboard</a>
+            <a href="/medical_facilities/inventory" class="nav-link"><span class="nav-icon"><i class="fas fa-box-open w-25"></i></span> Inventory & Reports</a>
+            <a href="/medical_facilities/donationManagement" class="nav-link"><span class="nav-icon"><i class="fas fa-user-nurse w-25"></i></span> Donation Management</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">

@@ -68,6 +68,11 @@ class UserController extends Controller
 
         $credentials = $request->only('email', 'password');
         if(Auth::attempt($credentials)){
+            if(!Auth::user()->is_active){
+                Auth::logout();
+                return redirect()->route('login')->with('error', 'Your account is deactivated. Please contact admin.');
+            }
+            
             switch (Auth::user()->role) {
                 case 'ADMIN':
                     return redirect()->route('admin.dashboard');
@@ -76,7 +81,7 @@ class UserController extends Controller
                 case 'ORGANIZER':
                     return redirect()->route('event_organizer.dashboard');
                 case 'STAFF':
-                    return redirect()->route('medicalFacilities.dashboard');
+                    return redirect()->route('medical_facilities.dashboard');
                 default:
                     Auth::logout();
                     return redirect()->route('login')->with('error', 'Invalid role.');

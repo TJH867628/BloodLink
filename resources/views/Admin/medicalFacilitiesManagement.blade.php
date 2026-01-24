@@ -156,8 +156,8 @@
         <nav class="nav flex-column mt-2 w-100">
             <div class="px-4 pb-2 text-label">Admin Portal</div>
             <a href="/admin/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
-            <a href="/admin/userManagement" class="nav-link"><i class="fas fa-users w-25"></i> User Mgmt</a>
-            <a href="/admin/hospitalManagement" class="nav-link active"><i class="fas fa-hospital w-25"></i> Hospital Mgmt</a>
+            <a href="/admin/userManagement" class="nav-link"><i class="fas fa-users w-25"></i> User Management</a>
+            <a href="/admin/medicalFacilitiesManagement" class="nav-link active"><i class="fas fa-hospital w-25"></i> Medical Facilities Management</a>
             <a href="/admin/systemModification" class="nav-link"><i class="fas fa-cogs w-25"></i> System Modification</a>
             <a href="/admin/auditReport" class="nav-link"><i class="fas fa-file-alt w-25"></i> Audit & Reports</a>
         </nav>
@@ -177,7 +177,7 @@
     <div class="main-content">
         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
-                <h2 class="fw-black mb-0">Hospital Management</h2>
+                <h2 class="fw-black mb-0">Medical Facilities Management</h2>
             </div>
             <div class="d-flex align-items-center gap-3">
                 <div class="text-end d-none d-md-block">
@@ -187,11 +187,29 @@
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" class="rounded-3 border" width="40" height="40" alt="Avatar">
             </div>
         </header>
-
+        @if($emergencyMode == 1)
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <div>
+                <strong>Emergency Mode is Enabled!</strong> The system is currently in emergency mode. Donation intervals have been reduced to 2 months.
+            </div>
+        </div>
+        @endif  
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @elseif(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <div class="custom-card">
             <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
                 <h5 class="fw-bold mb-0">Registered Facilities</h5>
-                <button class="btn btn-danger rounded-pill fw-bold px-4" data-bs-toggle="modal" data-bs-target="#addHospitalModal"><i class="fas fa-plus me-2"></i> Add Hospital</button>
+                <button class="btn btn-danger rounded-pill fw-bold px-4" data-bs-toggle="modal" data-bs-target="#addMedicalFacilitiesModal"><i class="fas fa-plus me-2"></i> Add Medical Facility</button>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
@@ -205,118 +223,107 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($facilities as $facility)
                         <tr>
-                            <td class="ps-4 fw-bold">City Central Hospital</td>
-                            <td class="text-muted small">FAC-001</td>
-                            <td>Trauma Center</td>
-                            <td>Cyberjaya</td>
-                            <td class="text-end pe-4"><button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#editHospitalModal"><i class="fas fa-edit"></i></button></td>
+                            <td class="ps-4 fw-bold">{{ $facility->name }}</td>
+                            <td>{{ $facility->id }}</td>
+                            <td>{{ $facility->type }}</td>
+                            <td>{{ $facility->address }}</td>
+                            <td class="text-end pe-4">
+                                <button class="btn btn-sm btn-outline-dark rounded-pill fw-bold px-3"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editMedicalFacilitiesModal"
+                                    data-id="{{ $facility->id }}"
+                                    data-name="{{ $facility->name }}"
+                                    data-type="{{ $facility->type }}"
+                                    data-address="{{ $facility->address }}">
+                                    <i class="fas fa-edit me-2"></i> Edit
+                                </button>
+                            </td>
                         </tr>
-                        <tr>
-                            <td class="ps-4 fw-bold">East Medical Clinic</td>
-                            <td class="text-muted small">FAC-002</td>
-                            <td>Clinic</td>
-                            <td>Puchong</td>
-                            <td class="text-end pe-4"><button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#editHospitalModal"><i class="fas fa-edit"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td class="ps-4 fw-bold">West Wing Blood Bank</td>
-                            <td class="text-muted small">FAC-004</td>
-                            <td>Blood Bank</td>
-                            <td>Subang Jaya</td>
-                            <td class="text-end pe-4"><button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#editHospitalModal"><i class="fas fa-edit"></i></button></td>
-                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
 
         <!-- Add Hospital Modal -->
-    <div class="modal fade" id="addHospitalModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="addMedicalFacilitiesModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow" style="border-radius: 24px;">
                 <div class="modal-header border-0 p-4 pb-0">
-                    <h5 class="modal-title fw-bold">Register New Facility</h5>
+                    <h5 class="modal-title fw-bold">Register New Medical facility</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <form>
-                        <div class="mb-3">
-                            <label class="text-muted fw-bold small text-uppercase mb-1">Facility Name</label>
-                            <input type="text" class="form-control rounded-3" placeholder="e.g. North District Hospital">
+                    <form method="POST" action="{{ route('admin.createMedicalFacility') }}">
+                    @csrf
+
+                    <div class="mb-3">
+                        <label class="text-muted fw-bold small text-uppercase mb-1">Facility Name</label>
+                        <input type="text" class="form-control rounded-3" name="name" required>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div>
+                            <label class="text-muted fw-bold small text-uppercase mb-1">Type</label>
+                            <select class="form-select rounded-3" name="type" required>
+                                <option value="HOSPITAL">Hospital</option>
+                                <option value="CLINIC">Clinic</option>
+                            </select>
                         </div>
-                        <div class="row g-3 mb-3">
-                            <div class="col-6">
-                                <label class="text-muted fw-bold small text-uppercase mb-1">Facility ID</label>
-                                <input type="text" class="form-control rounded-3" placeholder="FAC-XXX">
-                            </div>
-                            <div class="col-6">
-                                <label class="text-muted fw-bold small text-uppercase mb-1">Type</label>
-                                <select class="form-select rounded-3">
-                                    <option>General Hospital</option>
-                                    <option>Clinic</option>
-                                    <option>Blood Bank</option>
-                                    <option>Trauma Center</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="text-muted fw-bold small text-uppercase mb-1">Location / Address</label>
-                            <input type="text" class="form-control rounded-3" placeholder="City, State">
-                        </div>
-                        <div class="mb-4">
-                            <label class="text-muted fw-bold small text-uppercase mb-1">Contact Number</label>
-                            <input type="tel" class="form-control rounded-3" placeholder="+60 3-xxxx xxxx">
-                        </div>
-                        <button type="button" class="btn btn-danger w-100 py-3 rounded-pill fw-bold shadow-sm" data-bs-dismiss="modal">Register Facility</button>
-                    </form>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="text-muted fw-bold small text-uppercase mb-1">Location / Address</label>
+                        <input type="text" class="form-control rounded-3" name="address" required>
+                    </div>
+                    <button type="submit" class="btn btn-danger w-100 py-3 rounded-pill fw-bold shadow-sm">
+                        Register Facility
+                    </button>
+                </form>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Edit Hospital Modal -->
-    <div class="modal fade" id="editHospitalModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="editMedicalFacilitiesModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow" style="border-radius: 24px;">
                 <div class="modal-header border-0 p-4 pb-0">
-                    <h5 class="modal-title fw-bold">Edit Facility Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title fw-bold">Edit Medical Facility</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <form>
+                        <form method="POST" id="editMedicalFacilityForm">
+                        @csrf
                         <div class="mb-3">
                             <label class="text-muted fw-bold small text-uppercase mb-1">Facility Name</label>
-                            <input type="text" class="form-control rounded-3" value="City Central Hospital">
+                            <input type="text" class="form-control" name="name" required>
                         </div>
-                        <div class="row g-3 mb-3">
-                            <div class="col-6">
-                                <label class="text-muted fw-bold small text-uppercase mb-1">Facility ID</label>
-                                <input type="text" class="form-control rounded-3" value="FAC-001" readonly>
-                            </div>
-                            <div class="col-6">
-                                <label class="text-muted fw-bold small text-uppercase mb-1">Type</label>
-                                <select class="form-select rounded-3">
-                                    <option selected>Trauma Center</option>
-                                    <option>General Hospital</option>
-                                    <option>Clinic</option>
-                                    <option>Blood Bank</option>
-                                </select>
-                            </div>
+                        <div class="mb-3">
+                            <label class="text-muted fw-bold small text-uppercase mb-1">Type</label>
+                            <select class="form-select" name="type">
+                                <option value="HOSPITAL">Hospital</option>
+                                <option value="CLINIC">Clinic</option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label class="text-muted fw-bold small text-uppercase mb-1">Location / Address</label>
-                            <input type="text" class="form-control rounded-3" value="Cyberjaya, Selangor">
-                        </div>
-                        <div class="mb-4">
-                            <label class="text-muted fw-bold small text-uppercase mb-1">Contact Number</label>
-                            <input type="tel" class="form-control rounded-3" value="+60 3-8888 1234">
+                            <input type="text" class="form-control" name="address" required>
                         </div>
                         <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-light flex-fill py-3 rounded-pill fw-bold border" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" class="btn btn-dark flex-fill py-3 rounded-pill fw-bold shadow-sm" data-bs-dismiss="modal">Save Changes</button>
+                            <button type="button" class="btn btn-light w-50 py-3 rounded-pill fw-bold border" data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+                            <button type="submit" class="btn btn-dark w-50 py-3 rounded-pill fw-bold shadow-sm">
+                                Save Changes
+                            </button>
                         </div>
-                    </form>
+
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -325,3 +332,20 @@
 </body>
 
 </html>
+<script>
+document.getElementById('editMedicalFacilitiesModal').addEventListener('show.bs.modal', function (event) {
+    let button = event.relatedTarget;
+
+    let id = button.getAttribute('data-id');
+    let name = button.getAttribute('data-name');
+    let type = button.getAttribute('data-type');
+    let address = button.getAttribute('data-address');
+
+    let form = document.getElementById('editMedicalFacilityForm');
+    form.action = "/admin/editMedicalFacility/" + id;
+
+    form.querySelector('[name="name"]').value = name;
+    form.querySelector('[name="type"]').value = type;
+    form.querySelector('[name="address"]').value = address;
+});
+</script>

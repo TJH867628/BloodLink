@@ -185,9 +185,9 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="mobileMenu">
                 <ul class="navbar-nav mt-3">
-                    <li class="nav-item"><a class="nav-link" href="/hospital/dashboard">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="hospital_inventory.html">Inventory & Reports</a></li>
-                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="/hospital/donationManagement">Donation Management</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="medical_facilities_inventory.html">Inventory & Reports</a></li>
+                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="/medical_facilities/donationManagement">Donation Management</a></li>
                 </ul>
             </div>
         </div>
@@ -199,9 +199,9 @@
         </div>
         <nav class="nav flex-column mt-2 w-100">
             <div class="px-4 pb-2 text-label" style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Hospital Portal</div>
-            <a href="/hospital/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
-            <a href="/hospital/inventory" class="nav-link"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
-            <a href="/hospital/donationManagement" class="nav-link active"><i class="fas fa-user-nurse w-25"></i> Donation Mgmt</a>
+            <a href="/medical_facilities/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
+            <a href="/medical_facilities/inventory" class="nav-link"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
+            <a href="/medical_facilities/donationManagement" class="nav-link active"><i class="fas fa-user-nurse w-25"></i> Donation Management</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">
@@ -254,59 +254,26 @@
                                 <tr>
                                     <th class="px-4 py-3 text-muted small fw-bold text-uppercase">Donor</th>
                                     <th class="px-4 py-3 text-muted small fw-bold text-uppercase">Scheduled</th>
-                                    <th class="px-4 py-3 text-muted small fw-bold text-uppercase">Eligibility</th>
                                     <th class="px-4 py-3 text-end text-muted small fw-bold text-uppercase">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                @foreach ($donation_today as $donation)
+                                 <tr>
                                     <td class="px-4 py-3">
                                         <div class="d-flex align-items-center gap-3">
-                                            <div class="bg-danger-subtle text-danger rounded p-1 fw-bold small text-center" style="width: 32px;">A+</div>
+                                            <div class="bg-danger-subtle text-danger rounded p-1 fw-bold small text-center" style="width: 32px;">{{ $donation->blood_type }}</div>
                                             <div>
-                                                <div class="fw-bold">Nesandra Ann</div>
-                                                <div class="small text-muted">ID: D-201</div>
+                                                <div class="fw-bold">{{ $donation->donor_name }}</div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-4 py-3 text-muted fw-medium">10:30 AM</td>
-                                    <td class="px-4 py-3"><span class="status-badge badge-eligible">Eligible</span></td>
+                                    <td class="px-4 py-3 text-muted fw-medium">{{ $donation->time }}</td>
                                     <td class="px-4 py-3 text-end">
-                                        <button class="btn btn-outline-danger btn-sm fw-bold rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#recordModal">Record Result</button>
+                                        <button class="btn btn-outline-danger btn-sm fw-bold rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#recordModal" data-appointment="{{ $donation->appointment_id }}">Record Result</button>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td class="px-4 py-3">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="bg-danger-subtle text-danger rounded p-1 fw-bold small text-center" style="width: 32px;">O+</div>
-                                            <div>
-                                                <div class="fw-bold">Tan Jing Heng</div>
-                                                <div class="small text-muted">ID: D-202</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 text-muted fw-medium">11:00 AM</td>
-                                    <td class="px-4 py-3"><span class="status-badge badge-eligible">Eligible</span></td>
-                                    <td class="px-4 py-3 text-end">
-                                        <button class="btn btn-outline-danger btn-sm fw-bold rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#recordModal">Record Result</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 py-3">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="bg-danger-subtle text-danger rounded p-1 fw-bold small text-center" style="width: 32px;">B-</div>
-                                            <div>
-                                                <div class="fw-bold">Praveena Nair</div>
-                                                <div class="small text-muted">ID: D-203</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 text-muted fw-medium">11:45 AM</td>
-                                    <td class="px-4 py-3"><span class="status-badge badge-eligible">Eligible</span></td>
-                                    <td class="px-4 py-3 text-end">
-                                        <button class="btn btn-outline-danger btn-sm fw-bold rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#recordModal">Record Result</button>
-                                    </td>
-                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -318,22 +285,27 @@
                 <div class="custom-card h-100 p-4">
                     <h5 class="fw-bold mb-4">Recent Records</h5>
                     <div class="vstack gap-3">
+                    @forelse($recentRecords as $r)
                         <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-4">
                             <div>
-                                <div class="fw-bold small text-dark">Michael Chen</div>
-                                <div class="text-muted" style="font-size: 0.7rem;">Yesterday • HB 14.2</div>
+                                <div class="fw-bold small text-dark">{{ $r->donor_name }}</div>
+                                <div class="text-muted" style="font-size: 0.7rem;">
+                                    {{ \Carbon\Carbon::parse($r->collected_date)->format('d M Y') }}
+                                </div>
                             </div>
-                            <span class="badge bg-success text-white border-0">Successful</span>
+
+                            @if($r->status == 'SUCCESSFUL')
+                                <span class="badge bg-success text-white border-0">Successful</span>
+                            @else
+                                <span class="badge bg-warning text-dark border-0">Discarded</span>
+                            @endif
                         </div>
-                        <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-4">
-                            <div>
-                                <div class="fw-bold small text-dark">Sarah Lee</div>
-                                <div class="text-muted" style="font-size: 0.7rem;">Yesterday • HB 11.0</div>
-                            </div>
-                            <span class="badge bg-warning text-dark border-0">Deferred</span>
+                    @empty
+                        <div class="text-center text-muted small py-4">
+                            No records yet
                         </div>
+                    @endforelse
                     </div>
-                    <!-- Updated Button to Trigger Modal -->
                     <button class="btn btn-link text-danger text-decoration-none fw-bold text-uppercase w-100 mt-3" style="font-size: 0.75rem; letter-spacing: 0.1em;" data-bs-toggle="modal" data-bs-target="#historyModal">View Full History</button>
                 </div>
             </div>
@@ -349,34 +321,56 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <form>
-                        <div class="row g-3 mb-3">
-                            <div class="col-6">
-                                <label class="text-muted fw-bold small text-uppercase mb-1">Hemoglobin</label>
-                                <input type="text" class="form-control" placeholder="g/dL">
-                            </div>
-                            <div class="col-6">
-                                <label class="text-muted fw-bold small text-uppercase mb-1">Blood Pressure</label>
-                                <input type="text" class="form-control" placeholder="mmHg">
-                            </div>
+                    <form method="POST" id="recordDonationForm">
+                    @csrf
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label>Hemoglobin</label>
+                            <input type="number"
+                            step="0.1"
+                            min="8"
+                            max="20"
+                            class="form-control"
+                            name="hemoglobin_level"
+                            placeholder="e.g. 13.5"
+                            required>
                         </div>
-                        <div class="mb-3">
-                            <label class="text-muted fw-bold small text-uppercase mb-1">Weight</label>
-                            <input type="text" class="form-control" placeholder="kg">
+
+                        <div class="col-6">
+                            <label>Blood Pressure</label>
+                            <input type="text"
+                            class="form-control"
+                            name="blood_pressure"
+                            placeholder="e.g. 120/80"
+                            pattern="^\d{2,3}\/\d{2,3}$"
+                            title="Format must be like 120/80"
+                            required>
                         </div>
-                        <div class="mb-4">
-                            <label class="text-muted fw-bold small text-uppercase mb-1">Final Result</label>
-                            <select class="form-select">
-                                <option>Successful Donation</option>
-                                <option>Deferred (Medical)</option>
-                                <option>Deferred (Other)</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="text-muted fw-bold small text-uppercase mb-1">Clinical Notes</label>
-                            <textarea class="form-control" rows="2" placeholder="Any adverse reactions?"></textarea>
-                        </div>
-                        <button type="button" class="btn btn-danger w-100 py-3 rounded-pill fw-bold shadow-sm" data-bs-dismiss="modal">Save Record & Update Inventory</button>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Unit</label>
+                        <input type="number" class="form-control" name="unit" value="1">
+                    </div>
+
+                    <div class="mb-4">
+                        <label>Final Result</label>
+                        <select class="form-select" name="donation_status">
+                            <option value="SUCCESSFUL">Successful</option>
+                            <option value="DISCARDED">Discarded</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Notes</label>
+                        <textarea class="form-control" name="notes"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-danger w-100">
+                        Save Record
+                    </button>
+
                     </form>
                 </div>
             </div>
@@ -415,66 +409,46 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            @forelse($donationHistory as $r)
                                 <tr>
-                                    <td class="small text-muted ps-3">2025-12-29</td>
-                                    <td>
-                                        <div class="fw-bold small">Michael Chen</div>
-                                        <div class="small text-muted">D-105</div>
+                                    <td class="small text-muted ps-3">
+                                        {{ \Carbon\Carbon::parse($r->collected_date)->format('d M Y') }}
                                     </td>
-                                    <td><span class="badge bg-light text-dark border">O+</span></td>
-                                    <td class="small">14.2 / 110/70</td>
-                                    <td class="text-end pe-3"><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Successful</span></td>
+
+                                    <td>
+                                        <div class="fw-bold small">{{ $r->donor_name }}</div>
+                                        <div class="small text-muted">ID: D-{{ $r->donor_id }}</div>
+                                    </td>
+
+                                    <td>
+                                        <span class="badge bg-light text-dark border">
+                                            {{ $r->blood_type }}
+                                        </span>
+                                    </td>
+
+                                    <td class="small">
+                                        {{ $r->hemoglobin_level }} / {{ $r->blood_pressure }}
+                                    </td>
+
+                                    <td class="text-end pe-3">
+                                        @if($r->status == 'SUCCESSFUL')
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">
+                                                Successful
+                                            </span>
+                                        @else
+                                            <span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill">
+                                                Discarded
+                                            </span>
+                                        @endif
+                                    </td>
                                 </tr>
+                            @empty
                                 <tr>
-                                    <td class="small text-muted ps-3">2025-12-29</td>
-                                    <td>
-                                        <div class="fw-bold small">Michael Chen</div>
-                                        <div class="small text-muted">D-105</div>
+                                    <td colspan="5" class="text-center text-muted py-4">
+                                        No donation records found
                                     </td>
-                                    <td><span class="badge bg-light text-dark border">O+</span></td>
-                                    <td class="small">14.2 / 110/70</td>
-                                    <td class="text-end pe-3"><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Successful</span></td>
                                 </tr>
-                                <tr>
-                                    <td class="small text-muted ps-3">2025-12-29</td>
-                                    <td>
-                                        <div class="fw-bold small">Sarah Lee</div>
-                                        <div class="small text-muted">D-109</div>
-                                    </td>
-                                    <td><span class="badge bg-light text-dark border">A-</span></td>
-                                    <td class="small">11.0 / 120/80</td>
-                                    <td class="text-end pe-3"><span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill">Deferred</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="small text-muted ps-3">2025-12-28</td>
-                                    <td>
-                                        <div class="fw-bold small">James Wong</div>
-                                        <div class="small text-muted">D-112</div>
-                                    </td>
-                                    <td><span class="badge bg-light text-dark border">B+</span></td>
-                                    <td class="small">13.8 / 115/75</td>
-                                    <td class="text-end pe-3"><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Successful</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="small text-muted ps-3">2025-12-27</td>
-                                    <td>
-                                        <div class="fw-bold small">Priya M.</div>
-                                        <div class="small text-muted">D-115</div>
-                                    </td>
-                                    <td><span class="badge bg-light text-dark border">AB+</span></td>
-                                    <td class="small">12.9 / 118/72</td>
-                                    <td class="text-end pe-3"><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Successful</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="small text-muted ps-3">2025-12-25</td>
-                                    <td>
-                                        <div class="fw-bold small">Ahmad Z.</div>
-                                        <div class="small text-muted">D-120</div>
-                                    </td>
-                                    <td><span class="badge bg-light text-dark border">O-</span></td>
-                                    <td class="small">15.1 / 122/81</td>
-                                    <td class="text-end pe-3"><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Successful</span></td>
-                                </tr>
+                            @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -491,3 +465,13 @@
 </body>
 
 </html>
+
+<script>
+document.getElementById('recordModal').addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    const appointmentId = button.getAttribute('data-appointment');
+
+    const form = document.getElementById('recordDonationForm');
+    form.action = "/medical_facilities/recordDonationResult/" + appointmentId;
+});
+</script>

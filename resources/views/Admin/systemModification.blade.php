@@ -161,8 +161,8 @@
         <nav class="nav flex-column mt-2 w-100">
             <div class="px-4 pb-2 text-label">Admin Portal</div>
             <a href="/admin/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
-            <a href="/admin/userManagement" class="nav-link"><i class="fas fa-users w-25"></i> User Mgmt</a>
-            <a href="/admin/hospitalManagement" class="nav-link"><i class="fas fa-hospital w-25"></i> Hospital Mgmt</a>
+            <a href="/admin/userManagement" class="nav-link"><i class="fas fa-users w-25"></i> User Management</a>
+            <a href="/admin/medicalFacilitiesManagement" class="nav-link"><i class="fas fa-hospital w-25"></i>Medical Facilities Management</a>
             <a href="/admin/systemModification" class="nav-link active"><i class="fas fa-cogs w-25"></i> System Modification</a>
             <a href="/admin/auditReport" class="nav-link"><i class="fas fa-file-alt w-25"></i> Audit & Reports</a>
         </nav>
@@ -180,48 +180,65 @@
     </div>
 
     <div class="main-content">
-        <div class="d-flex justify-content-between align-items-center mb-5">
-            <h2 class="fw-black mb-0">System Modification</h2>
-            <button class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm"><i class="fas fa-save me-2"></i> Save Changes</button>
-        </div>
-
-        <div class="row g-4">
-            <div class="col-lg-6">
-                <div class="custom-card h-100">
-                    <h5 class="fw-bold mb-4 text-danger"><i class="fas fa-heart me-2"></i> Donation Protocols</h5>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">Minimum Donation Interval (Months)</label>
-                        <input type="number" class="form-control" value="3">
+        <form method="POST" action="{{ route('admin.updateSystemSettings') }}">
+        @csrf
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <h2 class="fw-black mb-0">System Modification</h2>
+                <button class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm" type="submit"><i class="fas fa-save me-2"></i> Save Changes</button>
+            </div>
+            @if($settings['emergency_mode'] ?? 0 == 1)
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Emergency Mode is Enabled!</strong> The system is currently in emergency mode. Donation intervals have been reduced to 2 months.
+                </div>
+            @endif
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @elseif(session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="custom-card h-100">
+                        <h5 class="fw-bold mb-4 text-danger"><i class="fas fa-heart me-2"></i> Donation Protocols</h5>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Minimum Donation Interval (Months)</label>
+                            <input type="number" class="form-control" name="donation_interval_months" value="{{ $settings['donation_interval_months'] }}" required readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Min Hemoglobin Level (g/dL)</label>
+                            <input type="number" step="0.1" name="min_hemoglobin" class="form-control" value="{{ $settings['min_hemoglobin'] }}">
+                        </div>
+                        <div class="form-check form-switch mt-4">
+                            <input class="form-check-input" type="checkbox" name="emergency_mode" role="switch" id="emergencyOverride" {{ ($settings['emergency_mode'] ?? 0) == 1 ? 'checked' : '' }}>
+                            <label class="form-check-label fw-bold text-danger" for="emergencyOverride">Emergency Shortage Mode</label>
+                            <div class="small text-muted">Reduces interval to 2 months and broadcasts alerts.</div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">Min Hemoglobin Level (g/dL)</label>
-                        <input type="number" step="0.1" class="form-control" value="12.5">
-                    </div>
-                    <div class="form-check form-switch mt-4">
-                        <input class="form-check-input" type="checkbox" role="switch" id="emergencyOverride">
-                        <label class="form-check-label fw-bold text-danger" for="emergencyOverride">Emergency Shortage Mode</label>
-                        <div class="small text-muted">Reduces interval to 2 months and broadcasts alerts.</div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="custom-card h-100">
+                        <h5 class="fw-bold mb-4 text-primary"><i class="fas fa-database me-2"></i> Inventory Thresholds</h5>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Critical Low Trigger (%)</label>
+                            <input type="number" class="form-control" name="inventory_critical_pct" value="{{ $settings['inventory_critical_pct'] ?? 15 }}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Warning Low Trigger (%)</label>
+                            <input type="number" class="form-control" name="inventory_warning_pct" value="{{ $settings['inventory_warning_pct'] ?? 30 }}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Optimal Target (%)</label>
+                            <input type="number" class="form-control" name="inventory_optimal_pct" value="{{ $settings['inventory_optimal_pct'] ?? 80 }}">
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="custom-card h-100">
-                    <h5 class="fw-bold mb-4 text-primary"><i class="fas fa-database me-2"></i> Inventory Thresholds</h5>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">Critical Low Trigger (%)</label>
-                        <input type="number" class="form-control" value="15">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">Warning Low Trigger (%)</label>
-                        <input type="number" class="form-control" value="30">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold text-muted">Optimal Target (%)</label>
-                        <input type="number" class="form-control" value="80">
-                    </div>
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -170,8 +170,8 @@
             <div class="collapse navbar-collapse" id="mobileMenu">
                 <ul class="navbar-nav mt-3">
                     <li class="nav-item"><a class="nav-link fw-bold text-danger" href="/admin/dashboard">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/admin/userManagement">User Mgmt</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/admin/hospitalManagement">Hospital Mgmt</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/userManagement">User Management</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/medicalFacilitiesManagement">Hospital Management</a></li>
                     <li class="nav-item"><a class="nav-link" href="/admin/systemModification">System Modification</a></li>
                     <li class="nav-item"><a class="nav-link" href="/admin/auditReport">Audit & Reports</a></li>
                 </ul>
@@ -186,8 +186,8 @@
         <nav class="nav flex-column mt-2 w-100">
             <div class="px-4 pb-2 text-label">Admin Portal</div>
             <a href="/admin/dashboard" class="nav-link active"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
-            <a href="/admin/userManagement" class="nav-link"><i class="fas fa-users w-25"></i> User Mgmt</a>
-            <a href="/admin/hospitalManagement" class="nav-link"><i class="fas fa-hospital w-25"></i> Hospital Mgmt</a>
+            <a href="/admin/userManagement" class="nav-link"><i class="fas fa-users w-25"></i> User Management</a>
+            <a href="/admin/medicalFacilitiesManagement" class="nav-link"><i class="fas fa-hospital w-25"></i>Medical Facilities Management</a>
             <a href="/admin/systemModification" class="nav-link"><i class="fas fa-cogs w-25"></i> System Modification</a>
             <a href="/admin/auditReport" class="nav-link"><i class="fas fa-file-alt w-25"></i> Audit & Reports</a>
         </nav>
@@ -208,56 +208,49 @@
         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
                 <h2 class="fw-black mb-0">Admin Dashboard</h2>
-                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 mt-2"><i class="fas fa-shield-alt me-1"></i> System Secure</span>
             </div>
             <div class="d-flex align-items-center gap-3">
                 <div class="text-end d-none d-md-block">
                     <div class="fw-bold small">System Admin</div>
-                    <div class="text-label text-primary">Superadmin</div>
+                    <div class="text-label text-primary">Admin</div>
                 </div>
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" class="rounded-3 border" width="40" height="40" alt="Avatar">
             </div>
         </header>   
-
+        @if($emergencyMode == 1)
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <div>
+                <strong>Emergency Mode is Enabled!</strong> The system is currently in emergency mode. Donation intervals have been reduced to 2 months.
+            </div>
+        </div>
+        @endif
         <div class="row g-4 mb-5">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="stat-card">
                     <div class="text-label text-primary">Total Users</div>
                     <div class="d-flex align-items-end justify-content-between mt-2">
-                        <h2 class="fw-black mb-0">1,240</h2>
+                        <h2 class="fw-black mb-0">{{ $totalUsers }}</h2>
                         <i class="fas fa-users text-primary opacity-25 fa-2x"></i>
                     </div>
-                    <div class="mt-2 text-muted small">+12% this month</div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="stat-card">
-                    <div class="text-label text-success">Hospitals</div>
+                    <div class="text-label text-success">Hospitals/Clinic</div>
                     <div class="d-flex align-items-end justify-content-between mt-2">
-                        <h2 class="fw-black mb-0">24</h2>
+                        <h2 class="fw-black mb-0">{{ $totalMedicalFacilities }}</h2>
                         <i class="fas fa-hospital text-success opacity-25 fa-2x"></i>
                     </div>
-                    <div class="mt-2 text-muted small">All systems operational</div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="stat-card">
                     <div class="text-label text-danger">Total Inventory</div>
                     <div class="d-flex align-items-end justify-content-between mt-2">
-                        <h2 class="fw-black mb-0">850</h2>
+                        <h2 class="fw-black mb-0">{{ $currentBloodStock }} Bags</h2>
                         <i class="fas fa-burn text-danger opacity-25 fa-2x"></i>
                     </div>
-                    <div class="mt-2 text-muted small">Units across network</div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stat-card">
-                    <div class="text-label text-warning">System Alerts</div>
-                    <div class="d-flex align-items-end justify-content-between mt-2">
-                        <h2 class="fw-black mb-0">02</h2>
-                        <i class="fas fa-exclamation-triangle text-warning opacity-25 fa-2x"></i>
-                    </div>
-                    <div class="mt-2 text-muted small">Server maintenance due</div>
                 </div>
             </div>
         </div>

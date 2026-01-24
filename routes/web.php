@@ -28,10 +28,11 @@ Route::middleware(['role:DONOR','auth'])->group(function () {
     Route::post('donor/cancelAppointment/{appointmentId}', [DonorController::class, 'cancelAppointment'])->name('donor.cancelAppointment');
 });
 Route::middleware(['role:STAFF','auth'])->group(function () {
-    Route::get('medicalFacilities/dashboard', [MedicalFacilitiesController::class, 'medicalFacilitiesDashboard'])->name('medicalFacilities.dashboard');
-    Route::get('medicalFacilities/inventory', [MedicalFacilitiesController::class, 'inventory_and_report'])->name('medicalFacilities.inventory');
-    Route::get('medicalFacilities/donationManagement', [MedicalFacilitiesController::class, 'donationManagement'])->name('medicalFacilities.donationManagement');
+    Route::get('medical_facilities/dashboard', [MedicalFacilitiesController::class, 'medicalFacilitiesDashboard'])->name('medical_facilities.dashboard');
+    Route::get('medical_facilities/inventory', [MedicalFacilitiesController::class, 'inventory_and_report'])->name('medical_facilities.inventory');
+    Route::get('medical_facilities/donationManagement', [MedicalFacilitiesController::class, 'donationManagement'])->name('medical_facilities.donationManagement');
 
+    Route::post('medical_facilities/recordDonationResult/{appointment_id}', [MedicalFacilitiesController::class, 'recordDonationResult'])->name('medical_facilities.recordDonationResult');
 });
 Route::middleware(['role:ORGANIZER','auth'])->group(function () {
     Route::get('event_organizer/dashboard', [EventOrganizerController::class, 'eventOrganizerDashboard'])->name('event_organizer.dashboard');
@@ -46,7 +47,14 @@ Route::middleware(['role:ORGANIZER','auth'])->group(function () {
 Route::middleware(['role:ADMIN','auth'])->group(function () {
     Route::get('admin/dashboard', [App\Http\Controllers\AdminController::class, 'adminDashboard'])->name('admin.dashboard');
     Route::get('admin/userManagement', [App\Http\Controllers\AdminController::class, 'userManagement'])->name('admin.userManagement');
-    Route::get('admin/hospitalManagement', [App\Http\Controllers\AdminController::class, 'hospitalManagement'])->name('admin.hospitalManagement');
+    Route::get('admin/medicalFacilitiesManagement', [App\Http\Controllers\AdminController::class, 'medicalFacilitiesManagement'])->name('admin.medicalFacilitiesManagement');
     Route::get('admin/systemModification', [App\Http\Controllers\AdminController::class, 'systemModification'])->name('admin.systemModification');
     Route::get('admin/auditReport', [App\Http\Controllers\AdminController::class, 'auditReport'])->name('admin.auditReport');
+
+    Route::post('admin/toggleUserActivation/{userId}', [App\Http\Controllers\AdminController::class, 'toggleUserActivation'])->name('admin.toggleUserActivation');
+    Route::post('admin/createUser', [App\Http\Controllers\AdminController::class, 'createUser'])->name('admin.createUser');
+    Route::post('admin/editUser/{userId}', [App\Http\Controllers\AdminController::class, 'editUser'])->name('admin.editUser');
+    Route::post('admin/createMedicalFacility', [App\Http\Controllers\AdminController::class, 'createMedicalFacility'])->name('admin.createMedicalFacility');
+    Route::post('admin/editMedicalFacility/{facilityId}', [App\Http\Controllers\AdminController::class, 'editMedicalFacility'])->name('admin.editMedicalFacility');
+    Route::post('admin/updateSystemSettings', [App\Http\Controllers\AdminController::class, 'updateSystemSettings'])->name('admin.updateSystemSettings');
 });
