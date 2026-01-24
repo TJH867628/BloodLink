@@ -398,6 +398,25 @@
                             <button type="button" class="btn btn-light fw-bold px-4 rounded-pill border">Cancel</button>
                             <button type="submit" class="btn btn-save px-4 rounded-pill">Save Changes</button>
                         </div>
+
+                        <h6 class="fw-bold mb-3">Security</h6>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Current Password</label>
+                            <input type="password" class="form-control" placeholder="••••••••">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">New Password</label>
+                            <input type="password" class="form-control" placeholder="New password">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-muted">Confirm New Password</label>
+                            <input type="password" class="form-control" placeholder="Confirm new password">
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-light rounded-pill px-4 fw-bold border">Cancel</button>
+                            <button type="submit" class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm">Save Changes</button>
+                        </div>
                     </form>
                 </div>
             </div>
