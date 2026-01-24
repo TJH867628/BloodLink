@@ -11,6 +11,7 @@ use App\Models\MedicalFacility;
 use App\Models\BloodInventory;
 use DB;
 use Carbon\Carbon;
+use App\Models\SystemSettings;
 
 class MedicalFacilitiesController extends Controller
 {
@@ -97,6 +98,10 @@ class MedicalFacilitiesController extends Controller
 
     public function recordDonationResult(Request $request,int $appointmentId)
     {
+        $minHemoglobin = SystemSettings::where('name','min_hemoglobin')->value('value');
+        if($request->input('hemoglobin_level') < $minHemoglobin) {
+            return redirect()->back()->with('error', 'Hemoglobin level is below the minimum required level of ' . $minHemoglobin . ' g/dL.');
+        }
         $appointment = Appointment::where('id', $appointmentId)->first();
         $donorHealthDetails = DonorHealthDetails::where('donor_id', $appointment->donor_id)->first();
         $donorHealthDetails->hemoglobin_level = $request->input('hemoglobin_level');
