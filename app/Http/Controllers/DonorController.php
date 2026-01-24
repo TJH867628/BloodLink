@@ -13,6 +13,7 @@ use App\Models\Feedback;
 use App\Models\BloodType;
 use App\Models\SystemSettings;
 use App\Models\Notification as NotificationModel;
+use App\Models\User;
 use Carbon\Carbon;
 use DB;
 use Notification;
@@ -205,29 +206,34 @@ class DonorController extends Controller
             return redirect()->back()->with('error', 'This event is not available for booking.');
         }
         $intervalMonths = SystemSettings::where('name','donation_interval_months')->value('value');
+        $intervalMonths = (int)$intervalMonths ?: 3;
         $targetDate = Carbon::parse($event->date);
         $windowStart = $targetDate->copy()->subMonths($intervalMonths);
         $windowEnd = $targetDate->copy()->addMonths($intervalMonths);
 
-        $hasAppointmentConflict = DB::table('appointment')
+        $hasFutureAppointment = DB::table('appointment')
             ->join('event', 'appointment.event_id', '=', 'event.id')
             ->where('appointment.donor_id', $user->id)
-            ->whereIn('appointment.status', ['ACCEPTED', 'COMPLETED'])
-            ->whereBetween('event.date', [$windowStart, $windowEnd])
+            ->where('appointment.status', 'ACCEPTED')
+            ->whereDate('event.date', '>=', now())
             ->exists();
 
         $healthDetails = $user->donorHealthDetails;
         $hasProfileConflict = false;
-        if ($healthDetails && $healthDetails->last_donation_date) {
-            $lastDonation = Carbon::parse($healthDetails->last_donation_date);
+        $lastDonation = $user->donorHealthDetails->last_donation_date;
 
-            if ($lastDonation->between($windowStart, $windowEnd)) {
+        if ($lastDonation) {
+            $nextEligible = Carbon::parse($lastDonation)->addMonths($intervalMonths);
+
+            if ($targetDate->lt($nextEligible)) {
                 $hasProfileConflict = true;
             }
         }
-
-        if ($hasAppointmentConflict || $hasProfileConflict) {
-            return redirect()->back()->with('error', 'You already have a blood donation within 3 months of this event. Please choose a later date.');
+        if ($hasFutureAppointment || $hasProfileConflict) {
+            return redirect()->back()->with(
+            'error',
+            "You already have a blood donation within the required {$intervalMonths} month waiting period. Please choose a later date."
+            );
         }
 
         Appointment::create([
@@ -244,7 +250,9 @@ class DonorController extends Controller
             'timestamp' => now(),
         ]);
 
-        sendSystemNotification($event->organizer_id, 'A new appointment has been booked for your event "' . $event->name . '" by ' . $user->name . '.');
+        $organizer = User::find($event->organizer_id);   
+
+        sendSystemNotification($organizer, 'A new appointment has been booked for your event "' . $event->name . '" by ' . $user->name . '.');
         sendSystemNotification($user, 'You have successfully booked an appointment for the event "' . $event->name . '" on ' . $event->date . '.');
 
         $event->decrement('available_slots');

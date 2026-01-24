@@ -6,9 +6,11 @@ use App\Models\AuditLog;
 use Event;
 use Illuminate\Http\Request;
 use App\Models\Event as EventModel;
+use App\Models\Notification as NotificationModel;
 use App\Models\Appointment;
 use Carbon\Carbon;
 use DB;
+use Auth;
 
 class EventOrganizerController extends Controller
 {
@@ -43,10 +45,14 @@ class EventOrganizerController extends Controller
             ->join('appointment', 'event.id', '=', 'appointment.event_id')
             ->whereIn('appointment.status', ['ACCEPTED', 'PENDING'])
             ->count();
+        
+        $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
+            ->where('status', 'SEND')
+            ->exists();
 
         $slotCapacityInPercent = $totalSlotCapacity > 0 ? ($totalBookedSlots / $totalSlotCapacity) * 100 : 0;
         $slotCapacity = round($slotCapacityInPercent, 2);
-        return view('Event_Organizer.dashboard', compact('user','events','totalRegisteredDonors','totalPendingAcceptDonors','slotCapacity'));
+        return view('Event_Organizer.dashboard', compact('user','events','totalRegisteredDonors','totalPendingAcceptDonors','slotCapacity','hasUnreadNotifications'));
     }
     public function eventManagement()
     {
@@ -217,9 +223,38 @@ class EventOrganizerController extends Controller
         return redirect()->back()->with('success', 'Appointment rejected successfully.');
     }
 
-    public function notification ()
-    {
-        $user = auth()->user();
-        return view('Event_Organizer.notification', compact('user'));
+    public function notification () {
+        $user = Auth::user();
+        $notifications = NotificationModel::where('user_id', $user->id)
+            ->orderBy('datetime', 'desc')
+            ->get();
+        return view('donor.notification', compact('user','notifications'));
+    }
+
+    public function markNotificationAsRead(Request $request, $notificationId) {
+        $user = Auth::user();
+
+        $notification = NotificationModel::where('id', $notificationId)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (!$notification) {
+            return redirect()->back()->with('error', 'Notification not found.');
+        }
+
+        $notification->status = 'READ';
+        $notification->save();
+
+        return redirect()->back()->with('success', 'Notification marked as read.');
+    }
+
+    public function markAllNotificationsAsRead(Request $request) {
+        $user = Auth::user();
+
+        NotificationModel::where('user_id', $user->id)
+            ->where('status', 'SEND')
+            ->update(['status' => 'READ']);
+
+        return redirect()->back()->with('success', 'All notifications marked as read.');
     }
 }

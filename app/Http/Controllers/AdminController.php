@@ -165,6 +165,8 @@ class AdminController extends Controller
             $settings['inventory_optimal_pct'] = 80;
         }
 
+        $settings['inventory_target_units'] = $request->input('inventory_target_units');
+
         foreach ($settings as $name => $value) {
             SystemSettings::updateOrCreate(
                 ['name' => $name],
@@ -197,6 +199,19 @@ class AdminController extends Controller
                 " Blood shortage emergency! Please check your eligibility and book an appointment if you can donate"
             );
         }
+    }
+
+    public function inventory()
+    {
+        $user = auth()->user();
+        $blood_inventories = BloodInventory::with('medicalFacility')->get();
+        $bloodTypeSummary = BloodInventory::selectRaw('blood_type, SUM(quantity) as total')
+        ->groupBy('blood_type')
+        ->get();
+
+        $settings = SystemSettings::pluck('value', 'name');
+
+        return view('Admin.inventory',compact('user', 'blood_inventories', 'bloodTypeSummary','settings'));
     }
 }
 

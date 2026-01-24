@@ -243,7 +243,6 @@
 
 <body>
 
-    <!-- Mobile Nav -->
     <nav class="navbar navbar-light bg-white border-bottom mobile-nav d-none fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
@@ -259,7 +258,6 @@
         </div>
     </nav>
 
-    <!-- Sidebar (Example using Donor Context) -->
     <div class="sidebar d-none d-lg-flex">
         <div class="brand-section">
             <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span class="fs-4 fw-bolder text-dark">BloodLink</span>
@@ -307,7 +305,6 @@
             <h2 class="fw-black mb-0">Notifications</h2>
             <p class="text-muted small fw-medium mt-1">Manage your alerts and system messages.</p>
         </header>
-
         <!-- Action Bar -->
         <div class="action-bar shadow-sm">
             <div class="d-flex align-items-center gap-3">

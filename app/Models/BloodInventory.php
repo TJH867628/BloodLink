@@ -15,4 +15,9 @@ class BloodInventory extends Model
         'status',
         'medical_facilities_id',
     ];
+
+    public function medicalFacility()
+    {
+        return $this->belongsTo(MedicalFacility::class, 'medical_facilities_id');
+    }
 }

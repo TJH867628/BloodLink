@@ -36,7 +36,6 @@ Route::middleware(['role:STAFF','auth'])->group(function () {
     Route::get('medical_facilities/donationManagement', [MedicalFacilitiesController::class, 'donationManagement'])->name('medical_facilities.donationManagement');
     Route::get('medical_facilities/bloodtypeManagement', [MedicalFacilitiesController::class, 'bloodtypeManagement'])->name('medical_facilities.bloodtypeManagement');
     Route::get('medical_facilities/profile', [MedicalFacilitiesController::class, 'profile'])->name('medical_facilities.profile');
-    Route::post('medical_facilities/notification', [MedicalFacilitiesController::class, 'notification'])->name('medical_facilities.notification');
 
     Route::post('medical_facilities/recordDonationResult/{appointment_id}', [MedicalFacilitiesController::class, 'recordDonationResult'])->name('medical_facilities.recordDonationResult');
 });
@@ -59,6 +58,7 @@ Route::middleware(['role:ADMIN','auth'])->group(function () {
     Route::get('admin/medicalFacilitiesManagement', [App\Http\Controllers\AdminController::class, 'medicalFacilitiesManagement'])->name('admin.medicalFacilitiesManagement');
     Route::get('admin/systemModification', [App\Http\Controllers\AdminController::class, 'systemModification'])->name('admin.systemModification');
     Route::get('admin/auditReport', [App\Http\Controllers\AdminController::class, 'auditReport'])->name('admin.auditReport');
+    Route::get('admin/inventory', [App\Http\Controllers\AdminController::class, 'inventory'])->name('admin.inventory');
 
     Route::post('admin/toggleUserActivation/{userId}', [App\Http\Controllers\AdminController::class, 'toggleUserActivation'])->name('admin.toggleUserActivation');
     Route::post('admin/createUser', [App\Http\Controllers\AdminController::class, 'createUser'])->name('admin.createUser');

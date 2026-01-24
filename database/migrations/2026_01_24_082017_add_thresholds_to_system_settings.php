@@ -26,6 +26,7 @@ return new class extends Migration
             ['name' => 'donation_interval_months', 'value' => '3'],
             ['name' => 'min_hemoglobin', 'value' => '12.5'],
             ['name' => 'emergency_mode', 'value' => '0'],
+            ['name' => 'inventory_target_units', 'value' => '100'],
             ['name' => 'inventory_critical_pct', 'value' => '15'],
             ['name' => 'inventory_warning_pct', 'value' => '30'],
             ['name' => 'inventory_optimal_pct', 'value' => '80'],

@@ -243,7 +243,9 @@
             <div class="d-flex align-items-center gap-4">
                 <a href="/event_organizer/notification" class="btn border-0 position-relative text-secondary">
                     <i class="fas fa-bell fa-lg"></i>
+                    @if($hasUnreadNotifications)
                     <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                    @endif
                 </a>
                 <div class="d-none d-md-block border-start h-50 mx-2"></div>
                 <div class="d-flex align-items-center gap-3">

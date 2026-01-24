@@ -158,10 +158,4 @@ class MedicalFacilitiesController extends Controller
 
         return redirect()->back()->with('success', 'Donation result recorded successfully.');
     }
-
-    public function notification ()
-    {
-        $user = auth()->user();
-        return view('MedicalFacilities.notification', compact('user'));
-    }
 }

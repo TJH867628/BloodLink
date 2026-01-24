@@ -3,6 +3,9 @@
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use App\Models\Event as EventModel;
+use App\Models\SystemSettings;
+use PHPUnit\Event\Telemetry\System;
+use App\Models\BloodInventory;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
@@ -14,4 +17,27 @@ Schedule::call(function () {
     EventModel::whereRaw("STR_TO_DATE(CONCAT(date, ' ', time), '%Y-%m-%d %H:%i:%s') < ?", [$now])
         ->update(['status' => 'CLOSED']);
 
+    $targetUnit = SystemSettings::where('name', 'inventory_target_units')->value('value');
+    $optimalPct = SystemSettings::where('name', 'inventory_optimal_pct')->value('value');
+    $warningPct = SystemSettings::where('name', 'inventory_warning_pct')->value('value');
+    $criticalPct = SystemSettings::where('name', 'inventory_critical_pct')->value('value');
+
+    $inventories = BloodInventory::all();
+
+    foreach ($inventories as $inv) {
+
+        $percent = ($inv->quantity / $targetUnit) * 100;
+
+        if ($percent <= $criticalPct) {
+            $inv->status = 'CRITICAL';
+        }
+        elseif ($percent <= $warningPct) {
+            $inv->status = 'LOW_STOCK';
+        }
+        elseif ($percent >= $optimalPct) {
+            $inv->status = 'OPTIMAL';
+        }
+
+        $inv->save();
+    }
 })->everyMinute();
