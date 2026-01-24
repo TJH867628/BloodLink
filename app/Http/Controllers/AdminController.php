@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditLog;
 use App\Models\MedicalFacility;
 use App\Models\SystemSettings;
 use App\Models\User;
@@ -41,7 +42,8 @@ class AdminController extends Controller
     public function auditReport()
     {
         $emergencyMode = SystemSettings::where('name', 'emergency_mode')->value('value');
-        return view('Admin.auditReport', compact('emergencyMode'));
+        $logs = AuditLog::orderBy('timestamp', 'desc')->get();
+        return view('Admin.auditReport', compact('emergencyMode', 'logs'));
     }
 
     public function toggleUserActivation($id)
@@ -71,6 +73,13 @@ class AdminController extends Controller
             'facilities_id' => $facilities_id,
         ]);
 
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Created user: ' . $name . ' with role: ' . $role,
+            'timestamp' => now(),
+        ]);
+
+
         return redirect()->back()->with('success', 'User created successfully.');
     }
 
@@ -86,6 +95,12 @@ class AdminController extends Controller
             'address' => $address,
         ]);
 
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Created medical facility: ' . $name . ' of type: ' . $type,
+            'timestamp' => now(),
+        ]);
+
         return redirect()->back()->with('success', 'Medical Facility created successfully.');
     }
 
@@ -97,6 +112,12 @@ class AdminController extends Controller
         $facility->type = $request->input('type');
         $facility->address = $request->input('address');
         $facility->save();
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Edited medical facility ID: ' . $facilityId,
+            'timestamp' => now(),
+        ]);
 
         return redirect()->back()->with('success', 'Medical Facility updated successfully.');
     }
@@ -131,6 +152,12 @@ class AdminController extends Controller
                 ['value' => $value]
             );
         }
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Updated system settings. Emergency mode: ' . ($emergency ? 'ON' : 'OFF'),
+            'timestamp' => now(),
+        ]);
 
         return redirect()->back()->with('success', 'System settings updated successfully.');
     }

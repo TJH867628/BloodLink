@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditLog;
 use Event;
 use Illuminate\Http\Request;
 use App\Models\Event as EventModel;
@@ -99,6 +100,12 @@ class EventOrganizerController extends Controller
             // 'organizer_id' => 2
         ]);
 
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Created event: ' . $request->input('event_name'),
+            'timestamp' => now(),
+        ]);
+
         return redirect()->route('event_organizer.eventManagement')->with('success', 'Event created successfully.');
     }
 
@@ -141,6 +148,12 @@ class EventOrganizerController extends Controller
         }
         $event->delete();
 
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Deleted event: ' . $event->id . ' ' . $event->name,
+            'timestamp' => now(),
+        ]);
+
         return redirect()->route('event_organizer.eventManagement')->with('success', 'Event deleted successfully.');
     }
 
@@ -166,6 +179,12 @@ class EventOrganizerController extends Controller
             ->update([
                 'appointment.status' => 'REJECTED'
             ]);
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Accepted appointment ID: ' . $appointmentId,
+            'timestamp' => now(),
+        ]);
         
         return redirect()->back()->with('success', 'Appointment accepted successfully.');
     }
@@ -178,6 +197,12 @@ class EventOrganizerController extends Controller
         $event->available_slots += 1;
         $appointment->save();
         $event->save();
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Rejected appointment ID: ' . $appointmentId,
+            'timestamp' => now(),
+        ]);
 
         return redirect()->back()->with('success', 'Appointment rejected successfully.');
     }

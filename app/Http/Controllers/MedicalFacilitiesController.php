@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\AuditLog;
 use App\Models\DonationRecord;
 use App\Models\DonorHealthDetails;
 use Illuminate\Http\Request;
@@ -120,6 +121,12 @@ class MedicalFacilitiesController extends Controller
                 ]);
             }
         }
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Recorded donation result for appointment ID: ' . $appointmentId,
+            'timestamp' => now(),
+        ]);
 
         return redirect()->back()->with('success', 'Donation result recorded successfully.');
     }

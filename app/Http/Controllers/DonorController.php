@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App;
+use App\Models\AuditLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Event;
@@ -166,6 +167,12 @@ class DonorController extends Controller
             'updated_at' => now(),
         ]);
 
+        AuditLog::create([
+            'user_id' => $user->id,
+            'action' => 'Submitted feedback for Donation ID: ' . ($donationId ?? 'N/A'),
+            'timestamp' => now(),
+        ]);
+
         return redirect()->back()->with('success', 'Feedback submitted successfully!');
     }
 
@@ -223,6 +230,12 @@ class DonorController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+        AuditLog::create([
+            'user_id' => $user->id,
+            'action' => 'Booked event ID: ' . $eventId,
+            'timestamp' => now(),
+        ]);
         
         $event->decrement('available_slots');
 
@@ -251,6 +264,12 @@ class DonorController extends Controller
         if ($event) {
             $event->increment('available_slots');
         }
+
+        AuditLog::create([
+            'user_id' => $user->id,
+            'action' => 'Cancelled appointment ID: ' . $appointmentId,
+            'timestamp' => now(),
+        ]);
 
         return redirect()->back()->with('success', 'Appointment cancelled successfully!');
     }
@@ -286,6 +305,12 @@ class DonorController extends Controller
         $donorHealthDetails->last_donation_date = $request->input('last_donation_date');
         
         $donorHealthDetails->save();
+
+        AuditLog::create([
+            'user_id' => $user->id,
+            'action' => 'Updated profile information',
+            'timestamp' => now(),
+        ]);
 
         return redirect()->back()->with('success', 'Profile updated successfully!');
     }   

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditLog;
 use App\Models\DonorHealthDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -60,6 +61,12 @@ class UserController extends Controller
             'last_checkup_date' => $request->last_checkup_date,
         ]);
 
+        AuditLog::create([
+            'user_id' => $user->id,
+            'action' => 'User Registration',
+            'timestamp' => now(),
+        ]);
+
         return redirect()->route('login')->with('success', 'Registration successful. Please login.');
     }
 
@@ -72,6 +79,12 @@ class UserController extends Controller
                 Auth::logout();
                 return redirect()->route('login')->with('error', 'Your account is deactivated. Please contact admin.');
             }
+
+            AuditLog::create([
+                'user_id' => Auth::user()->id,
+                'action' => 'User Login',
+                'timestamp' => now(),
+            ]);
             
             switch (Auth::user()->role) {
                 case 'ADMIN':
