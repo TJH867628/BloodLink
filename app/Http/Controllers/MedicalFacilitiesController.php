@@ -103,20 +103,25 @@ class MedicalFacilitiesController extends Controller
         $donorHealthDetails->blood_pressure = $request->input('blood_pressure');
         $donorHealthDetails->last_donation_date = now();
         $donorHealthDetails->save();
-        DonationRecord::create([
-            'appointment_id'    => $appointment->id,
-            'donor_id'          => $appointment->donor_id,
-            'event_id'          => $appointment->event_id,
-            'facility_id'       => auth()->user()->facility_id,
-            'hemoglobin_level'  => $request->input('hemoglobin_level'),
-            'blood_pressure'   => $request->input('blood_pressure'),
-            'unit'             => $request->input('unit'),
-            'status'           => $request->input('donation_status'),
-            'staff_id'        => auth()->user()->id,
-            'collected_date'   => now(),
-            'expiration_date' => now()->addDays(42),
-            'notes'            => $request->input('notes'),
-        ]);
+
+        $bags = $request->input('unit');
+        for($i = 0; $i < $bags; $i++){
+            DonationRecord::create([
+                'appointment_id'    => $appointment->id,
+                'donor_id'          => $appointment->donor_id,
+                'event_id'          => $appointment->event_id,
+                'facility_id'       => auth()->user()->facility_id,
+                'hemoglobin_level'  => $request->input('hemoglobin_level'),
+                'blood_pressure'   => $request->input('blood_pressure'),
+                'unit'             => 1,
+                'status'           => $request->input('donation_status'),
+                'staff_id'        => auth()->user()->id,
+                'collected_date'   => now(),
+                'expiration_date' => now()->addDays(42),
+                'notes'            => $request->input('notes'),
+            ]);
+        }
+        
         $appointment->status = 'COMPLETED';
         $appointment->save();
 
@@ -143,6 +148,8 @@ class MedicalFacilitiesController extends Controller
             'action' => 'Recorded donation result for appointment ID: ' . $appointmentId,
             'timestamp' => now(),
         ]);
+
+        sendSystemNotification($appointment->donor, 'Your donation result for the appointment on ' . $appointment->created_at->toDateString() . ' has been recorded as ' . $request->input('donation_status') . '.');
 
         return redirect()->back()->with('success', 'Donation result recorded successfully.');
     }

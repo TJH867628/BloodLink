@@ -14,4 +14,9 @@ class Appointment extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function donor()
+    {
+        return $this->belongsTo(User::class, 'donor_id');
+    }
 }

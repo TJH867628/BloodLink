@@ -144,22 +144,21 @@ class AdminController extends Controller
 
     public function updateSystemSettings(Request $request)
     {
-        $emergency = $request->has('emergency_mode');
+        $oldEmergency = SystemSettings::where('name','emergency_mode')->value('value') ?? 0;
+        $newEmergency = $request->has('emergency_mode') ? 1 : 0;
+
         $settings = [
             'min_hemoglobin' => $request->input('min_hemoglobin'),
-            'inventory_critical_pct' => $request->input('inventory_critical_pct'),
-            'inventory_warning_pct' => $request->input('inventory_warning_pct'),
-            'inventory_optimal_pct' => $request->input('inventory_optimal_pct'),
-            'emergency_mode' => $request->has('emergency_mode') ? 1 : 0,
+            'emergency_mode' => $newEmergency,
         ];
 
-        if ($emergency) {
-            $settings['donation_interval_months'] = 2;   // donors can donate sooner
-            $settings['inventory_critical_pct'] = 25;    // raise alert earlier
+        if ($newEmergency) {
+            $settings['donation_interval_months'] = 2;
+            $settings['inventory_critical_pct'] = 25;
             $settings['inventory_warning_pct'] = 40;
             $settings['inventory_optimal_pct'] = 90;
         } else {
-            // Normal mode
+            // Normal Mode
             $settings['donation_interval_months'] = 3;
             $settings['inventory_critical_pct'] = 15;
             $settings['inventory_warning_pct'] = 30;
@@ -173,12 +172,31 @@ class AdminController extends Controller
             );
         }
 
+        if ($oldEmergency == 0 && $newEmergency == 1) {
+            $this->sendEmergencyAlerts();
+        }
+
+        // Audit Log
         AuditLog::create([
-            'user_id' => auth()->user()->id,
-            'action' => 'Updated system settings. Emergency mode: ' . ($emergency ? 'ON' : 'OFF'),
+            'user_id' => auth()->id(),
+            'action' => 'Updated system settings. Emergency mode: ' . ($newEmergency ? 'ON' : 'OFF'),
             'timestamp' => now(),
         ]);
 
         return redirect()->back()->with('success', 'System settings updated successfully.');
     }
+
+    private function sendEmergencyAlerts()
+    {
+        $donors = User::where('role', 'DONOR')
+                    ->get();
+
+        foreach ($donors as $donor) {
+            sendSystemNotification(
+                $donor,
+                " Blood shortage emergency! Please check your eligibility and book an appointment if you can donate"
+            );
+        }
+    }
 }
+

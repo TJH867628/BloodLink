@@ -193,6 +193,8 @@ class EventOrganizerController extends Controller
             'action' => 'Accepted appointment ID: ' . $appointmentId,
             'timestamp' => now(),
         ]);
+
+        sendSystemNotification($appointment->donor, 'Your appointment for the event "' . $event->name . '" on ' . $event->date . ' has been accepted.');
         
         return redirect()->back()->with('success', 'Appointment accepted successfully.');
     }

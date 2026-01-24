@@ -236,6 +236,9 @@ class DonorController extends Controller
             'action' => 'Booked event ID: ' . $eventId,
             'timestamp' => now(),
         ]);
+
+        sendSystemNotification($event->organizer_id, 'A new appointment has been booked for your event "' . $event->name . '" by ' . $user->name . '.');
+        sendSystemNotification($user, 'You have successfully booked an appointment for the event "' . $event->name . '" on ' . $event->date . '.');
         
         $event->decrement('available_slots');
 
