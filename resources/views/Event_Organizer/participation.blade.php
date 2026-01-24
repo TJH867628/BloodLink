@@ -195,13 +195,14 @@
             <a href="/event_organizer/dashboard" class="nav-link"><span class="nav-icon"><i class="fas fa-chart-pie w-25"></i></span> Dashboard</a>
             <a href="/event_organizer/eventManagement" class="nav-link"><span class="nav-icon"><i class="fas fa-calendar-alt w-25"></i></span> Event Management</a>
             <a href="/event_organizer/participation" class="nav-link active"><span class="nav-icon"><i class="fas fa-users w-25"></i></span> Participation</a>
+            <a href="/event_organizer/profile" class="nav-link"><span class="nav-icon"><i class="fas fa-id-card"></i></span> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">
                 <div class="d-flex align-items-center gap-3 p-2 rounded logout-item">
                     <div class="icon-box"><i class="fas fa-sign-out-alt"></i></div>
                     <div>
-                        <div class="fw-bold text-dark small">Organizer</div>
+                        <div class="fw-bold text-dark small">{{ $user->name }}</div>
                         <div class="logout-text">Sign Out</div>
                     </div>
                 </div>

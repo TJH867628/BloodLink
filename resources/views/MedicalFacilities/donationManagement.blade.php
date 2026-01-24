@@ -202,6 +202,7 @@
             <a href="/medical_facilities/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
             <a href="/medical_facilities/inventory" class="nav-link"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
             <a href="/medical_facilities/donationManagement" class="nav-link active"><i class="fas fa-user-nurse w-25"></i> Donation Management</a>
+            <a href="/medical_facilities/profile" class="nav-link"><i class="fas fa-hospital w-25"></i> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">
@@ -246,7 +247,7 @@
                 <div class="custom-card h-100">
                     <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
                         <h5 class="fw-bold mb-0">Today's Queue</h5>
-                        <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill fw-bold">3 Pending</span>
+                        <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill fw-bold">{{ $donation_today->count() }} Pending</span>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-hover mb-0 align-middle">
@@ -454,7 +455,7 @@
                                         No donation records found
                                     </td>
                                 </tr>
-                                @endforelse
+                                @endforelse 
                                 <tr id="historyNoData" style="display: none;">
                                     <td colspan="5" class="text-center text-muted py-4">
                                         No donation records found

@@ -39,7 +39,7 @@ class MedicalFacilitiesController extends Controller
             ->join('users', 'appointment.donor_id', '=', 'users.id')
             ->join('donor_health_details', 'users.id', '=', 'donor_health_details.donor_id')
             ->whereDate('event.date', $today)
-            ->where('appointment.status', 'APPROVED')
+            ->where('appointment.status', 'ACCEPTED')
             ->select(
                 'appointment.id as appointment_id',
                 'users.name as donor_name',
@@ -79,6 +79,19 @@ class MedicalFacilitiesController extends Controller
         ->get();
 
         return view('MedicalFacilities.donationManagement', compact('user', 'donation_today','donationHistory','recentRecords'));
+    }
+
+    public function profile()
+    {
+        $user = auth()->user();
+        $medical_facility = MedicalFacility::find($user->facility_id);
+        return view('MedicalFacilities.profile', compact('user', 'medical_facility'));
+    }
+
+    public function bloodtypeManagement()
+    {
+        $user = auth()->user();
+        return view('MedicalFacilities.bloodtypeManagement', compact('user'));
     }
 
     public function recordDonationResult(Request $request,int $appointmentId)
