@@ -28,7 +28,8 @@ Route::middleware(['role:DONOR','auth'])->group(function () {
     Route::post('donor/submitFeedback', [DonorController::class, 'submitFeedback'])->name('donor.submitFeedback');
     Route::post('donor/cancelAppointment/{appointmentId}', [DonorController::class, 'cancelAppointment'])->name('donor.cancelAppointment');
     Route::post('donor/markNotificationRead/{notificationId}', [DonorController::class, 'markNotificationAsRead'])->name('donor.markNotificationRead');
-    Route::post('donot/markAllNotificationsRead', [DonorController::class, 'markAllNotificationsAsRead'])->name('donor.markAllNotificationsRead');
+    Route::post('donor/markAllNotificationsRead', [DonorController::class, 'markAllNotificationsAsRead'])->name('donor.markAllNotificationsRead');
+    Route::post('donor/changePassword', [DonorController::class, 'changePassword'])->name('donor.changePassword');
 });
 Route::middleware(['role:STAFF','auth'])->group(function () {
     Route::get('medical_facilities/dashboard', [MedicalFacilitiesController::class, 'medicalFacilitiesDashboard'])->name('medical_facilities.dashboard');
@@ -38,6 +39,10 @@ Route::middleware(['role:STAFF','auth'])->group(function () {
     Route::get('medical_facilities/profile', [MedicalFacilitiesController::class, 'profile'])->name('medical_facilities.profile');
 
     Route::post('medical_facilities/recordDonationResult/{appointment_id}', [MedicalFacilitiesController::class, 'recordDonationResult'])->name('medical_facilities.recordDonationResult');
+    Route::post('medical_facilities/updateProfile', [MedicalFacilitiesController::class, 'updateProfile'])->name('medical_facilities.updateProfile');
+    Route::post('medical_facilities/useBloodBags', [MedicalFacilitiesController::class, 'useBloodBags'])->name('medical_facilities.useBloodBags');
+    Route::post('medical_facilities/updateProfile', [MedicalFacilitiesController::class, 'updateProfile'])->name('medical_facilities.updateProfile');
+    Route::post('medical_facilities/changePassword', [MedicalFacilitiesController::class, 'changePassword'])->name('medical_facilities.changePassword');
 });
 Route::middleware(['role:ORGANIZER','auth'])->group(function () {
     Route::get('event_organizer/dashboard', [EventOrganizerController::class, 'eventOrganizerDashboard'])->name('event_organizer.dashboard');
@@ -45,12 +50,17 @@ Route::middleware(['role:ORGANIZER','auth'])->group(function () {
     Route::get('event_organizer/participation', [EventOrganizerController::class, 'participation'])->name('event_organizer.participation');
     Route::get('event_organizer/profile', [EventOrganizerController::class, 'profile'])->name('event_organizer.profile');
     Route::get('event_organizer/notification', [EventOrganizerController::class, 'notification'])->name('event_organizer.notification');
+    Route::get('event_organizer/export-participation', [EventOrganizerController::class, 'exportParticipation'])->name('event_organizer.exportParticipation');
 
     Route::post('event_organizer/createEvent', [EventOrganizerController::class, 'createEvent'])->name('event_organizer.createEvent'); 
     Route::post('event_organizer/editEvent/{id}', [EventOrganizerController::class, 'editEvent'])->name('event_organizer.editEvent');
     Route::post('event_organizer/deleteEvent/{id}', [EventOrganizerController::class, 'deleteEvent'])->name('event_organizer.deleteEvent');
     Route::post('event_organizer/acceptAppointment/{id}', [EventOrganizerController::class, 'acceptAppointment'])->name('event_organizer.acceptAppointment');
     Route::post('event_organizer/rejectAppointment/{id}', [EventOrganizerController::class, 'rejectAppointment'])->name('event_organizer.rejectAppointment');
+    Route::post('event_organizer/updateProfile', [EventOrganizerController::class, 'updateProfile'])->name('event_organizer.updateProfile');
+    Route::post('event_organizer/markNotificationRead/{notificationId}', [EventOrganizerController::class, 'markNotificationAsRead'])->name('event_organizer.markNotificationRead ');
+    Route::post('event_organizer/markAllNotificationsRead', [EventOrganizerController::class, 'markAllNotificationsAsRead'])->name('event_organizer.markAllNotificationsRead ');
+    Route::post('event_organizer/changePassword', [EventOrganizerController::class, 'changePassword'])->name('event_organizer.changePassword');
 });
 Route::middleware(['role:ADMIN','auth'])->group(function () {
     Route::get('admin/dashboard', [App\Http\Controllers\AdminController::class, 'adminDashboard'])->name('admin.dashboard');

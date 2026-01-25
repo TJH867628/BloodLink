@@ -6,6 +6,7 @@ use App\Models\Event as EventModel;
 use App\Models\SystemSettings;
 use PHPUnit\Event\Telemetry\System;
 use App\Models\BloodInventory;
+use App\Models\BloodBag;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
@@ -41,5 +42,17 @@ Schedule::call(function () {
         }
 
         $inv->save();
+    }
+
+    $expiredBags = BloodBag::where('expires_at', '<=', $now)
+        ->where('status', 'STORED')
+        ->get();
+    foreach ($expiredBags as $bag) {
+        $bag->status = 'EXPIRED';
+        $bag->save();
+
+        BloodInventory::where('medical_facilities_id', $bag->facility_id)
+            ->where('blood_type', $bag->blood_type)
+            ->decrement('quantity', 1);
     }
 })->everyThirtySeconds();

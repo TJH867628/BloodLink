@@ -184,8 +184,8 @@
             letter-spacing: 0.05em;
         }
 
-                /* Logout Styles */
-                .logout-link {
+        /* Logout Styles */
+        .logout-link {
             text-decoration: none;
             color: inherit;
         }
@@ -232,13 +232,15 @@
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
                 <div class="brand-icon"><i class="fas fa-droplet"></i></div> <span class="fw-bold">BloodLink</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span class="navbar-toggler-icon"></span></button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span
+                    class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="mobileMenu">
                 <ul class="navbar-nav mt-3">
                     <li class="nav-item"><a class="nav-link" href="organizer_dashboard.html">Dashboard</a></li>
                     <li class="nav-item"><a class="nav-link" href="organizer_events.html">Event Management</a></li>
                     <li class="nav-item"><a class="nav-link" href="organizer_participation.html">Participation</a></li>
-                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="organizer_profile.html">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link fw-bold text-danger"
+                            href="organizer_profile.html">Profile</a></li>
                 </ul>
             </div>
         </div>
@@ -246,14 +248,19 @@
 
     <div class="sidebar d-none d-lg-flex">
         <div class="brand-section">
-            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span class="fs-4 fw-bolder text-dark">BloodLink</span>
+            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span
+                class="fs-4 fw-bolder text-dark">BloodLink</span>
         </div>
         <nav class="nav flex-column mt-2 w-100">
             <div class="px-4 pb-2 text-label">Organizer Portal</div>
-            <a href="/event_organizer/dashboard" class="nav-link"><span class="nav-icon"><i class="fas fa-chart-pie w-25"></i></span> Dashboard</a>
-            <a href="/event_organizer/eventManagement" class="nav-link"><span class="nav-icon"><i class="fas fa-calendar-alt w-25"></i></span> Event Management</a>
-            <a href="/event_organizer/participation" class="nav-link"><span class="nav-icon"><i class="fas fa-users w-25"></i></span> Participation</a>
-            <a href="/event_organizer/profile" class="nav-link active"><span class="nav-icon"><i class="fas fa-id-card"></i></span> Profile</a>
+            <a href="/event_organizer/dashboard" class="nav-link"><span class="nav-icon"><i
+                        class="fas fa-chart-pie w-25"></i></span> Dashboard</a>
+            <a href="/event_organizer/eventManagement" class="nav-link"><span class="nav-icon"><i
+                        class="fas fa-calendar-alt w-25"></i></span> Event Management</a>
+            <a href="/event_organizer/participation" class="nav-link"><span class="nav-icon"><i
+                        class="fas fa-users w-25"></i></span> Participation</a>
+            <a href="/event_organizer/profile" class="nav-link active"><span class="nav-icon"><i
+                        class="fas fa-id-card"></i></span> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">
@@ -275,80 +282,67 @@
             <h2 class="fw-black mb-0">Organizer Profile</h2>
             <p class="text-muted small fw-medium mt-1">Manage organization details and personal account settings.</p>
         </header>
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @elseif(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
 
         <div class="row g-4">
-            <!-- Organization Info Card -->
-            <div class="col-lg-5">
-                <div class="custom-card p-4 h-100">
-                    <div class="d-flex align-items-center gap-3 mb-4">
-                        <div class="org-badge"><i class="fas fa-building"></i></div>
-                        <div>
-                            <h5 class="fw-bold mb-0">Red Cross Society</h5>
-                            <p class="text-muted small mb-0">Registered NGO #NGO-998</p>
-                        </div>
-                    </div>
-                    <div class="vstack gap-3">
-                        <div class="p-3 bg-light rounded-4 border">
-                            <small class="text-uppercase fw-bold text-muted" style="font-size: 0.7rem;">Headquarters Address</small>
-                            <div class="fw-bold text-dark mt-1">45, Jalan Charity, 50450 Kuala Lumpur</div>
-                        </div>
-                        <div class="p-3 bg-light rounded-4 border">
-                            <small class="text-uppercase fw-bold text-muted" style="font-size: 0.7rem;">Official Contact</small>
-                            <div class="fw-bold text-dark mt-1">+60 3-2222 5555</div>
-                        </div>
-                        <div class="p-3 bg-light rounded-4 border">
-                            <small class="text-uppercase fw-bold text-muted" style="font-size: 0.7rem;">Organization Type</small>
-                            <div class="fw-bold text-dark mt-1">Non-Profit Organization</div>
-                        </div>
-                        <div class="alert alert-primary border-0 d-flex gap-2 align-items-center mb-0 mt-2">
-                            <i class="fas fa-info-circle"></i>
-                            <span class="small fw-bold">To update organization details, please submit a request to Admin.</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Organizer Account Settings -->
-            <div class="col-lg-7">
+            <div class="col-lg-12">
                 <div class="custom-card p-4 p-md-5 h-100">
                     <h5 class="fw-bold mb-4">Personal Account Settings</h5>
-                    <form>
+                    <form method="post" action="{{  route('event_organizer.updateProfile') }}">
+                        @csrf
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Full Name</label>
-                            <input type="text" class="form-control" value="Organizer">
+                            <input type="text" class="form-control" name="name" value="{{ $user->name }}" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Email Address</label>
-                            <input type="email" class="form-control" value="praveena@event.org">
+                            <input type="email" class="form-control" value="{{ $user->email }}" readonly>
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Phone Number</label>
-                            <input type="tel" class="form-control" value="+60 12-987 6543">
+                            <input type="tel" class="form-control" name="phone" value="{{ $user->phone }}" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Role</label>
-                            <input type="text" class="form-control" value="Event Coordinator" readonly>
+                            <input type="text" class="form-control" value="Event Organizer" readonly>
+                        </div>
+                        <div class="d-flex justify-content-end mb-4">
+                            <button type="submit" class="btn btn-dark rounded-pill px-4 fw-bold">Update Profile</button>
                         </div>
 
                         <hr class="my-4">
-
+                    </form>
+                    <form method="post" action="{{  route('event_organizer.changePassword') }}">
+                        @csrf
                         <h6 class="fw-bold mb-3">Security</h6>
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Current Password</label>
-                            <input type="password" class="form-control" placeholder="••••••••">
+                            <input type="password" name="current_password" class="form-control" placeholder="••••••••">
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">New Password</label>
-                            <input type="password" class="form-control" placeholder="New password">
+                            <input type="password" name="new_password" minlength="8" class="form-control"
+                                placeholder="New password">
                         </div>
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-muted">Confirm New Password</label>
-                            <input type="password" class="form-control" placeholder="Confirm new password">
+                            <input type="password" name="confirm_password" minlength="8" class="form-control"
+                                placeholder="Confirm new password">
                         </div>
 
-                        <div class="d-flex justify-content-end gap-2">
-                            <button type="button" class="btn btn-light rounded-pill px-4 fw-bold border">Cancel</button>
-                            <button type="submit" class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm">Save Changes</button>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-dark rounded-pill px-4 fw-bold">Update
+                                Password</button>
                         </div>
                     </form>
                 </div>

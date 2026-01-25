@@ -9,6 +9,7 @@ use App\Models\DonorHealthDetails;
 use Illuminate\Http\Request;
 use App\Models\MedicalFacility;
 use App\Models\BloodInventory;
+use App\Models\BloodBag;
 use DB;
 use Carbon\Carbon;
 use App\Models\SystemSettings;
@@ -90,10 +91,104 @@ class MedicalFacilitiesController extends Controller
         return view('MedicalFacilities.profile', compact('user', 'medical_facility'));
     }
 
-    public function bloodManagement()
+    public function updateProfile(Request $request)
     {
         $user = auth()->user();
-        return view('MedicalFacilities.bloodManagement', compact('user'));
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+        ]);
+
+        $user->name = $request->input('name');
+        $user->phone = $request->input('phone');
+        $user->save();
+
+        AuditLog::create([
+            'user_id' => $user->id,
+            'action' => 'Updated profile information',
+            'timestamp' => now(),
+        ]);
+
+        return redirect()->back()->with('success', 'Profile updated successfully.');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $user = auth()->user();
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|string|min:8',
+            'confirm_password' => 'required|string|min:8',
+        ]);
+        if (!password_verify($request->input('current_password'), $user->password)) {
+            return redirect()->back()->with('error', 'Current password is incorrect.');
+        }
+
+        if ($request->input('new_password') !== $request->input('confirm_password')) {
+            return redirect()->back()->with('error', 'New password and confirmation do not match.');
+        }
+
+        if($request->input('current_password') === $request->input('new_password')) {
+            return redirect()->back()->with('error', 'New password cannot be the same as the current password.');
+        }
+
+        $user->password = bcrypt($request->input('new_password'));
+        $user->save();
+
+        AuditLog::create([
+            'user_id' => $user->id,
+            'action' => 'Changed account password',
+            'timestamp' => now(),
+        ]);
+
+        return redirect()->back()->with('success', 'Password changed successfully.');
+    }
+
+    public function bloodManagement(Request $request)
+    {
+        $user = auth()->user();
+
+        $query = BloodBag::where('facility_id', $user->facility_id)->where('status', 'STORED');
+
+        // Filter: blood type
+        if ($request->filled('blood_type')) {
+            $query->where('blood_type', $request->blood_type);
+        }
+
+        // Search: bag ID
+        if ($request->filled('bag_id')) {
+            $query->where('id', 'like', '%' . $request->bag_id . '%');
+        }
+
+        // Sorting
+        if ($request->sort == 'expiry') {
+            $query->orderBy('expires_at');
+        } elseif ($request->sort == 'newest') {
+            $query->orderByDesc('collected_at');
+        } else {
+            $query->orderBy('id'); // default
+        }
+
+        $bloodBags = $query->paginate(10)->withQueryString();
+
+        $historyQuery = BloodBag::where('facility_id', $user->facility_id)
+            ->whereIn('status', ['USED','EXPIRED']);
+
+        if ($request->filled('history_status')) {
+            $historyQuery->where('status', $request->history_status);
+        }
+
+        if ($request->filled('history_bag_id')) {
+            $historyQuery->where('id', 'like', '%' . $request->history_bag_id . '%');
+        }
+
+        $history = $historyQuery
+            ->orderByDesc('updated_at')
+            ->paginate(10, ['*'], 'history_page')
+            ->withQueryString();
+
+        return view('MedicalFacilities.bloodManagement', compact('bloodBags','user','history'));
     }
 
     public function recordDonationResult(Request $request,int $appointmentId)
@@ -158,4 +253,47 @@ class MedicalFacilitiesController extends Controller
 
         return redirect()->back()->with('success', 'Donation result recorded successfully.');
     }
+
+    public function useBloodBags(Request $request)
+    {
+        $bloodBagIds = $request->input('blood_bag_ids', []);
+        if (empty($bloodBagIds)) {
+            return redirect()->back()->with('error', 'No blood bags selected for usage.');
+        }
+
+        $bloodBags = BloodBag::whereIn('id', $bloodBagIds)
+            ->where('facility_id', auth()->user()->facility_id)
+            ->where('status', 'STORED')
+            ->get();
+
+        foreach ($bloodBags as $bloodBag) {
+            $bloodBag->status = 'USED';
+            $bloodBag->used_at = now();
+            $bloodBag->save();
+        }
+
+        //Update inventory status
+        $inventoryUpdates = $bloodBags->groupBy('blood_type')->map(function ($bags, $type) {
+            return $bags->count();
+        });
+        foreach ($inventoryUpdates as $type => $usedCount) {
+            $bloodInventory = BloodInventory::where('medical_facilities_id', auth()->user()->facility_id)
+                ->where('blood_type', $type)
+                ->first();
+            if ($bloodInventory) {
+                $bloodInventory->quantity -= $usedCount;
+                $bloodInventory->save();
+            }
+        }
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Marked blood bags as used: ' . implode(', ', $bloodBagIds),
+            'timestamp' => now(),
+        ]);
+
+        
+        return redirect()->back()->with('success', 'Selected blood bags have been marked as used.');
+    }
+    
 }

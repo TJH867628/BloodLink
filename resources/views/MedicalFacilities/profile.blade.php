@@ -257,6 +257,17 @@
                 </div>
             </div>
         </header>
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @elseif(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
         <div class="row g-4">
             <!-- Facility Info Card -->
@@ -265,18 +276,14 @@
                     <div class="d-flex align-items-center gap-3 mb-4">
                         <div class="facility-badge"><i class="fas fa-hospital-alt"></i></div>
                         <div>
-                            <h5 class="fw-bold mb-0">medical facilities name</h5>
-                            <p class="text-muted small mb-0">medical facilities的type</p>
+                            <h5 class="fw-bold mb-0">{{ $medical_facility->name }}</h5>
+                            <p class="text-muted small mb-0">{{ $medical_facility->type }}</p>
                         </div>
                     </div>
                     <div class="vstack gap-3">
                         <div class="p-3 bg-light rounded-4 border">
                             <small class="text-uppercase fw-bold text-muted" style="font-size: 0.7rem;">Address</small>
-                            <div class="fw-bold text-dark mt-1">medical facilities的address</div>
-                        </div>
-                        <div class="p-3 bg-light rounded-4 border">
-                            <small class="text-uppercase fw-bold text-muted" style="font-size: 0.7rem;">Operating Hours</small>
-                            <div class="fw-bold text-dark mt-1">24 Hours / 7 Days</div>
+                            <div class="fw-bold text-dark mt-1">{{ $medical_facility->address }}</div>
                         </div>
                         <div class="alert alert-info border-0 d-flex gap-2 align-items-center mb-0 mt-2">
                             <i class="fas fa-info-circle"></i>
@@ -290,45 +297,45 @@
             <div class="col-lg-7">
                 <div class="custom-card p-4 p-md-5 h-100">
                     <h5 class="fw-bold mb-4">Staff Account Settings</h5>
-                    <form>
+                    <form method="post" action="{{route('medical_facilities.updateProfile')}}">
+                        @csrf
                         <div class="mb-3">
                             <label class="form-label small fw-bold">Staff Name</label>
-                            <input type="text" name="name" class="form-control" value="Dr. Chai Yu Xuan">
+                            <input type="text" name="name" class="form-control" value="{{ $user->name }}" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Email Address</label>
-                            <input type="text" name="email" class="form-control" value="chaiyuxuan@gmail.com">
+                            <input type="text" class="form-control" value="{{ $user->email }}" readonly>
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Phone Number</label>
-                            <input type="text" name="phone" class="form-control" value="0123456789">
+                            <input type="text" name="phone" class="form-control" value="{{ $user->phone }}" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Role</label>
-                            <select class="form-select" name="role">
-                                <option value="Hospital" selected>Hospital</option>
-                                <option value="Clinic">Clinic</option>
-                            </select>
+                            <input type="text" class="form-control" value="{{ $user->role }}" readonly>
                         </div>
 
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-dark rounded-pill px-4 fw-bold">Save Changes</button>
                         </div>
+                    </form>
 
                         <hr class="my-4">
-
+                    <form method="post" action="{{  route('medical_facilities.changePassword') }}">
+                        @csrf
                         <h6 class="fw-bold mb-3">Security</h6>
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Current Password</label>
-                            <input type="password" name="password" class="form-control" placeholder="••••••••">
+                            <input type="password" name="current_password" class="form-control" placeholder="••••••••">
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">New Password</label>
-                            <input type="password" name="newPassword" class="form-control" placeholder="New password">
+                            <input type="password" name="new_password" minlength="8" class="form-control" placeholder="New password">
                         </div>
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-muted">Confirm New Password</label>
-                            <input type="password" name="confirmPassword" class="form-control" placeholder="Confirm new password">
+                            <input type="password" name="confirm_password" minlength="8" class="form-control" placeholder="Confirm new password">
                         </div>
 
                         <div class="d-flex justify-content-end">

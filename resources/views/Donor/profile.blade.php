@@ -267,6 +267,15 @@
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Donor" class="rounded-3 border" width="40" height="40" alt="Avatar">
             </div>
         </header>
+        @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @elseif(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
 
         <div class="row g-4">
             <!-- Profile Status -->
@@ -375,15 +384,6 @@
                                     value="{{ $donorHealthDetails->hemoglobin_level ?? "" }}"
                                     required>
                             </div>
-                            <!-- Last Checkup Date -->
-                            <div class="col-md-6">
-                                <label class="form-label small fw-bold text-muted">Last Checkup Date</label>
-                                <input type="date"
-                                    class="form-control"
-                                    name="last_checkup_date"
-                                    value="{{ $donorHealthDetails->last_checkup_date ?? '' }}"
-                                    max="{{ now()->toDateString() }}">
-                            </div>
                             <!-- Last Donation Date -->
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-muted">Last Donation Date</label>
@@ -395,27 +395,27 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-end gap-3">
-                            <button type="button" class="btn btn-light fw-bold px-4 rounded-pill border">Cancel</button>
                             <button type="submit" class="btn btn-save px-4 rounded-pill">Save Changes</button>
                         </div>
-
+                    </form>
+                    <form method="post" action="{{  route('donor.changePassword') }}">
+                        @csrf
                         <h6 class="fw-bold mb-3">Security</h6>
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">Current Password</label>
-                            <input type="password" class="form-control" placeholder="••••••••">
+                            <input type="password" name="current_password" class="form-control" placeholder="••••••••">
                         </div>
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted">New Password</label>
-                            <input type="password" class="form-control" placeholder="New password">
+                            <input type="password" name="new_password" minlength="8" class="form-control" placeholder="New password">
                         </div>
                         <div class="mb-4">
                             <label class="form-label small fw-bold text-muted">Confirm New Password</label>
-                            <input type="password" class="form-control" placeholder="Confirm new password">
+                            <input type="password" name="confirm_password" minlength="8" class="form-control" placeholder="Confirm new password">
                         </div>
 
-                        <div class="d-flex justify-content-end gap-2">
-                            <button type="button" class="btn btn-light rounded-pill px-4 fw-bold border">Cancel</button>
-                            <button type="submit" class="btn btn-dark rounded-pill px-4 fw-bold shadow-sm">Save Changes</button>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-dark rounded-pill px-4 fw-bold">Update Password</button>
                         </div>
                     </form>
                 </div>

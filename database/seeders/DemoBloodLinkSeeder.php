@@ -48,7 +48,8 @@ class DemoBloodLinkSeeder extends Seeder
             'email' => 'organizer@bloodlink.com',
             'password' => Hash::make('password'),
             'role' => 'ORGANIZER',
-            'is_active' => 1
+            'is_active' => 1,
+            'phone' => '0123456789'
         ]);
 
         /* ============================
@@ -60,7 +61,8 @@ class DemoBloodLinkSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => 'STAFF',
             'facility_id' => $hospital->id,
-            'is_active' => 1
+            'is_active' => 1,
+            'phone' => '0123456789'
         ]);
 
         /* ============================
@@ -76,7 +78,8 @@ class DemoBloodLinkSeeder extends Seeder
                 'email' => "donor$i@bloodlink.com",
                 'password' => Hash::make('password'),
                 'role' => 'DONOR',
-                'is_active' => 1
+                'is_active' => 1,
+                'phone' => '0123456789'
             ]);
 
             DonorHealthDetails::create([
@@ -87,7 +90,8 @@ class DemoBloodLinkSeeder extends Seeder
                 'height' => rand(150,185),
                 'weight' => rand(50,90),
                 'is_eligible' => 1,
-                'last_donation_date' => null
+                'last_donation_date' => null,
+                'phone' => '0123456789'
             ]);
 
             $donors->push($donor);
@@ -158,7 +162,7 @@ class DemoBloodLinkSeeder extends Seeder
                 // 90% donors show up
                 if (rand(1,100) > 90) continue;
 
-                $units = rand(1,3);
+                $units = 1;
                 $type = $health->blood_type;
 
                 $donation = DonationRecord::create([

@@ -318,8 +318,6 @@ class DonorController extends Controller
         $donorHealthDetails->blood_type = $request->input('blood_type');
         $donorHealthDetails->blood_pressure = $request->input('blood_pressure');
         $donorHealthDetails->hemoglobin_level = $request->input('hemoglobin_level');
-        $donorHealthDetails->medical_conditions = $request->input('medical_conditions');
-        $donorHealthDetails->last_checkup_date = $request->input('last_checkup_date');
         $donorHealthDetails->last_donation_date = $request->input('last_donation_date');
         
         $donorHealthDetails->save();
@@ -366,5 +364,37 @@ class DonorController extends Controller
             ->update(['status' => 'READ']);
 
         return redirect()->back()->with('success', 'All notifications marked as read.');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $user = auth()->user();
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|string|min:8',
+            'confirm_password' => 'required|string|min:8',
+        ]);
+        if (!password_verify($request->input('current_password'), $user->password)) {
+            return redirect()->back()->with('error', 'Current password is incorrect.');
+        }
+
+        if ($request->input('new_password') !== $request->input('confirm_password')) {
+            return redirect()->back()->with('error', 'New password and confirmation do not match.');
+        }
+
+        if($request->input('current_password') === $request->input('new_password')) {
+            return redirect()->back()->with('error', 'New password cannot be the same as the current password.');
+        }
+
+        $user->password = bcrypt($request->input('new_password'));
+        $user->save();
+
+        AuditLog::create([
+            'user_id' => $user->id,
+            'action' => 'Changed account password',
+            'timestamp' => now(),
+        ]);
+
+        return redirect()->back()->with('success', 'Password changed successfully.');
     }
 }

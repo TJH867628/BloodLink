@@ -179,13 +179,17 @@
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
                 <div class="brand-icon"><i class="fas fa-droplet"></i></div> <span class="fw-bold">BloodLink</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span class="navbar-toggler-icon"></span></button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span
+                    class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="mobileMenu">
                 <ul class="navbar-nav mt-3">
                     <li class="nav-item"><a class="nav-link" href="/medical_facilities/dashboard">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/inventory">Inventory & Reports</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/donationManagement">Donation Management</a></li>
-                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="hospital_blood_logistics.html">Blood Logistics</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/inventory">Inventory &
+                            Reports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/donationManagement">Donation
+                            Management</a></li>
+                    <li class="nav-item"><a class="nav-link fw-bold text-danger"
+                            href="hospital_blood_logistics.html">Blood Logistics</a></li>
                 </ul>
             </div>
         </div>
@@ -194,14 +198,20 @@
     <!-- Sidebar -->
     <div class="sidebar d-none d-lg-flex">
         <div class="brand-section">
-            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span class="fs-4 fw-bolder text-dark">BloodLink</span>
+            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span
+                class="fs-4 fw-bolder text-dark">BloodLink</span>
         </div>
         <nav class="nav flex-column mt-2 w-100">
-            <div class="px-4 pb-2 text-label" style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Hospital Portal</div>
+            <div class="px-4 pb-2 text-label"
+                style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Hospital Portal
+            </div>
             <a href="/medical_facilities/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
-            <a href="/medical_facilities/inventory" class="nav-link"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
-            <a href="/medical_facilities/donationManagement" class="nav-link"><i class="fas fa-user-nurse w-25"></i> Donation Management</a>
-            <a href="/medical_facilities/bloodManagement" class="nav-link active"><i class="fas fa-exchange-alt w-25"></i> Blood Management</a>
+            <a href="/medical_facilities/inventory" class="nav-link"><i class="fas fa-box-open w-25"></i> Inventory &
+                Reports</a>
+            <a href="/medical_facilities/donationManagement" class="nav-link"><i class="fas fa-user-nurse w-25"></i>
+                Donation Management</a>
+            <a href="/medical_facilities/bloodManagement" class="nav-link active"><i
+                    class="fas fa-exchange-alt w-25"></i> Blood Management</a>
             <a href="/medical_facilities/profile" class="nav-link"><i class="fas fa-hospital w-25"></i> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
@@ -221,7 +231,7 @@
     <div class="main-content">
         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
-                <h2 class="fw-black mb-0">Blood Logistics</h2>
+                <h2 class="fw-black mb-0">Blood Usage</h2>
                 <p class="text-muted small fw-medium mt-1 mb-0">Manage donor intake and record blood distribution.</p>
             </div>
             <div class="d-flex align-items-center gap-4">
@@ -229,9 +239,11 @@
                 <div class="d-flex align-items-center gap-3">
                     <div class="text-end d-none d-md-block">
                         <div class="fw-bold small">{{ $user->role }}</div>
-                        <div class="text-label text-success" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Verified Staff</div>
+                        <div class="text-label text-success"
+                            style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Verified Staff</div>
                     </div>
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hospital" class="rounded-3 border" width="40" height="40" alt="Avatar">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hospital" class="rounded-3 border"
+                        width="40" height="40" alt="Avatar">
                 </div>
             </div>
         </header>
@@ -241,6 +253,39 @@
                 <div class="custom-card">
                     <div class="p-4 border-bottom bg-light">
                         <h5 class="fw-bold mb-0">Recent Logistics Activity</h5>
+                    </div>
+                    <div class="p-3 border-bottom bg-white">
+                        <form method="GET" class="row g-3">
+                            <div class="col-md-4">
+                                <select name="blood_type" class="form-select">
+                                    <option value="">All Blood Types</option>
+                                    @foreach(['O+', 'A+', 'B+', 'AB+', 'O-', 'A-', 'B-', 'AB-'] as $type)
+                                        <option value="{{ $type }}" {{ request('blood_type') == $type ? 'selected' : '' }}>
+                                            {{ $type }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <input type="number" name="bag_id" class="form-control" placeholder="Blood Bag ID"
+                                    value="{{ request('bag_id') }}">
+                            </div>
+
+                            <div class="col-md-3">
+                                <select name="sort" class="form-select">
+                                    <option value="">Sort by</option>
+                                    <option value="expiry" {{ request('sort') == 'expiry' ? 'selected' : '' }}>Expiry
+                                        Soonest</option>
+                                    <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Newest
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-1 d-grid">
+                                <button class="btn btn-danger fw-bold">Filter</button>
+                            </div>
+                        </form>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
@@ -253,41 +298,146 @@
                                     <th class="px-4 py-3 text-muted small fw-bold text-uppercase text-end">Donor</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="px-4 fw-bold text-dark">
-                                        <input type="checkbox" class="form-check-input" id="checkBlood">
-                                        <label class="form-check-label text-muted fw-bold small text-uppercase" for="checkBlood">
-                                            Used unit for Inventory
-                                        </label>
-                                    </td>
-                                    <td class="px-4 text-muted small">BB - 001</td>
-                                    <td class="px-4 fw-bold text-dark">A-</td>
-                                    <td class="px-4 small text-muted">Emergency Transfusion</td>
-                                    <td class="px-4 text-end small fw-bold">Dr. Chai</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-4 fw-bold text-dark">
-                                        <input type="checkbox" class="form-check-input" id="checkBlood">
-                                        <label class="form-check-label text-muted fw-bold small text-uppercase" for="checkBlood">
-                                            Used unit for Inventory
-                                        </label>
-                                    </td>
-                                    <td class="px-4 text-muted small">BB - 002</td>
-                                    <td class="px-4 fw-bold text-dark">O-</td>
-                                    <td class="px-4 small text-muted">Emergency Transfusion</td>
-                                    <td class="px-4 text-end small fw-bold">Dr. Chai</td>
-                                </tr>
-                            </tbody>
+                            <form method="POST" action="{{ route('medical_facilities.useBloodBags') }}">
+                                @csrf
+
+                                <tbody>
+                                    @foreach($bloodBags as $bag)
+                                        <tr>
+                                            <td class="px-4 fw-bold text-dark">
+                                                <input type="checkbox" name="blood_bag_ids[]" value="{{ $bag->id }}"
+                                                    class="form-check-input">
+                                                <span class="small fw-bold text-muted">Use this bag</span>
+                                            </td>
+
+                                            <td class="px-4 text-muted small">
+                                                {{ str_pad($bag->id, 5, '0', STR_PAD_LEFT) }}
+                                            </td>
+
+                                            <td class="px-4 fw-bold">{{ $bag->blood_type }}</td>
+
+                                            <td class="px-4 small text-muted">
+                                                Expires {{ \Carbon\Carbon::parse($bag->expires_at)->format('d M Y') }}
+                                            </td>
+
+                                            <td class="px-4 text-end small fw-bold">
+                                                From Donation #{{ $bag->donation_record_id }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
                         </table>
-                        <div class="p-3 border-top bg-light d-flex justify-content-end">
-                            <button class="btn btn-primary rounded-pill fw-bold px-4 shadow-sm">Submit Activity Log</button>
+
+                        <div class="p-3 border-top bg-light d-flex justify-content-between align-items-center">
+                            <div class="px-4 text-muted small">
+                                Showing {{ $bloodBags->firstItem() }}–{{ $bloodBags->lastItem() }}
+                                of {{ $bloodBags->total() }} blood bags
+                            </div>
+                            <div>
+                                {{ $bloodBags->links('pagination::bootstrap-5') }}
+                            </div>
+
+                            <button class="btn btn-danger rounded-pill fw-bold px-4 shadow-sm">
+                                <i class="fas fa-check me-1"></i> Confirm Usage
+                            </button>
                         </div>
+                        </form>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="custom-card mt-5" id="history-table">
+            <div class="p-4 border-bottom bg-light">
+                <h5 class="fw-bold mb-0">Usage & Expiry History</h5>
+                <p class="text-muted small mb-0">Used and expired blood bags</p>
+            </div>
+        <form method="GET" class="row g-3 p-3 border-bottom bg-white">
 
+            <div class="col-md-4">
+                <select name="history_status" class="form-select">
+                    <option value="">All (Used & Expired)</option>
+                    <option value="USED" {{ request('history_status') == 'USED' ? 'selected' : '' }}>
+                        Used
+                    </option>
+                    <option value="EXPIRED" {{ request('history_status') == 'EXPIRED' ? 'selected' : '' }}>
+                        Expired
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <input type="number"
+                    name="history_bag_id"
+                    class="form-control"
+                    placeholder="Search Blood Bag ID"
+                    value="{{ request('history_bag_id') }}">
+            </div>
+
+            <div class="col-md-2 d-grid">
+                <button class="btn btn-secondary fw-bold">
+                    <i class="fas fa-filter me-1"></i> Filter
+                </button>
+            </div>
+
+        </form>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-white">
+                        <tr>
+                            <th class="px-4 py-3 text-muted small fw-bold text-uppercase">Blood Bag</th>
+                            <th class="px-4 py-3 text-muted small fw-bold text-uppercase">Type</th>
+                            <th class="px-4 py-3 text-muted small fw-bold text-uppercase">Status</th>
+                            <th class="px-4 py-3 text-muted small fw-bold text-uppercase">Date</th>
+                            <th class="px-4 py-3 text-muted small fw-bold text-uppercase text-end">Donation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($history as $bag)
+                            <tr class="{{ $bag->status == 'EXPIRED' }}">
+                                <td class="px-4 fw-bold">
+                                    {{ str_pad($bag->id, 5, '0', STR_PAD_LEFT) }}
+                                </td>
+
+                                <td class="px-4 fw-bold">
+                                    {{ $bag->blood_type }}
+                                </td>
+
+                                <td class="px-4 fw-bold">
+                                    @if($bag->status == 'EXPIRED')
+                                        <span class="badge bg-danger">Expired</span>
+                                    @else
+                                        <span class="badge bg-secondary">Used</span>
+                                    @endif
+                                </td>
+
+                                <td class="px-4 text-muted small">
+                                    @if($bag->status == 'USED')
+                                        Used on {{ \Carbon\Carbon::parse($bag->used_at)->format('d M Y, h:i A') }}
+                                    @else
+                                        Expired on {{ \Carbon\Carbon::parse($bag->expires_at)->format('d M Y') }}
+                                    @endif
+                                </td>
+
+                                <td class="px-4 text-end fw-bold small">
+                                    #{{ $bag->donation_record_id }}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-muted">
+                                    No usage or expiry records yet.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="p-3 border-top bg-light d-flex justify-content-end">
+                {{ $history->appends(request()->query())->fragment('history-table')->links('pagination::bootstrap-5') }}
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

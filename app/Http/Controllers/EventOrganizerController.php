@@ -8,9 +8,12 @@ use Illuminate\Http\Request;
 use App\Models\Event as EventModel;
 use App\Models\Notification as NotificationModel;
 use App\Models\Appointment;
+use App\Exports\ParticipationExport;
 use Carbon\Carbon;
 use DB;
 use Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Excel as ExcelFormat;
 
 class EventOrganizerController extends Controller
 {
@@ -256,5 +259,111 @@ class EventOrganizerController extends Controller
             ->update(['status' => 'READ']);
 
         return redirect()->back()->with('success', 'All notifications marked as read.');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $user = auth()->user();
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|string|min:8',
+            'confirm_password' => 'required|string|min:8',
+        ]);
+        if (!password_verify($request->input('current_password'), $user->password)) {
+            return redirect()->back()->with('error', 'Current password is incorrect.');
+        }
+
+        if ($request->input('new_password') !== $request->input('confirm_password')) {
+            return redirect()->back()->with('error', 'New password and confirmation do not match.');
+        }
+
+        if($request->input('current_password') === $request->input('new_password')) {
+            return redirect()->back()->with('error', 'New password cannot be the same as the current password.');
+        }
+
+        $user->password = bcrypt($request->input('new_password'));
+        $user->save();
+
+        AuditLog::create([
+            'user_id' => $user->id,
+            'action' => 'Changed account password',
+            'timestamp' => now(),
+        ]);
+
+        return redirect()->back()->with('success', 'Password changed successfully.');
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = auth()->user();
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+        ]);
+
+        $user->name = $request->input('name');
+        $user->phone = $request->input('phone');
+        $user->save();
+
+        AuditLog::create([
+            'user_id' => $user->id,
+            'action' => 'Updated profile information',
+            'timestamp' => now(),
+        ]);
+
+        return redirect()->back()->with('success', 'Profile updated successfully.');
+    }
+
+    public function exportParticipation(Request $request)
+    {
+        $eventId = $request->query('eventId', 'all');
+        $type = $request->query('type', 'xlsx');
+
+        // Check ALL events data
+        if ($eventId === 'all') {
+            $totalCount = Appointment::whereHas('event', function($q) {
+                $q->where('organizer_id', auth()->id());
+            })->count();
+
+            if ($totalCount == 0) {
+                return redirect()->back()->with('error', 'No participation data available.');
+            }
+
+            $filename = 'all_events_donor_participation.xlsx';
+        }
+        else {
+            $event = DB::table('event')->where('id', $eventId)->first();
+
+            if (!$event) {
+                return redirect()->back()->with('error', 'Selected event not found.');
+            }
+
+            $participationCount = Appointment::where('event_id', $eventId)->count();
+
+            if ($participationCount == 0) {
+                return redirect()->back()->with('error', 'No participation data available for the selected event.');
+            }
+
+            $eventName = str_replace(' ', '_', strtolower($event->name));
+            $filename = $eventName . '_donor_participation.xlsx';
+        }
+
+        // CSV
+        if ($type === 'csv') {
+            $filename = str_replace('.xlsx', '.csv', $filename);
+
+            return Excel::download(
+                new ParticipationExport($eventId),
+                $filename,
+                ExcelFormat::CSV
+            );
+        }
+
+        // XLSX
+        return Excel::download(
+            new ParticipationExport($eventId),
+            $filename,
+            ExcelFormat::XLSX
+        );
     }
 }

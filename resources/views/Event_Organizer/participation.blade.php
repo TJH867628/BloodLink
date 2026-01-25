@@ -224,7 +224,17 @@
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Organizer" class="rounded-3 border" width="40" height="40" alt="Avatar">
             </div>
         </header>
-
+        @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @elseif(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
         <div class="row g-4 mb-4">
             <!-- Filter Section -->
             <div class="col-12">
@@ -238,7 +248,14 @@
                             @endforeach
                         </select>
                     </div>
-                    <button class="btn btn-outline-secondary rounded-pill px-4 fw-bold"><i class="fas fa-download me-2"></i> Export Data</button>
+                    <select id="fileType" class="form-select w-auto">
+                        <option value="xlsx">Excel (.xlsx)</option>
+                        <option value="csv">CSV (.csv)</option>
+                    </select>
+
+                    <button id="exportBtn" class="btn btn-outline-secondary rounded-pill px-4 fw-bold">
+                        <i class="fas fa-download me-2"></i> Export Data
+                    </button>
                 </div>
             </div>
         </div>
@@ -366,6 +383,14 @@
                     noData.classList.toggle('d-none', visible !== 0);
                 }
             });
+        });
+
+        document.getElementById("exportBtn").addEventListener("click", function () {
+            const eventId = document.getElementById("eventFilter").value;
+            const fileType = document.getElementById("fileType").value;
+
+            window.location.href =
+                `/event_organizer/export-participation?eventId=${eventId}&type=${fileType}`;
         });
     </script>
 
