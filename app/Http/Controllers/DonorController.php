@@ -20,7 +20,8 @@ use Notification;
 
 class DonorController extends Controller
 {
-    public function donorDashboard(){
+    public function donorDashboard()
+    {
         $user = Auth::user();
         $donorHealthDetails = $user->donorHealthDetails;
         $recentActivities = DB::table('appointment')
@@ -39,14 +40,15 @@ class DonorController extends Controller
         $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
             ->where('status', 'SEND')
             ->exists();
-        return view('donor.dashboard',compact('user', 'donorHealthDetails','recentActivities','hasUnreadNotifications'));
+        return view('donor.dashboard', compact('user', 'donorHealthDetails', 'recentActivities', 'hasUnreadNotifications'));
     }
 
-    public function findEvent() {
+    public function findEvent()
+    {
         $user = Auth::user();
         $donorHealthDetails = $user->donorHealthDetails;
         $events = Event::all();
-        $bookedEventId= Appointment::where('donor_id', $user->id)
+        $bookedEventId = Appointment::where('donor_id', $user->id)
             ->whereIn('status', ['PENDING', 'ACCEPTED'])
             ->pluck('event_id')
             ->toArray();
@@ -56,118 +58,121 @@ class DonorController extends Controller
             ->where('appointment.status', 'ACCEPTED')
             ->orderBy('event.date', 'desc')
             ->value('event.date');
-        $intervalMonths = SystemSettings::where('name','donation_interval_months')->value('value');
-        $intervalMonths = (int)$intervalMonths ?: 3;
-        return view('donor.findEvent',compact('user','donorHealthDetails','events','bookedEventId','lastAcceptedDate','intervalMonths'));
+        $intervalMonths = SystemSettings::where('name', 'donation_interval_months')->value('value');
+        $intervalMonths = (int) $intervalMonths ?: 3;
+        return view('donor.findEvent', compact('user', 'donorHealthDetails', 'events', 'bookedEventId', 'lastAcceptedDate', 'intervalMonths'));
     }
 
-    public function history() {
+    public function history()
+    {
         $user = Auth::user();
 
         // Completed donations
         $donations = DonationRecord::join('event', 'donation_record.event_id', '=', 'event.id')
-        ->leftJoin('medical_facilities', 'donation_record.facility_id', '=', 'medical_facilities.id')
-        ->where('donation_record.donor_id', $user->id)
-        ->select(
-            'donation_record.*',
-            'event.name as event_name',
-            'medical_facilities.name as facility_name'
-        )
-        ->orderBy('donation_record.created_at', 'desc')
-        ->get();
+            ->leftJoin('medical_facilities', 'donation_record.facility_id', '=', 'medical_facilities.id')
+            ->where('donation_record.donor_id', $user->id)
+            ->select(
+                'donation_record.*',
+                'event.name as event_name',
+                'medical_facilities.name as facility_name'
+            )
+            ->orderBy('donation_record.created_at', 'desc')
+            ->get();
 
         // All appointments (pending / approved / cancelled)
         $appointments = Appointment::join('event', 'appointment.event_id', '=', 'event.id')
-        ->where('appointment.donor_id', $user->id)
-        ->whereNotIn('appointment.status', ['COMPLETED'])
-        ->select(
-            'appointment.*',
-            'event.name as event_name',
-            'event.location',
-            'event.date',
-            'event.time'
-        )
-        ->orderBy('appointment.created_at', 'desc')
-        ->get();
+            ->where('appointment.donor_id', $user->id)
+            ->whereNotIn('appointment.status', ['COMPLETED'])
+            ->select(
+                'appointment.*',
+                'event.name as event_name',
+                'event.location',
+                'event.date',
+                'event.time'
+            )
+            ->orderBy('appointment.created_at', 'desc')
+            ->get();
 
-        return view('donor.history',compact('user','appointments','donations'));
+        return view('donor.history', compact('user', 'appointments', 'donations'));
         $user = Auth::user();
 
         // Completed donations
         $donations = DonationRecord::join('event', 'donation_record.event_id', '=', 'event.id')
-        ->leftJoin('medical_facilities', 'donation_record.facility_id', '=', 'medical_facilities.id')
-        ->where('donation_record.donor_id', $user->id)
-        ->select(
-            'donation_record.*',
-            'event.name as event_name',
-            'medical_facilities.name as facility_name'
-        )
-        ->orderBy('donation_record.created_at', 'desc')
-        ->get();
+            ->leftJoin('medical_facilities', 'donation_record.facility_id', '=', 'medical_facilities.id')
+            ->where('donation_record.donor_id', $user->id)
+            ->select(
+                'donation_record.*',
+                'event.name as event_name',
+                'medical_facilities.name as facility_name'
+            )
+            ->orderBy('donation_record.created_at', 'desc')
+            ->get();
 
         // All appointments (pending / approved / cancelled)
         $appointments = Appointment::join('event', 'appointment.event_id', '=', 'event.id')
-        ->where('appointment.donor_id', $user->id)
-        ->whereNotIn('appointment.status', ['COMPLETED'])
-        ->select(
-            'appointment.*',
-            'event.name as event_name',
-            'event.location',
-            'event.date',
-            'event.time'
-        )
-        ->orderBy('appointment.created_at', 'desc')
-        ->get();
+            ->where('appointment.donor_id', $user->id)
+            ->whereNotIn('appointment.status', ['COMPLETED'])
+            ->select(
+                'appointment.*',
+                'event.name as event_name',
+                'event.location',
+                'event.date',
+                'event.time'
+            )
+            ->orderBy('appointment.created_at', 'desc')
+            ->get();
 
-        return view('donor.history',compact('user','appointments','donations'));
+        return view('donor.history', compact('user', 'appointments', 'donations'));
     }
 
-    public function feedback() {
+    public function feedback()
+    {
         $user = Auth::user();
-        $donations = DonationRecord::join('event','donation_record.event_id','=','event.id')
-        ->leftJoin('medical_facilities','donation_record.facility_id','=','medical_facilities.id')
-        ->where('donation_record.donor_id',$user->id)
-        ->select(
-            'donation_record.id',
-            'event.name as event_name',
-            'medical_facilities.name as facility_name',
-            'donation_record.created_at'
-        )
-        ->orderBy('donation_record.created_at','desc')
-        ->get();
+        $donations = DonationRecord::join('event', 'donation_record.event_id', '=', 'event.id')
+            ->leftJoin('medical_facilities', 'donation_record.facility_id', '=', 'medical_facilities.id')
+            ->where('donation_record.donor_id', $user->id)
+            ->select(
+                'donation_record.id',
+                'event.name as event_name',
+                'medical_facilities.name as facility_name',
+                'donation_record.created_at'
+            )
+            ->orderBy('donation_record.created_at', 'desc')
+            ->get();
 
-        $feedbacks = Feedback::where('user_id',$user->id)
-        ->orderBy('created_at','desc')
-        ->get();
+        $feedbacks = Feedback::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        return view('donor.feedback',compact('user','donations','feedbacks'));
+        return view('donor.feedback', compact('user', 'donations', 'feedbacks'));
     }
 
-    public function submitFeedback(Request $request) {
+    public function submitFeedback(Request $request)
+    {
         $user = Auth::user();
         $donationId = $request->input('donation_id');
         $rating = $request->input('rating');
         $comment = $request->input('comments');
 
-        if($donationId){
-            $donation = DonationRecord::join('event','donation_record.event_id','=','event.id')
+        if ($donationId) {
+            $donation = DonationRecord::join('event', 'donation_record.event_id', '=', 'event.id')
                 ->where('donation_record.id', $donationId)
                 ->select('event.name as event_name')
                 ->first();
 
-            $message = 
+            $message =
                 "Feedback for Donation ID: $donationId\n" .
                 "Event: " . ($donation ? $donation->event_name : 'Unknown') . "\n" .
                 "Rating: $rating Star\n" .
                 "Comment:\n $comment";
-        }else{
-            $message = 
+        } else {
+            $message =
                 "Feedback\n" .
                 "Rating: $rating Star\n" .
                 "Comment:\n $comment";
         }
-       
-            
+
+
         Feedback::create([
             'user_id' => $user->id,
             'message' => $message,
@@ -184,10 +189,11 @@ class DonorController extends Controller
         return redirect()->back()->with('success', 'Feedback submitted successfully!');
     }
 
-    public function bookEvent(Request $request, $eventId) {
+    public function bookEvent(Request $request, $eventId)
+    {
         $user = Auth::user();
 
-        if($user->donorHealthDetails->is_eligible == false){
+        if ($user->donorHealthDetails->is_eligible == false) {
             return redirect()->back()->with('error', 'You are not eligible to donate blood.');
         }
 
@@ -196,7 +202,7 @@ class DonorController extends Controller
             ->where('event_id', $eventId)
             ->whereIn('status', ['PENDING', 'ACCEPTED'])
             ->exists();
-        
+
         if ($existingAppointment) {
             return redirect()->back()->with('error', 'You have already booked this event.');
         }
@@ -205,8 +211,8 @@ class DonorController extends Controller
         if (!$event || $event->status != 'ACTIVE' || $event->available_slots <= 0) {
             return redirect()->back()->with('error', 'This event is not available for booking.');
         }
-        $intervalMonths = SystemSettings::where('name','donation_interval_months')->value('value');
-        $intervalMonths = (int)$intervalMonths ?: 3;
+        $intervalMonths = SystemSettings::where('name', 'donation_interval_months')->value('value');
+        $intervalMonths = (int) $intervalMonths ?: 3;
         $targetDate = Carbon::parse($event->date);
         $windowStart = $targetDate->copy()->subMonths($intervalMonths);
         $windowEnd = $targetDate->copy()->addMonths($intervalMonths);
@@ -231,8 +237,8 @@ class DonorController extends Controller
         }
         if ($hasFutureAppointment || $hasProfileConflict) {
             return redirect()->back()->with(
-            'error',
-            "You already have a blood donation within the required {$intervalMonths} month waiting period. Please choose a later date."
+                'error',
+                "You already have a blood donation within the required {$intervalMonths} month waiting period. Please choose a later date."
             );
         }
 
@@ -250,7 +256,7 @@ class DonorController extends Controller
             'timestamp' => now(),
         ]);
 
-        $organizer = User::find($event->organizer_id);   
+        $organizer = User::find($event->organizer_id);
 
         sendSystemNotification($organizer, 'A new appointment has been booked for your event "' . $event->name . '" by ' . $user->name . '.');
         sendSystemNotification($user, 'You have successfully booked an appointment for the event "' . $event->name . '" on ' . $event->date . '.');
@@ -260,7 +266,8 @@ class DonorController extends Controller
         return redirect()->back()->with('success', 'Event booked successfully!');
     }
 
-    public function cancelAppointment(Request $request, $appointmentId) {
+    public function cancelAppointment(Request $request, $appointmentId)
+    {
         $user = Auth::user();
 
         $appointment = Appointment::where('id', $appointmentId)
@@ -291,17 +298,19 @@ class DonorController extends Controller
 
         return redirect()->back()->with('success', 'Appointment cancelled successfully!');
     }
-    public function profile() {
+    public function profile()
+    {
         $user = Auth::user();
         $donorHealthDetails = $user->donorHealthDetails;
         $bloodTypes = BloodType::active()
-                        ->orderBy('value')
-                        ->get();
+            ->orderBy('value')
+            ->get();
 
-        return view('donor.profile', compact('user','donorHealthDetails', 'bloodTypes'));
+        return view('donor.profile', compact('user', 'donorHealthDetails', 'bloodTypes'));
     }
 
-    public function updateProfile(Request $request) {
+    public function updateProfile(Request $request)
+    {
         $user = Auth::user();
 
         $user->name = $request->input('name');
@@ -319,7 +328,7 @@ class DonorController extends Controller
         $donorHealthDetails->blood_pressure = $request->input('blood_pressure');
         $donorHealthDetails->hemoglobin_level = $request->input('hemoglobin_level');
         $donorHealthDetails->last_donation_date = $request->input('last_donation_date');
-        
+
         $donorHealthDetails->save();
 
         AuditLog::create([
@@ -329,17 +338,20 @@ class DonorController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Profile updated successfully!');
-    }   
-
-    public function notification () {
-        $user = Auth::user();
-        $notifications = NotificationModel::where('user_id', $user->id)
-            ->orderBy('datetime', 'desc')
-            ->get();
-        return view('donor.notification', compact('user','notifications'));
     }
 
-    public function markNotificationAsRead(Request $request, $notificationId) {
+    public function notification()
+    {
+        $user = Auth::user();
+        $notifications = NotificationModel::where('user_id', $user->id)
+            ->orderByRaw("status = 'READ'")
+            ->orderBy('datetime', 'desc')
+            ->get();
+        return view('donor.notification', compact('user', 'notifications'));
+    }
+
+    public function markNotificationAsRead(Request $request, $notificationId)
+    {
         $user = Auth::user();
 
         $notification = NotificationModel::where('id', $notificationId)
@@ -356,7 +368,8 @@ class DonorController extends Controller
         return redirect()->back()->with('success', 'Notification marked as read.');
     }
 
-    public function markAllNotificationsAsRead(Request $request) {
+    public function markAllNotificationsAsRead(Request $request)
+    {
         $user = Auth::user();
 
         NotificationModel::where('user_id', $user->id)
@@ -382,7 +395,7 @@ class DonorController extends Controller
             return redirect()->back()->with('error', 'New password and confirmation do not match.');
         }
 
-        if($request->input('current_password') === $request->input('new_password')) {
+        if ($request->input('current_password') === $request->input('new_password')) {
             return redirect()->back()->with('error', 'New password cannot be the same as the current password.');
         }
 

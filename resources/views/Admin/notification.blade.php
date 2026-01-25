@@ -267,12 +267,14 @@
                 class="fs-4 fw-bolder text-dark">BloodLink</span>
         </div>
         <nav class="nav flex-column mt-2 w-100">
-            <div class="px-4 pb-2 text-label">Organizer Portal</div>
-            <a href="/donor/dashboard" class="nav-link"><span class="nav-icon"><i class="fas fa-chart-pie w-25"></i></span> Dashboard</a>
-            <a href="/donor/findEvent" class="nav-link"><span class="nav-icon"><i class="fas fa-search w-25"></i></span> Find Events</a>
-            <a href="/donor/history" class="nav-link"><span class="nav-icon"><i class="fas fa-history w-25"></i></span> My History</a>
-            <a href="/donor/feedback" class="nav-link"><span class="nav-icon"><i class="fas fa-comment-dots w-25"></i></span> Feedback</a>
-            <a href="/donor/profile" class="nav-link"><span class="nav-icon"><i class="fas fa-user-circle w-25"></i></span> Profile</a>
+            <div class="px-4 pb-2 text-label"
+                style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Organizer Portal
+            </div>
+            <a href="/admin/userManagement" class="nav-link"><i class="fas fa-users w-25"></i> User Management</a>
+            <a href="/admin/medicalFacilitiesManagement" class="nav-link"><i class="fas fa-hospital w-25"></i>Medical Facilities Management</a>
+            <a href="/admin/inventory" class="nav-link"><i class="fas fa-hospital w-25"></i>Blood Inventories</a>
+            <a href="/admin/systemModification" class="nav-link"><i class="fas fa-cogs w-25"></i> System Modification</a>
+            <a href="/admin/auditReport" class="nav-link"><i class="fas fa-file-alt w-25"></i> Audit & Reports</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">
@@ -305,7 +307,7 @@
                 </select>
             </div>
             <div class="d-flex gap-2">
-                <form method="POST" action="{{ route('donor.markAllNotificationsRead') }}">
+                <form method="POST" action="{{ route('admin.markAllNotificationsRead') }}">
                     @csrf
                     <button class="btn btn-sm btn-outline-secondary w-100 mb-2">
                         Mark All as Read
@@ -321,14 +323,14 @@
 
                     <!-- ICON -->
                     <div class="icon-circle 
-                                @if(str_contains(strtolower($notif->message), 'urgent') || str_contains(strtolower($notif->message), 'emergency'))
-                                    bg-urgent
-                                @elseif(str_contains(strtolower($notif->message), 'appointment'))
-                                    bg-info-custom
-                                @else
-                                    bg-success-custom
-                                @endif
-                            ">
+                                    @if(str_contains(strtolower($notif->message), 'urgent') || str_contains(strtolower($notif->message), 'emergency'))
+                                        bg-urgent
+                                    @elseif(str_contains(strtolower($notif->message), 'appointment'))
+                                        bg-info-custom
+                                    @else
+                                        bg-success-custom
+                                    @endif
+                                ">
                         @if(str_contains(strtolower($notif->message), 'urgent') || str_contains(strtolower($notif->message), 'emergency'))
                             <i class="fas fa-exclamation-circle"></i>
                         @elseif(str_contains(strtolower($notif->message), 'appointment'))
@@ -367,7 +369,7 @@
                             @if($notif->status == 'SEND')
                                 <li>
                                     <form method="POST"
-                                        action="{{ route('donor.markNotificationRead', $notif->id) }}">
+                                        action="{{ route('admin.markNotificationRead', $notif->id) }}">
                                         @csrf
                                         <button type="submit" class="dropdown-item small fw-bold">
                                             Mark as read

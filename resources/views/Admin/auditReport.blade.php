@@ -175,16 +175,20 @@
 <body>
     <div class="sidebar d-none d-lg-flex">
         <div class="brand-section">
-            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span class="fs-4 fw-bolder text-dark">BloodLink</span>
+            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span
+                class="fs-4 fw-bolder text-dark">BloodLink</span>
         </div>
         <nav class="nav flex-column mt-2 w-100">
             <div class="px-4 pb-2 text-label">Admin Portal</div>
             <a href="/admin/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
             <a href="/admin/userManagement" class="nav-link"><i class="fas fa-users w-25"></i> User Management</a>
-            <a href="/admin/medicalFacilitiesManagement" class="nav-link"><i class="fas fa-hospital w-25"></i>Medical Facilities Management</a>
+            <a href="/admin/medicalFacilitiesManagement" class="nav-link"><i class="fas fa-hospital w-25"></i>Medical
+                Facilities Management</a>
             <a href="/admin/inventory" class="nav-link"><i class="fas fa-hospital w-25"></i>Blood Inventories</a>
-            <a href="/admin/systemModification" class="nav-link"><i class="fas fa-cogs w-25"></i> System Modification</a>
-            <a href="/admin/auditReport" class="nav-link active"><i class="fas fa-file-alt w-25"></i> Audit & Reports</a>
+            <a href="/admin/systemModification" class="nav-link"><i class="fas fa-cogs w-25"></i> System
+                Modification</a>
+            <a href="/admin/auditReport" class="nav-link active"><i class="fas fa-file-alt w-25"></i> Audit &
+                Reports</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">
@@ -200,7 +204,7 @@
     </div>
 
     <div class="main-content">
-    <header class="d-flex justify-content-between align-items-center mb-5">
+        <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
                 <h2 class="fw-black mb-0">Audit & Report</h2>
             </div>
@@ -209,85 +213,209 @@
                     <div class="fw-bold small">System Admin</div>
                     <div class="text-label text-primary">Superadmin</div>
                 </div>
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" class="rounded-3 border" width="40" height="40" alt="Avatar">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" class="rounded-3 border" width="40"
+                    height="40" alt="Avatar">
             </div>
         </header>
 
         <ul class="nav nav-tabs mb-4" id="reportTabs" role="tablist">
-            <li class="nav-item"><button class="nav-link active" id="audit-tab" data-bs-toggle="tab" data-bs-target="#audit" type="button">Audit Logs</button></li>
-            <li class="nav-item"><button class="nav-link" id="reports-tab" data-bs-toggle="tab" data-bs-target="#reports" type="button">System Reports</button></li>
+            <li class="nav-item"><button class="nav-link active" id="audit-tab" data-bs-toggle="tab"
+                    data-bs-target="#audit" type="button">Audit Logs</button></li>
+            <li class="nav-item"><button class="nav-link" id="reports-tab" data-bs-toggle="tab"
+                    data-bs-target="#reports" type="button">System Reports</button></li>
         </ul>
 
         <div class="tab-content" id="reportTabsContent">
             <!-- Audit Log Tab -->
             <div class="tab-pane fade show active" id="audit" role="tabpanel">
                 <div class="log-terminal shadow-lg">
-                @foreach($logs as $log)
-                    @php
-                        $role = strtoupper($log->user_role ?? 'SYSTEM');
+                    @foreach($logs as $log)
+                        @php
+                            $role = strtoupper($log->user_role ?? 'SYSTEM');
 
-                        if ($role === 'ADMIN') {
-                            $roleColor = 'text-danger';
-                        } elseif ($role === 'HOSPITAL') {
-                            $roleColor = 'text-primary';
-                        } elseif ($role === 'DONOR') {
-                            $roleColor = 'text-success';
-                        } else {
-                            $roleColor = 'text-warning'; // SYSTEM
-                        }
-                    @endphp
+                            if ($role === 'ADMIN') {
+                                $roleColor = 'text-danger';
+                            } elseif ($role === 'HOSPITAL') {
+                                $roleColor = 'text-primary';
+                            } elseif ($role === 'DONOR') {
+                                $roleColor = 'text-success';
+                            } else {
+                                $roleColor = 'text-warning'; // SYSTEM
+                            }
+                        @endphp
 
-                    <div class="mb-2">
-                        <span class="text-secondary">
-                            [{{ \Carbon\Carbon::parse($log->timestamp)->format('Y-m-d H:i:s') }}]
-                        </span>
+                        <div class="mb-2">
+                            <span class="text-secondary">
+                                [{{ \Carbon\Carbon::parse($log->timestamp)->format('Y-m-d H:i:s') }}]
+                            </span>
 
-                        <span class="{{ $roleColor }} fw-bold">
-                            @if($log->user_id)
-                                {{ $role }}_{{ $log->user_id }} ({{ $log->user_name }}):
-                            @else
-                                SYSTEM:
-                            @endif
-                        </span>
+                            <span class="{{ $roleColor }} fw-bold">
+                                @if($log->user_id)
+                                    {{ $role }}_{{ $log->user_id }} ({{ $log->user_name }}):
+                                @else
+                                    SYSTEM:
+                                @endif
+                            </span>
 
-                        <span class="text-white">
-                            {{ $log->action }}
-                        </span>
-                    </div>
-                @endforeach
+                            <span class="text-white">
+                                {{ $log->action }}
+                            </span>
+                        </div>
+                    @endforeach
 
-                <div class="mt-3 opacity-50">_ Waiting for new events...</div>
+                    <div class="mt-3 opacity-50">_ Waiting for new events...</div>
 
                 </div>
             </div>
 
-            <!-- Reports Tab -->
             <div class="tab-pane fade" id="reports" role="tabpanel">
                 <div class="row g-4">
+
+                    <!-- BLOOD INVENTORY -->
                     <div class="col-md-4">
                         <div class="custom-card p-4 text-center h-100">
-                            <i class="fas fa-file-pdf text-danger fa-3x mb-3"></i>
-                            <h5 class="fw-bold">User Growth Report</h5>
-                            <p class="text-muted small">Monthly analysis of new donor registrations and retention rates.</p>
-                            <button class="btn btn-outline-dark btn-sm rounded-pill px-4 fw-bold">Download PDF</button>
+                            <i class="fas fa-boxes text-success fa-3x mb-3"></i>
+                            <h5 class="fw-bold">Blood Inventory</h5>
+                            <p class="text-muted small">Current blood stock snapshot</p>
+
+                            <form action="{{ route('admin.exportBloodInventory') }}" method="GET">
+                                <select name="format" class="form-select form-select-sm mb-3">
+                                    <option value="xlsx">Excel (.xlsx)</option>
+                                    <option value="csv">CSV</option>
+                                </select>
+
+                                <button class="btn btn-outline-dark btn-sm rounded-pill px-4 fw-bold w-100">
+                                    Download
+                                </button>
+                            </form>
                         </div>
                     </div>
+                    
+                    <!-- USERS -->
                     <div class="col-md-4">
                         <div class="custom-card p-4 text-center h-100">
-                            <i class="fas fa-file-excel text-success fa-3x mb-3"></i>
-                            <h5 class="fw-bold">Inventory Audit</h5>
-                            <p class="text-muted small">Complete breakdown of blood stock across all facilities.</p>
-                            <button class="btn btn-outline-dark btn-sm rounded-pill px-4 fw-bold">Download CSV</button>
+                            <i class="fas fa-users text-secondary fa-3x mb-3"></i>
+                            <h5 class="fw-bold">Users</h5>
+                            <p class="text-muted small">All donors, staff & organizers</p>
+
+                            <form action="{{ route('admin.exportUserSummary') }}" method="GET">
+
+                                <select name="format" class="form-select form-select-sm mb-3">
+                                    <option value="xlsx">Excel (.xlsx)</option>
+                                    <option value="csv">CSV</option>
+                                </select>
+
+                                <button class="btn btn-outline-dark btn-sm rounded-pill px-4 fw-bold w-100">
+                                    Download
+                                </button>
+                            </form>
                         </div>
                     </div>
+
+                    <!-- BLOOD USAGE -->
                     <div class="col-md-4">
                         <div class="custom-card p-4 text-center h-100">
-                            <i class="fas fa-file-medical-alt text-primary fa-3x mb-3"></i>
-                            <h5 class="fw-bold">Donation Stats</h5>
-                            <p class="text-muted small">Successful vs Deferred donations by region and demographic.</p>
-                            <button class="btn btn-outline-dark btn-sm rounded-pill px-4 fw-bold">Download PDF</button>
+                            <i class="fas fa-tint text-warning fa-3x mb-3"></i>
+                            <h5 class="fw-bold">Blood Usage</h5>
+                            <p class="text-muted small">Blood used in hospitals</p>
+
+                            <form action="{{ route('admin.exportBloodUsage') }}" method="GET">
+                                <div class="d-flex gap-2 mb-2">
+                                    <input type="date" name="from" class="form-control form-control-sm">
+                                    <input type="date" name="to" class="form-control form-control-sm">
+                                </div>
+
+                                <select name="format" class="form-select form-select-sm mb-3">
+                                    <option value="xlsx">Excel (.xlsx)</option>
+                                    <option value="csv">CSV</option>
+                                </select>
+
+                                <button class="btn btn-outline-dark btn-sm rounded-pill px-4 fw-bold w-100">
+                                    Download
+                                </button>
+                            </form>
                         </div>
                     </div>
+
+
+                    <!-- BLOOD WASTAGE -->
+                    <div class="col-md-4">
+                        <div class="custom-card p-4 text-center h-100">
+                            <i class="fas fa-trash-alt text-danger fa-3x mb-3"></i>
+                            <h5 class="fw-bold">Blood Wastage</h5>
+                            <p class="text-muted small">Expired & discarded blood</p>
+
+                            <form action="{{ route('admin.exportBloodWastage') }}" method="GET">
+                                <div class="d-flex gap-2 mb-2">
+                                    <input type="date" name="from" class="form-control form-control-sm">
+                                    <input type="date" name="to" class="form-control form-control-sm">
+                                </div>
+
+                                <select name="format" class="form-select form-select-sm mb-3">
+                                    <option value="xlsx">Excel (.xlsx)</option>
+                                    <option value="csv">CSV</option>
+                                </select>
+
+                                <button class="btn btn-outline-dark btn-sm rounded-pill px-4 fw-bold w-100">
+                                    Download
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+
+                    <!-- DONATIONS -->
+                    <div class="col-md-4">
+                        <div class="custom-card p-4 text-center h-100">
+                            <i class="fas fa-hand-holding-heart text-primary fa-3x mb-3"></i>
+                            <h5 class="fw-bold">Donations</h5>
+                            <p class="text-muted small">All donation records</p>
+
+                            <form action="{{ route('admin.exportDonationRecords') }}" method="GET">
+                                <div class="d-flex gap-2 mb-2">
+                                    <input type="date" name="from" class="form-control form-control-sm">
+                                    <input type="date" name="to" class="form-control form-control-sm">
+                                </div>
+
+                                <select name="format" class="form-select form-select-sm mb-3">
+                                    <option value="xlsx">Excel (.xlsx)</option>
+                                    <option value="csv">CSV</option>
+                                </select>
+
+                                <button class="btn btn-outline-dark btn-sm rounded-pill px-4 fw-bold w-100">
+                                    Download
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+
+                    <!-- EVENTS -->
+                    <div class="col-md-4">
+                        <div class="custom-card p-4 text-center h-100">
+                            <i class="fas fa-calendar-alt text-info fa-3x mb-3"></i>
+                            <h5 class="fw-bold">Events</h5>
+                            <p class="text-muted small">Blood drive events</p>
+
+                            <form action="{{ route('admin.exportEvent') }}" method="GET">
+                                <div class="d-flex gap-2 mb-2">
+                                    <input type="date" name="from" class="form-control form-control-sm">
+                                    <input type="date" name="to" class="form-control form-control-sm">
+                                </div>
+
+                                <select name="format" class="form-select form-select-sm mb-3">
+                                    <option value="xlsx">Excel (.xlsx)</option>
+                                    <option value="csv">CSV</option>
+                                </select>
+
+                                <button class="btn btn-outline-dark btn-sm rounded-pill px-4 fw-bold w-100">
+                                    Download
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>

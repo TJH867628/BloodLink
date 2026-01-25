@@ -249,7 +249,8 @@
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
                 <div class="brand-icon"><i class="fas fa-droplet"></i></div> <span class="fw-bold">BloodLink</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span class="navbar-toggler-icon"></span></button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span
+                    class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="mobileMenu">
                 <ul class="navbar-nav mt-3">
                     <li class="nav-item"><a class="nav-link" href="donor_dashboard.html">Dashboard</a></li>
@@ -262,14 +263,21 @@
     <!-- Sidebar (Example using Donor Context) -->
     <div class="sidebar d-none d-lg-flex">
         <div class="brand-section">
-            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span class="fs-4 fw-bolder text-dark">BloodLink</span>
+            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span
+                class="fs-4 fw-bolder text-dark">BloodLink</span>
         </div>
         <nav class="nav flex-column mt-2 w-100">
-            <div class="px-4 pb-2 text-label">Organizer Portal</div>
-            <a href="/event_organizer/dashboard" class="nav-link active"><span class="nav-icon"><i class="fas fa-chart-pie w-25"></i></span> Dashboard</a>
-            <a href="/event_organizer/eventManagement" class="nav-link"><span class="nav-icon"><i class="fas fa-calendar-alt w-25"></i></span> Event Management</a>
-            <a href="/event_organizer/participation" class="nav-link"><span class="nav-icon"><i class="fas fa-users w-25"></i></span> Participation</a>
-            <a href="/event_organizer/profile" class="nav-link"><span class="nav-icon"><i class="fas fa-id-card"></i></span> Profile</a>
+            <div class="px-4 pb-2 text-label"
+                style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Organizer Portal
+            </div>
+            <a href="/event_organizer/dashboard" class="nav-link"><span class="nav-icon"><i
+                        class="fas fa-chart-pie w-25"></i></span> Dashboard</a>
+            <a href="/event_organizer/eventManagement" class="nav-link"><span class="nav-icon"><i
+                        class="fas fa-calendar-alt w-25"></i></span> Event Management</a>
+            <a href="/event_organizer/participation" class="nav-link"><span class="nav-icon"><i
+                        class="fas fa-users w-25"></i></span> Participation</a>
+            <a href="/event_organizer/profile" class="nav-link"><span class="nav-icon"><i
+                        class="fas fa-id-card"></i></span> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">
@@ -295,14 +303,14 @@
         <div class="action-bar shadow-sm">
             <div class="d-flex align-items-center gap-3">
                 <span class="fw-bold text-dark">Filter:</span>
-                <select class="form-select form-select-sm rounded-pill border-secondary-subtle" style="width: 150px;">
+                <select id="notificationFilter" class="form-select form-select-sm rounded-pill border-secondary-subtle"
+                    style="width: 150px;">
                     <option value="all">All Notifications</option>
                     <option value="unread">Unread Only</option>
-                    <option value="urgent">Urgent</option>
                 </select>
             </div>
             <div class="d-flex gap-2">
-                <form method="POST" action="{{ route('donor.markAllNotificationsRead') }}">
+                <form method="POST" action="{{ route('event_organizer.markAllNotificationsRead') }}">
                     @csrf
                     <button class="btn btn-sm btn-outline-secondary w-100 mb-2">
                         Mark All as Read
@@ -312,75 +320,75 @@
         </div>
 
         <div id="notificationList">
-        @forelse($notifications as $notif)
-        <div class="notification-card {{ $notif->status == 'SEND' ? 'unread' : 'read' }} d-flex gap-3 align-items-start"
-            id="notif-{{ $notif->id }}">
+            @forelse($notifications as $notif)
+                <div class="notification-card  {{ $notif->status == 'SEND' ? 'unread' : 'read' }} d-flex gap-3 align-items-start"
+                    id="notif-{{ $notif->id }}" data-status="{{ $notif->status }}">
 
-            <!-- ICON -->
-            <div class="icon-circle 
-                @if(str_contains(strtolower($notif->message), 'urgent') || str_contains(strtolower($notif->message), 'emergency'))
-                    bg-urgent
-                @elseif(str_contains(strtolower($notif->message), 'appointment'))
-                    bg-info-custom
-                @else
-                    bg-success-custom
-                @endif
-            ">
-                @if(str_contains(strtolower($notif->message), 'urgent') || str_contains(strtolower($notif->message), 'emergency'))
-                    <i class="fas fa-exclamation-circle"></i>
-                @elseif(str_contains(strtolower($notif->message), 'appointment'))
-                    <i class="fas fa-calendar-check"></i>
-                @else
-                    <i class="fas fa-clipboard-check"></i>
-                @endif
-            </div>
-
-            <!-- CONTENT -->
-            <div class="grow">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                    <h6 class="fw-bold mb-0 text-dark notif-title">
-                        {{ Str::limit($notif->message, 40) }}
-                        @if($notif->status == 'SEND')
-                            <span class="unread-dot"></span>
+                    <!-- ICON -->
+                    <div class="icon-circle 
+                                    @if(str_contains(strtolower($notif->message), 'urgent') || str_contains(strtolower($notif->message), 'emergency'))
+                                        bg-urgent
+                                    @elseif(str_contains(strtolower($notif->message), 'appointment'))
+                                        bg-info-custom
+                                    @else
+                                        bg-success-custom
+                                    @endif
+                                ">
+                        @if(str_contains(strtolower($notif->message), 'urgent') || str_contains(strtolower($notif->message), 'emergency'))
+                            <i class="fas fa-exclamation-circle"></i>
+                        @elseif(str_contains(strtolower($notif->message), 'appointment'))
+                            <i class="fas fa-calendar-check"></i>
+                        @else
+                            <i class="fas fa-clipboard-check"></i>
                         @endif
-                    </h6>
-                    <span class="time-badge">
-                        {{ \Carbon\Carbon::parse($notif->datetime)->diffForHumans() }}
-                    </span>
+                    </div>
+
+                    <!-- CONTENT -->
+                    <div class="grow">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <h6 class="fw-bold mb-0 text-dark notif-title">
+                                {{ Str::limit($notif->message, 40) }}
+                                @if($notif->status == 'SEND')
+                                    <span class="unread-dot"></span>
+                                @endif
+                            </h6>
+                            <span class="time-badge">
+                                {{ \Carbon\Carbon::parse($notif->datetime)->diffForHumans() }}
+                            </span>
+                        </div>
+
+                        <p class="text-muted small mb-0 lh-sm">
+                            {{ $notif->message }}
+                        </p>
+                    </div>
+
+                    <!-- ACTIONS -->
+                    <div class="dropdown">
+                        <button class="btn btn-link text-muted p-0" data-bs-toggle="dropdown">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
+                            @if($notif->status == 'SEND')
+                                <li>
+                                    <form method="POST"
+                                        action="{{ route('event_organizer.markNotificationRead', $notif->id) }}">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item small fw-bold">
+                                            Mark as read
+                                        </button>
+                                    </form>
+                                </li>
+                            @endif
+                        </ul>
+                    </div>
+
                 </div>
-
-                <p class="text-muted small mb-0 lh-sm">
-                    {{ $notif->message }}
-                </p>
-            </div>
-
-            <!-- ACTIONS -->
-            <div class="dropdown">
-                <button class="btn btn-link text-muted p-0" data-bs-toggle="dropdown">
-                    <i class="fas fa-ellipsis-v"></i>
-                </button>
-
-                <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
-                    @if($notif->status == 'SEND')
-                    <li>
-                        <form method="POST" 
-                            action="{{ route('donor.markNotificationRead', $notif->id) }}">
-                            @csrf
-                            <button type="submit" class="dropdown-item small fw-bold">
-                                Mark as read
-                            </button>
-                        </form>
-                    </li>
-                    @endif
-                </ul>
-            </div>
-
-        </div>
-        @empty
-            <div class="text-center text-muted py-5">
-                No notifications yet
-            </div>
-        @endforelse
+            @empty
+                <div class="text-center text-muted py-5">
+                    No notifications yet
+                </div>
+            @endforelse
 
         </div>
 
@@ -407,6 +415,10 @@
                 // Remove the red dot if it exists
                 const dot = card.querySelector('.unread-dot');
                 if (dot) dot.remove();
+
+                if (document.getElementById('notificationFilter').value === 'unread') {
+                    card.style.display = 'none';
+                }
             }
         }
 
@@ -454,6 +466,24 @@
                 emptyState.classList.remove('d-none');
             }
         }
+
+        document.getElementById('notificationFilter').addEventListener('change', function () {
+            const filter = this.value;
+
+            document.querySelectorAll('.notification-card').forEach(card => {
+                const status = card.dataset.status; // SEND or READ
+
+                // reset first
+                card.classList.remove('d-none');
+
+                if (filter === 'unread') {
+                    if (status !== 'SEND') {
+                        card.classList.add('d-none');
+                    }
+                }
+            });
+        });
     </script>
 </body>
+
 </html>

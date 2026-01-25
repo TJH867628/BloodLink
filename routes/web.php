@@ -37,12 +37,19 @@ Route::middleware(['role:STAFF','auth'])->group(function () {
     Route::get('medical_facilities/donationManagement', [MedicalFacilitiesController::class, 'donationManagement'])->name('medical_facilities.donationManagement');
     Route::get('medical_facilities/bloodManagement', [MedicalFacilitiesController::class, 'bloodManagement'])->name('medical_facilities.bloodManagement');
     Route::get('medical_facilities/profile', [MedicalFacilitiesController::class, 'profile'])->name('medical_facilities.profile');
+    Route::get('medical_facilities/exportInventory', [MedicalFacilitiesController::class, 'exportInventoryReport'])->name('medical.exportInventory');
+    Route::get('medical_facilities/exportUsage', [MedicalFacilitiesController::class, 'exportUsageReport'])->name('medical.exportUsage');
+    Route::get('medical_facilities/exportWastage', [MedicalFacilitiesController::class, 'exportWastageReport'])->name('medical.exportWastage');
+    Route::get('medical_facilities/exportDonationRecords', [MedicalFacilitiesController::class, 'exportDonationRecords'])->name('medical.exportDonationRecords');
+    Route::get('medical_facilities/notification', [MedicalFacilitiesController::class, 'notification'])->name('medical_facilities.notification');
 
     Route::post('medical_facilities/recordDonationResult/{appointment_id}', [MedicalFacilitiesController::class, 'recordDonationResult'])->name('medical_facilities.recordDonationResult');
     Route::post('medical_facilities/updateProfile', [MedicalFacilitiesController::class, 'updateProfile'])->name('medical_facilities.updateProfile');
     Route::post('medical_facilities/useBloodBags', [MedicalFacilitiesController::class, 'useBloodBags'])->name('medical_facilities.useBloodBags');
     Route::post('medical_facilities/updateProfile', [MedicalFacilitiesController::class, 'updateProfile'])->name('medical_facilities.updateProfile');
     Route::post('medical_facilities/changePassword', [MedicalFacilitiesController::class, 'changePassword'])->name('medical_facilities.changePassword');
+    Route::post('medical_facilities/markNotificationRead/{notificationId}', [MedicalFacilitiesController::class, 'markNotificationAsRead'])->name('medical_facilities.markNotificationRead');
+    Route::post('medical_facilities/markAllNotificationsRead', [MedicalFacilitiesController::class, 'markAllNotificationsAsRead'])->name('medical_facilities.markAllNotificationsRead');
 });
 Route::middleware(['role:ORGANIZER','auth'])->group(function () {
     Route::get('event_organizer/dashboard', [EventOrganizerController::class, 'eventOrganizerDashboard'])->name('event_organizer.dashboard');
@@ -69,6 +76,13 @@ Route::middleware(['role:ADMIN','auth'])->group(function () {
     Route::get('admin/systemModification', [App\Http\Controllers\AdminController::class, 'systemModification'])->name('admin.systemModification');
     Route::get('admin/auditReport', [App\Http\Controllers\AdminController::class, 'auditReport'])->name('admin.auditReport');
     Route::get('admin/inventory', [App\Http\Controllers\AdminController::class, 'inventory'])->name('admin.inventory');
+    Route::get('admin/exportBloodInventory', [App\Http\Controllers\AdminController::class, 'exportBloodInventory'])->name('admin.exportBloodInventory');
+    Route::get('admin/exportBloodUsage', [App\Http\Controllers\AdminController::class, 'exportBloodUsage'])->name('admin.exportBloodUsage');
+    Route::get('admin/exportBloodWastage', [App\Http\Controllers\AdminController::class, 'exportBloodWastage'])->name('admin.exportBloodWastage');
+    Route::get('admin/exportDonationRecords', [App\Http\Controllers\AdminController::class, 'exportDonationRecords'])->name('admin.exportDonationRecords');
+    Route::get('admin/exportEvent', [App\Http\Controllers\AdminController::class, 'exportEvent'])->name('admin.exportEvent');
+    Route::get('admin/exportUserSummary', [App\Http\Controllers\AdminController::class, 'exportUserSummary'])->name('admin.exportUserSummary');
+    Route::get('admin/notification', [App\Http\Controllers\AdminController::class, 'notification'])->name('admin.notification');
 
     Route::post('admin/toggleUserActivation/{userId}', [App\Http\Controllers\AdminController::class, 'toggleUserActivation'])->name('admin.toggleUserActivation');
     Route::post('admin/createUser', [App\Http\Controllers\AdminController::class, 'createUser'])->name('admin.createUser');
@@ -76,4 +90,6 @@ Route::middleware(['role:ADMIN','auth'])->group(function () {
     Route::post('admin/createMedicalFacility', [App\Http\Controllers\AdminController::class, 'createMedicalFacility'])->name('admin.createMedicalFacility');
     Route::post('admin/editMedicalFacility/{facilityId}', [App\Http\Controllers\AdminController::class, 'editMedicalFacility'])->name('admin.editMedicalFacility');
     Route::post('admin/updateSystemSettings', [App\Http\Controllers\AdminController::class, 'updateSystemSettings'])->name('admin.updateSystemSettings');
+    Route::post('admin/markNotificationRead/{notificationId}', [App\Http\Controllers\AdminController::class, 'markNotificationAsRead'])->name('admin.markNotificationRead');
+    Route::post('admin/markAllNotificationsRead', [App\Http\Controllers\AdminController::class, 'markAllNotificationsAsRead'])->name('admin.markAllNotificationsRead');
 });

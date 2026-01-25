@@ -223,15 +223,18 @@ class EventOrganizerController extends Controller
             'timestamp' => now(),
         ]);
 
+        sendSystemNotification($appointment->donor, 'Your appointment for the event "' . $event->name . '" on ' . $event->date . ' has been rejected.');
+
         return redirect()->back()->with('success', 'Appointment rejected successfully.');
     }
 
     public function notification () {
         $user = Auth::user();
         $notifications = NotificationModel::where('user_id', $user->id)
+            ->orderByRaw("status = 'READ'")
             ->orderBy('datetime', 'desc')
             ->get();
-        return view('donor.notification', compact('user','notifications'));
+        return view('event_organizer.notification', compact('user','notifications'));
     }
 
     public function markNotificationAsRead(Request $request, $notificationId) {

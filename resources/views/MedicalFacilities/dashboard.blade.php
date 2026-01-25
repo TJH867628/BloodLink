@@ -66,7 +66,8 @@
         }
 
         .nav-icon {
-            width: 32px;              /* FIXED WIDTH */
+            width: 32px;
+            /* FIXED WIDTH */
             display: flex;
             justify-content: center;
             font-size: 1rem;
@@ -159,8 +160,8 @@
             letter-spacing: 0.05em;
         }
 
-                /* Remove default link styles */
-                .logout-link {
+        /* Remove default link styles */
+        .logout-link {
             text-decoration: none;
             color: inherit;
         }
@@ -212,12 +213,16 @@
                 <div class="brand-icon"><i class="fas fa-droplet"></i></div>
                 <span class="fw-bold">BloodLink</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span class="navbar-toggler-icon"></span></button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span
+                    class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="mobileMenu">
                 <ul class="navbar-nav mt-3">
-                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="/medical_facilities/dashboard">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/inventory">Inventory & Reports</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/donationManagement">Donation Management</a></li>
+                    <li class="nav-item"><a class="nav-link fw-bold text-danger"
+                            href="/medical_facilities/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/inventory">Inventory &
+                            Reports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/donationManagement">Donation
+                            Management</a></li>
                 </ul>
             </div>
         </div>
@@ -230,11 +235,17 @@
             <span class="fs-4 fw-bolder text-dark">BloodLink</span>
         </div>
         <nav class="nav flex-column mt-2 w-100">
-            <div class="px-4 pb-2 text-label" style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Hospital Portal</div>
-            <a href="/medical_facilities/dashboard" class="nav-link active"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
-            <a href="/medical_facilities/inventory" class="nav-link"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
-            <a href="/medical_facilities/donationManagement" class="nav-link"><i class="fas fa-user-nurse w-25"></i> Donation Management</a>
-            <a href="/medical_facilities/bloodManagement" class="nav-link"><i class="fas fa-exchange-alt w-25"></i>Blood<br> Management</a>
+            <div class="px-4 pb-2 text-label"
+                style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Hospital Portal
+            </div>
+            <a href="/medical_facilities/dashboard" class="nav-link active"><i class="fas fa-chart-pie w-25"></i>
+                Dashboard</a>
+            <a href="/medical_facilities/inventory" class="nav-link"><i class="fas fa-box-open w-25"></i> Inventory &
+                Reports</a>
+            <a href="/medical_facilities/donationManagement" class="nav-link"><i class="fas fa-user-nurse w-25"></i>
+                Donation Management</a>
+            <a href="/medical_facilities/bloodManagement" class="nav-link"><i
+                    class="fas fa-exchange-alt w-25"></i>Blood<br> Management</a>
             <a href="/medical_facilities/profile" class="nav-link"><i class="fas fa-hospital w-25"></i> Profile</a>
         </nav>
         </nav>
@@ -262,138 +273,116 @@
             <div class="d-flex align-items-center gap-4">
                 <div class="d-none d-md-block border-start h-50 mx-2"></div>
                 <div class="d-flex align-items-center gap-3">
+                    <a href="/medical_facilities/notification" class="btn border-0 position-relative text-secondary">
+                        <i class="fas fa-bell fa-lg"></i>
+                        @if($hasUnreadNotifications)
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                        @endif
+                    </a>
                     <div class="text-end d-none d-md-block">
                         <div class="fw-bold small">Hospital Staff</div>
                         <div class="text-label text-success">Staff</div>
                     </div>
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hospital" class="rounded-3 border" width="40" height="40" alt="Avatar">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hospital" class="rounded-3 border"
+                        width="40" height="40" alt="Avatar">
                 </div>
             </div>
         </header>
 
-        <!-- Stats Grid -->
         <div class="row g-4 mb-5">
-            <div class="col-md-3">
+
+            <!-- Total Inventory -->
+            <div class="col-md-4">
                 <div class="stat-card">
-                    <div class="text-label">Total Inventory</div>
+                    <div class="text-label">Total Blood Units</div>
                     <div class="d-flex align-items-end justify-content-between mt-2">
-                        <h2 class="fw-black mb-0">150</h2>
+                        <h2 class="fw-black mb-0">{{ $total_inventory }}</h2>
                         <span class="text-muted small fw-bold">Units</span>
                     </div>
-                    <div class="progress progress-thin">
-                        <div class="progress-bar bg-danger" style="width: 65%"></div>
+                    <div class="mt-2 text-muted" style="font-size: 0.75rem;">
+                        All stored blood in this hospital
                     </div>
-                    <div class="mt-2 text-muted" style="font-size: 0.75rem;">65% Storage Capacity</div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="stat-card">
-                    <div class="text-label text-danger">Urgent Requests</div>
-                    <div class="d-flex align-items-end justify-content-between mt-2">
-                        <h2 class="fw-black mb-0 text-danger">03</h2>
-                        <span class="badge bg-danger-subtle text-danger">Action Req.</span>
-                    </div>
-                    <div class="mt-3 text-muted" style="font-size: 0.75rem;">Pending broadcasts to donors</div>
-                </div>
-            </div>
-            <div class="col-md-3">
+
+            <!-- Expiring Soon -->
+            <div class="col-md-4">
                 <div class="stat-card border-warning">
                     <div class="text-label text-warning">Expiring Soon</div>
                     <div class="d-flex align-items-end justify-content-between mt-2">
-                        <h2 class="fw-black mb-0 text-warning">05</h2>
+                        <h2 class="fw-black mb-0 text-warning">{{ $expiring_soon_count }}</h2>
                         <span class="text-muted small fw-bold">Units</span>
                     </div>
-                    <div class="mt-3 text-muted" style="font-size: 0.75rem;">Expire within 48 hours</div>
+                    <div class="mt-3 text-muted" style="font-size: 0.75rem;">
+                        Blood expiring within 7 days
+                    </div>
                 </div>
             </div>
-            <div class="col-md-3">
+
+            <!-- Today's Queue -->
+            <div class="col-md-4">
                 <div class="stat-card">
                     <div class="text-label text-primary">Today's Queue</div>
                     <div class="d-flex align-items-end justify-content-between mt-2">
-                        <h2 class="fw-black mb-0 text-primary">12</h2>
-                        <span class="text-muted small fw-bold">Donors</span>
+                        <h2 class="fw-black mb-0 text-primary">{{ $today_pending }}</h2>
+                        <span class="text-muted small fw-bold">Waiting</span>
                     </div>
-                    <div class="mt-3 text-muted" style="font-size: 0.75rem;">8 Processed • 4 Pending</div>
+                    <div class="mt-3 text-muted" style="font-size: 0.75rem;">
+                        Donors still waiting to be processed
+                    </div>
                 </div>
             </div>
+
         </div>
 
-        <!-- Real-time Stock -->
-        <div class="card border-0 shadow-sm p-4 p-lg-5" style="border-radius: 24px;">
+        ◊<div class="card border-0 shadow-sm p-4 p-lg-5" style="border-radius: 24px;">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h4 class="fw-bold mb-0"><i class="fas fa-heartbeat text-danger me-2"></i> Real-time Stock Levels</h4>
+                <h4 class="fw-bold mb-0">
+                    <i class="fas fa-heartbeat text-danger me-2"></i>
+                    Blood Stock Levels
+                </h4>
             </div>
-            <div class="stock-grid">
-                <!-- O+ -->
-                <div class="blood-type-card">
-                    <div class="text-label mb-1">O+</div>
-                    <div class="fs-4 fw-black text-dark">45</div>
-                    <div class="progress progress-thin">
-                        <div class="progress-bar bg-success" style="width: 80%"></div>
+
+            <div class="row g-3">
+
+                @foreach($bloodStocks as $stock)
+                    @php
+                        $danger = $stock->status == 'CRITICAL';
+                        $warning = $stock->status == 'LOW_STOCK';
+                    @endphp
+
+                    <div class="col-6 col-md-3">
+                        <div class="blood-type-card
+                            {{ $danger ? 'bg-danger-subtle border-danger' : '' }}
+                            {{ $warning ? 'bg-warning-subtle border-warning' : '' }}
+                        ">
+                            <div class="text-label {{ $danger ? 'text-danger' : ($warning ? 'text-warning' : '') }}">
+                                {{ $stock->blood_type }}
+                            </div>
+
+                            <div class="fs-4 fw-black {{ $danger ? 'text-danger' : ($warning ? 'text-warning' : '') }}">
+                                {{ $stock->quantity }}
+                            </div>
+
+                            <div class="small text-muted">
+                                @if($stock->status == 'OPTIMAL')
+                                    <i class="fas fa-check-circle text-success"></i><br> OPTIMAL
+                                @elseif($stock->status == 'CRITICAL')
+                                    <i class="fas fa-exclamation-triangle text-danger"></i><br> CRITICAL
+                                @elseif($stock->status == 'LOW_STOCK')
+                                    <i class="fas fa-exclamation-triangle text-warning"></i><br> LOW STOCK
+                                @endif
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <!-- O- -->
-                <div class="blood-type-card bg-danger-subtle border-danger">
-                    <div class="text-label text-danger mb-1">O-</div>
-                    <div class="fs-4 fw-black text-danger">04</div>
-                    <div class="progress progress-thin">
-                        <div class="progress-bar bg-danger" style="width: 15%"></div>
-                    </div>
-                </div>
-                <!-- A+ -->
-                <div class="blood-type-card">
-                    <div class="text-label mb-1">A+</div>
-                    <div class="fs-4 fw-black text-dark">32</div>
-                    <div class="progress progress-thin">
-                        <div class="progress-bar bg-success" style="width: 60%"></div>
-                    </div>
-                </div>
-                <!-- A- -->
-                <div class="blood-type-card">
-                    <div class="text-label mb-1">A-</div>
-                    <div class="fs-4 fw-black text-dark">12</div>
-                    <div class="progress progress-thin">
-                        <div class="progress-bar bg-warning" style="width: 40%"></div>
-                    </div>
-                </div>
-                <!-- B+ -->
-                <div class="blood-type-card">
-                    <div class="text-label mb-1">B+</div>
-                    <div class="fs-4 fw-black text-dark">28</div>
-                    <div class="progress progress-thin">
-                        <div class="progress-bar bg-success" style="width: 70%"></div>
-                    </div>
-                </div>
-                <!-- B- -->
-                <div class="blood-type-card">
-                    <div class="text-label mb-1">B-</div>
-                    <div class="fs-4 fw-black text-dark">08</div>
-                    <div class="progress progress-thin">
-                        <div class="progress-bar bg-warning" style="width: 30%"></div>
-                    </div>
-                </div>
-                <!-- AB+ -->
-                <div class="blood-type-card">
-                    <div class="text-label mb-1">AB+</div>
-                    <div class="fs-4 fw-black text-dark">15</div>
-                    <div class="progress progress-thin">
-                        <div class="progress-bar bg-success" style="width: 50%"></div>
-                    </div>
-                </div>
-                <!-- AB- -->
-                <div class="blood-type-card bg-danger-subtle border-danger">
-                    <div class="text-label text-danger mb-1">AB-</div>
-                    <div class="fs-4 fw-black text-danger">02</div>
-                    <div class="progress progress-thin">
-                        <div class="progress-bar bg-danger" style="width: 10%"></div>
-                    </div>
-                </div>
+
+                @endforeach
+
             </div>
         </div>
 
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

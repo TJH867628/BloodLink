@@ -249,7 +249,8 @@
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
                 <div class="brand-icon"><i class="fas fa-droplet"></i></div> <span class="fw-bold">BloodLink</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span class="navbar-toggler-icon"></span></button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span
+                    class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="mobileMenu">
                 <ul class="navbar-nav mt-3">
                     <li class="nav-item"><a class="nav-link" href="donor_dashboard.html">Dashboard</a></li>
@@ -262,15 +263,19 @@
     <!-- Sidebar (Example using Donor Context) -->
     <div class="sidebar d-none d-lg-flex">
         <div class="brand-section">
-            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span class="fs-4 fw-bolder text-dark">BloodLink</span>
+            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span
+                class="fs-4 fw-bolder text-dark">BloodLink</span>
         </div>
         <nav class="nav flex-column mt-2 w-100">
-            <div class="px-4 pb-2 text-label" style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Hospital Portal</div>
-            <a href="/medical_facilities/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
-            <a href="/medical_facilities/inventory" class="nav-link"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
-            <a href="/medical_facilities/donationManagement" class="nav-link"><i class="fas fa-user-nurse w-25"></i> Donation Management</a>
-            <a href="/medical_facilities/bloodManagement" class="nav-link"><i class="fas fa-exchange-alt w-25"></i> Blood Management</a>
-            <a href="/medical_facilities/profile" class="nav-link"><i class="fas fa-hospital w-25"></i> Profile</a>
+            <div class="px-4 pb-2 text-label">Organizer Portal</div>
+            <a href="/event_organizer/dashboard" class="nav-link active"><span class="nav-icon"><i
+                        class="fas fa-chart-pie w-25"></i></span> Dashboard</a>
+            <a href="/event_organizer/eventManagement" class="nav-link"><span class="nav-icon"><i
+                        class="fas fa-calendar-alt w-25"></i></span> Event Management</a>
+            <a href="/event_organizer/participation" class="nav-link"><span class="nav-icon"><i
+                        class="fas fa-users w-25"></i></span> Participation</a>
+            <a href="/event_organizer/profile" class="nav-link"><span class="nav-icon"><i
+                        class="fas fa-id-card"></i></span> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">
@@ -292,86 +297,97 @@
             <h2 class="fw-black mb-0">Notifications</h2>
             <p class="text-muted small fw-medium mt-1">Manage your alerts and system messages.</p>
         </header>
-
         <!-- Action Bar -->
         <div class="action-bar shadow-sm">
             <div class="d-flex align-items-center gap-3">
                 <span class="fw-bold text-dark">Filter:</span>
-                <select class="form-select form-select-sm rounded-pill border-secondary-subtle" style="width: 150px;">
+                <select id="notificationFilter" class="form-select form-select-sm rounded-pill border-secondary-subtle"
+                    style="width: 150px;">
                     <option value="all">All Notifications</option>
                     <option value="unread">Unread Only</option>
-                    <option value="urgent">Urgent</option>
                 </select>
             </div>
             <div class="d-flex gap-2">
-                <button class="btn btn-light btn-sm fw-bold border rounded-pill px-3" onclick="markAllAsRead()"><i class="fas fa-check-double me-2"></i> Mark all as read</button>
-                <button class="btn btn-outline-danger btn-sm fw-bold rounded-pill px-3" onclick="deleteAll()"><i class="fas fa-trash-alt me-2"></i> Clear All</button>
+                <form method="POST" action="{{ route('medical_facilities.markAllNotificationsRead') }}">
+                    @csrf
+                    <button class="btn btn-sm btn-outline-secondary w-100 mb-2">
+                        Mark All as Read
+                    </button>
+                </form>
             </div>
         </div>
 
         <div id="notificationList">
-            <!-- Item 1: Urgent (Unread) -->
-            <div class="notification-card unread d-flex gap-3 align-items-start" id="notif-1">
-                <div class="icon-circle bg-urgent">
-                    <i class="fas fa-exclamation-circle"></i>
-                </div>
-                <div class="grow">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <h6 class="fw-bold mb-0 text-dark notif-title">Urgent Blood Request: O+ Needed <span class="unread-dot"></span></h6>
-                        <span class="time-badge">2 mins ago</span>
-                    </div>
-                    <p class="text-muted small mb-0 lh-sm">City Central Hospital has issued an urgent request for O+ blood type. Click to book an immediate slot.</p>
-                </div>
-                <div class="dropdown">
-                    <button class="btn btn-link text-muted p-0" data-bs-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></button>
-                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
-                        <li><a class="dropdown-item small fw-bold" href="#" onclick="markRead('notif-1')">Mark as read</a></li>
-                        <li><a class="dropdown-item small fw-bold text-danger" href="#" onclick="deleteNotif('notif-1')">Delete</a></li>
-                    </ul>
-                </div>
-            </div>
+            @forelse($notifications as $notif)
+                <div class="notification-card  {{ $notif->status == 'SEND' ? 'unread' : 'read' }} d-flex gap-3 align-items-start"
+                    id="notif-{{ $notif->id }}" data-status="{{ $notif->status }}">
 
-            <!-- Item 2: Appointment (Unread) -->
-            <div class="notification-card unread d-flex gap-3 align-items-start" id="notif-2">
-                <div class="icon-circle bg-info-custom">
-                    <i class="fas fa-calendar-check"></i>
-                </div>
-                <div class="grow">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <h6 class="fw-bold mb-0 text-dark notif-title">Upcoming Appointment <span class="unread-dot"></span></h6>
-                        <span class="time-badge">1 hour ago</span>
+                    <!-- ICON -->
+                    <div class="icon-circle 
+                                @if(str_contains(strtolower($notif->message), 'urgent') || str_contains(strtolower($notif->message), 'emergency'))
+                                    bg-urgent
+                                @elseif(str_contains(strtolower($notif->message), 'appointment'))
+                                    bg-info-custom
+                                @else
+                                    bg-success-custom
+                                @endif
+                            ">
+                        @if(str_contains(strtolower($notif->message), 'urgent') || str_contains(strtolower($notif->message), 'emergency'))
+                            <i class="fas fa-exclamation-circle"></i>
+                        @elseif(str_contains(strtolower($notif->message), 'appointment'))
+                            <i class="fas fa-calendar-check"></i>
+                        @else
+                            <i class="fas fa-clipboard-check"></i>
+                        @endif
                     </div>
-                    <p class="text-muted small mb-0 lh-sm">Reminder: You have a scheduled donation at <strong>Red Cross Annual Drive</strong> tomorrow at 09:00 AM.</p>
-                </div>
-                <div class="dropdown">
-                    <button class="btn btn-link text-muted p-0" data-bs-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></button>
-                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
-                        <li><a class="dropdown-item small fw-bold" href="#" onclick="markRead('notif-2')">Mark as read</a></li>
-                        <li><a class="dropdown-item small fw-bold text-danger" href="#" onclick="deleteNotif('notif-2')">Delete</a></li>
-                    </ul>
-                </div>
-            </div>
 
-            <!-- Item 3: System (Read) -->
-            <div class="notification-card read d-flex gap-3 align-items-start" id="notif-3">
-                <div class="icon-circle bg-success-custom">
-                    <i class="fas fa-clipboard-check"></i>
-                </div>
-                <div class="grow">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <h6 class="fw-bold mb-0 notif-title">Donation Successful</h6>
-                        <span class="time-badge">3 days ago</span>
+                    <!-- CONTENT -->
+                    <div class="grow">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <h6 class="fw-bold mb-0 text-dark notif-title">
+                                {{ Str::limit($notif->message, 40) }}
+                                @if($notif->status == 'SEND')
+                                    <span class="unread-dot"></span>
+                                @endif
+                            </h6>
+                            <span class="time-badge">
+                                {{ \Carbon\Carbon::parse($notif->datetime)->diffForHumans() }}
+                            </span>
+                        </div>
+
+                        <p class="text-muted small mb-0 lh-sm">
+                            {{ $notif->message }}
+                        </p>
                     </div>
-                    <p class="text-muted small mb-0 lh-sm">Your donation record from Dec 30, 2025 has been verified and added to your history.</p>
+
+                    <!-- ACTIONS -->
+                    <div class="dropdown">
+                        <button class="btn btn-link text-muted p-0" data-bs-toggle="dropdown">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
+                            @if($notif->status == 'SEND')
+                                <li>
+                                    <form method="POST"
+                                        action="{{ route('medical_facilities.markNotificationRead', $notif->id) }}">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item small fw-bold">
+                                            Mark as read
+                                        </button>
+                                    </form>
+                                </li>
+                            @endif
+                        </ul>
+                    </div>
+
                 </div>
-                <div class="dropdown">
-                    <button class="btn btn-link text-muted p-0" data-bs-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></button>
-                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
-                        <li><a class="dropdown-item small fw-bold" href="#" onclick="markRead('notif-3')">Mark as read</a></li>
-                        <li><a class="dropdown-item small fw-bold text-danger" href="#" onclick="deleteNotif('notif-3')">Delete</a></li>
-                    </ul>
+            @empty
+                <div class="text-center text-muted py-5">
+                    No notifications yet
                 </div>
-            </div>
+            @endforelse
+
         </div>
 
         <!-- Empty State (Hidden by default) -->
@@ -397,6 +413,10 @@
                 // Remove the red dot if it exists
                 const dot = card.querySelector('.unread-dot');
                 if (dot) dot.remove();
+
+                if (document.getElementById('notificationFilter').value === 'unread') {
+                    card.style.display = 'none';
+                }
             }
         }
 
@@ -444,6 +464,24 @@
                 emptyState.classList.remove('d-none');
             }
         }
+
+        document.getElementById('notificationFilter').addEventListener('change', function () {
+            const filter = this.value;
+
+            document.querySelectorAll('.notification-card').forEach(card => {
+                const status = card.dataset.status; // SEND or READ
+
+                // reset first
+                card.classList.remove('d-none');
+
+                if (filter === 'unread') {
+                    if (status !== 'SEND') {
+                        card.classList.add('d-none');
+                    }
+                }
+            });
+        });
     </script>
 </body>
+
 </html>

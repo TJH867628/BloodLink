@@ -166,13 +166,17 @@
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
                 <div class="brand-icon"><i class="fas fa-droplet"></i></div> <span class="fw-bold">BloodLink</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span class="navbar-toggler-icon"></span></button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span
+                    class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="mobileMenu">
                 <ul class="navbar-nav mt-3">
-                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="/admin/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="/admin/dashboard">Dashboard</a>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="/admin/userManagement">User Management</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/admin/medicalFacilitiesManagement">Hospital Management</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/admin/systemModification">System Modification</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/medicalFacilitiesManagement">Hospital
+                            Management</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/systemModification">System Modification</a>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="/admin/auditReport">Audit & Reports</a></li>
                 </ul>
             </div>
@@ -181,15 +185,18 @@
 
     <div class="sidebar d-none d-lg-flex">
         <div class="brand-section">
-            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span class="fs-4 fw-bolder text-dark">BloodLink</span>
+            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span
+                class="fs-4 fw-bolder text-dark">BloodLink</span>
         </div>
         <nav class="nav flex-column mt-2 w-100">
             <div class="px-4 pb-2 text-label">Admin Portal</div>
             <a href="/admin/dashboard" class="nav-link active"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
             <a href="/admin/userManagement" class="nav-link"><i class="fas fa-users w-25"></i> User Management</a>
-            <a href="/admin/medicalFacilitiesManagement" class="nav-link"><i class="fas fa-hospital w-25"></i>Medical Facilities Management</a>
+            <a href="/admin/medicalFacilitiesManagement" class="nav-link"><i class="fas fa-hospital w-25"></i>Medical
+                Facilities Management</a>
             <a href="/admin/inventory" class="nav-link"><i class="fas fa-hospital w-25"></i>Blood Inventories</a>
-            <a href="/admin/systemModification" class="nav-link"><i class="fas fa-cogs w-25"></i> System Modification</a>
+            <a href="/admin/systemModification" class="nav-link"><i class="fas fa-cogs w-25"></i> System
+                Modification</a>
             <a href="/admin/auditReport" class="nav-link"><i class="fas fa-file-alt w-25"></i> Audit & Reports</a>
         </nav>
         <div class="mt-auto border-top p-3">
@@ -211,20 +218,29 @@
                 <h2 class="fw-black mb-0">Admin Dashboard</h2>
             </div>
             <div class="d-flex align-items-center gap-3">
+                <a href="/admin/notification" class="btn border-0 position-relative text-secondary">
+                    <i class="fas fa-bell fa-lg"></i>
+                    @if($hasUnreadNotifications)
+                        <span
+                            class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                    @endif
+                </a>
                 <div class="text-end d-none d-md-block">
                     <div class="fw-bold small">System Admin</div>
                     <div class="text-label text-primary">Admin</div>
                 </div>
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" class="rounded-3 border" width="40" height="40" alt="Avatar">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" class="rounded-3 border" width="40"
+                    height="40" alt="Avatar">
             </div>
-        </header>   
+        </header>
         @if($emergencyMode == 1)
-        <div class="alert alert-danger d-flex align-items-center" role="alert">
-            <i class="fas fa-exclamation-triangle me-2"></i>
-            <div>
-                <strong>Emergency Mode is Enabled!</strong> The system is currently in emergency mode. Donation intervals have been reduced to 2 months.
+            <div class="alert alert-danger d-flex align-items-center" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <div>
+                    <strong>Emergency Mode is Enabled!</strong> The system is currently in emergency mode. Donation
+                    intervals have been reduced to 2 months.
+                </div>
             </div>
-        </div>
         @endif
         <div class="row g-4 mb-5">
             <div class="col-md-4">
@@ -269,37 +285,37 @@
                     </thead>
                     <tbody>
                         @forelse($logs as $log)
-                        <tr>
-                            <td class="small text-muted">
-                                {{ \Carbon\Carbon::parse($log->timestamp)->format('h:i A') }}
-                            </td>
+                            <tr>
+                                <td class="small text-muted">
+                                    {{ \Carbon\Carbon::parse($log->timestamp)->format('h:i A') }}
+                                </td>
 
-                            <td>
-                                <div class="fw-bold">{{ $log->user->name }}</div>
-                                <div class="text-muted small">
-                                    ID {{ $log->user_id }} • 
-                                    <span class="
-                                        @if($log->user->role == 'ADMIN') text-danger
-                                        @elseif($log->user->role == 'HOSPITAL') text-primary
-                                        @elseif($log->user->role == 'DONOR') text-success
-                                        @else text-secondary
-                                        @endif
-                                    ">
-                                        {{ $log->user->role }}
-                                    </span>
-                                </div>
-                            </td>
+                                <td>
+                                    <div class="fw-bold">{{ $log->user->name }}</div>
+                                    <div class="text-muted small">
+                                        ID {{ $log->user_id }} •
+                                        <span class="
+                                            @if($log->user->role == 'ADMIN') text-danger
+                                            @elseif($log->user->role == 'HOSPITAL') text-primary
+                                            @elseif($log->user->role == 'DONOR') text-success
+                                            @else text-secondary
+                                            @endif
+                                        ">
+                                            {{ $log->user->role }}
+                                        </span>
+                                    </div>
+                                </td>
 
-                            <td class="fw-semibold">
-                                {{ $log->action }}
-                            </td>
-                        </tr>
+                                <td class="fw-semibold">
+                                    {{ $log->action }}
+                                </td>
+                            </tr>
                         @empty
-                        <tr>
-                            <td colspan="3" class="text-center text-muted py-3">
-                                No activity yet
-                            </td>
-                        </tr>
+                            <tr>
+                                <td colspan="3" class="text-center text-muted py-3">
+                                    No activity yet
+                                </td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>

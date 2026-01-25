@@ -13,23 +13,107 @@ use App\Models\BloodBag;
 use DB;
 use Carbon\Carbon;
 use App\Models\SystemSettings;
+use Maatwebsite\Excel\Excel as ExcelFormat;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\BloodUsageExport;
+use App\Exports\InventoryExport;
+use App\Exports\WastageExport;
+use App\Exports\DonationHistoryExport;
+use App\Models\Notification as NotificationModel;
+use Illuminate\Support\Facades\Auth;
 
 class MedicalFacilitiesController extends Controller
 {
-    //
     public function medicalFacilitiesDashboard()
     {
         $user = auth()->user();
         $medical_facility_id = $user->facility_id;
-        $medical_facility = MedicalFacility::find($medical_facility_id)->first();
-        return view('MedicalFacilities.dashboard',compact('user','medical_facility'));
+
+        $medical_facility = MedicalFacility::find($medical_facility_id);
+
+        $total_inventory = BloodInventory::where('medical_facilities_id', $medical_facility_id)
+            ->sum('quantity');
+
+        $expiring_soon_count = BloodBag::where('facility_id', $medical_facility_id)
+            ->where('status', 'STORED')
+            ->whereBetween('expires_at', [now(), now()->addDays(2)])
+            ->count();
+
+        $today_total = Appointment::whereHas('event', function ($q) use ($medical_facility_id) {
+            $q->whereDate('date', today());
+        })->count();
+
+        $today_completed = Appointment::where('status', 'COMPLETED')
+            ->whereHas('event', function ($q) use ($medical_facility_id) {
+                $q->whereDate('date', today());
+            })->count();
+
+        $today_pending = $today_total - $today_completed;
+
+        $bloodStocks = BloodInventory::where('medical_facilities_id', $medical_facility_id)
+            ->get()
+            ->keyBy('blood_type');
+        
+        $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
+            ->where('status', 'SEND')
+            ->exists();
+
+        return view('MedicalFacilities.dashboard', compact(
+            'user',
+            'medical_facility',
+            'total_inventory',
+            'expiring_soon_count',
+            'today_total',
+            'today_completed',
+            'today_pending',
+            'bloodStocks',
+            'hasUnreadNotifications'
+        ));
+    }
+
+    public function notification()
+    {
+        $user = auth()->user();
+        $notifications = NotificationModel::where('user_id', $user->id)
+            ->orderByRaw("status = 'READ'")
+            ->orderBy('datetime', 'desc')
+            ->paginate(10);
+
+        return view('MedicalFacilities.notification', compact('user', 'notifications'));
+    }
+
+public function markNotificationAsRead(Request $request, $notificationId) {
+        $user = Auth::user();
+
+        $notification = NotificationModel::where('id', $notificationId)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (!$notification) {
+            return redirect()->back()->with('error', 'Notification not found.');
+        }
+
+        $notification->status = 'READ';
+        $notification->save();
+
+        return redirect()->back()->with('success', 'Notification marked as read.');
+    }
+
+    public function markAllNotificationsAsRead(Request $request) {
+        $user = Auth::user();
+
+        NotificationModel::where('user_id', $user->id)
+            ->where('status', 'SEND')
+            ->update(['status' => 'READ']);
+
+        return redirect()->back()->with('success', 'All notifications marked as read.');
     }
 
     public function inventory_and_report()
     {
         $user = auth()->user();
         $blood_inventories = BloodInventory::where('medical_facilities_id', auth()->user()->facility_id)->get();
-        return view('MedicalFacilities.inventory',compact('user', 'blood_inventories'));
+        return view('MedicalFacilities.inventory', compact('user', 'blood_inventories'));
     }
 
     public function donationManagement()
@@ -62,26 +146,26 @@ class MedicalFacilitiesController extends Controller
                 'donation_record.status',
                 'users.name as donor_name'
             )
-        ->get();
+            ->get();
 
         $donationHistory = DB::table('donation_record')
-        ->join('users', 'donation_record.donor_id', '=', 'users.id')
-        ->join('donor_health_details', 'donation_record.donor_id', '=', 'donor_health_details.donor_id')
-        ->where('donation_record.facility_id', auth()->user()->facility_id)
-        ->orderBy('donation_record.collected_date', 'desc')
-        ->limit(50)
-        ->select(
-            'donation_record.collected_date',
-            'donation_record.status',
-            'donation_record.hemoglobin_level',
-            'donation_record.blood_pressure',
-            'users.name as donor_name',
-            'users.id as donor_id',
-            'donor_health_details.blood_type'
-        )
-        ->get();
+            ->join('users', 'donation_record.donor_id', '=', 'users.id')
+            ->join('donor_health_details', 'donation_record.donor_id', '=', 'donor_health_details.donor_id')
+            ->where('donation_record.facility_id', auth()->user()->facility_id)
+            ->orderBy('donation_record.collected_date', 'desc')
+            ->limit(50)
+            ->select(
+                'donation_record.collected_date',
+                'donation_record.status',
+                'donation_record.hemoglobin_level',
+                'donation_record.blood_pressure',
+                'users.name as donor_name',
+                'users.id as donor_id',
+                'donor_health_details.blood_type'
+            )
+            ->get();
 
-        return view('MedicalFacilities.donationManagement', compact('user', 'donation_today','donationHistory','recentRecords'));
+        return view('MedicalFacilities.donationManagement', compact('user', 'donation_today', 'donationHistory', 'recentRecords'));
     }
 
     public function profile()
@@ -129,7 +213,7 @@ class MedicalFacilitiesController extends Controller
             return redirect()->back()->with('error', 'New password and confirmation do not match.');
         }
 
-        if($request->input('current_password') === $request->input('new_password')) {
+        if ($request->input('current_password') === $request->input('new_password')) {
             return redirect()->back()->with('error', 'New password cannot be the same as the current password.');
         }
 
@@ -173,7 +257,7 @@ class MedicalFacilitiesController extends Controller
         $bloodBags = $query->paginate(10)->withQueryString();
 
         $historyQuery = BloodBag::where('facility_id', $user->facility_id)
-            ->whereIn('status', ['USED','EXPIRED']);
+            ->whereIn('status', ['USED', 'EXPIRED']);
 
         if ($request->filled('history_status')) {
             $historyQuery->where('status', $request->history_status);
@@ -188,13 +272,13 @@ class MedicalFacilitiesController extends Controller
             ->paginate(10, ['*'], 'history_page')
             ->withQueryString();
 
-        return view('MedicalFacilities.bloodManagement', compact('bloodBags','user','history'));
+        return view('MedicalFacilities.bloodManagement', compact('bloodBags', 'user', 'history'));
     }
 
-    public function recordDonationResult(Request $request,int $appointmentId)
+    public function recordDonationResult(Request $request, int $appointmentId)
     {
-        $minHemoglobin = SystemSettings::where('name','min_hemoglobin')->value('value');
-        if($request->input('hemoglobin_level') < $minHemoglobin) {
+        $minHemoglobin = SystemSettings::where('name', 'min_hemoglobin')->value('value');
+        if ($request->input('hemoglobin_level') < $minHemoglobin) {
             return redirect()->back()->with('error', 'Hemoglobin level is below the minimum required level of ' . $minHemoglobin . ' g/dL.');
         }
         $appointment = Appointment::where('id', $appointmentId)->first();
@@ -205,27 +289,27 @@ class MedicalFacilitiesController extends Controller
         $donorHealthDetails->save();
 
         $bags = $request->input('unit');
-        for($i = 0; $i < $bags; $i++){
+        for ($i = 0; $i < $bags; $i++) {
             DonationRecord::create([
-                'appointment_id'    => $appointment->id,
-                'donor_id'          => $appointment->donor_id,
-                'event_id'          => $appointment->event_id,
-                'facility_id'       => auth()->user()->facility_id,
-                'hemoglobin_level'  => $request->input('hemoglobin_level'),
-                'blood_pressure'   => $request->input('blood_pressure'),
-                'unit'             => 1,
-                'status'           => $request->input('donation_status'),
-                'staff_id'        => auth()->user()->id,
-                'collected_date'   => now(),
+                'appointment_id' => $appointment->id,
+                'donor_id' => $appointment->donor_id,
+                'event_id' => $appointment->event_id,
+                'facility_id' => auth()->user()->facility_id,
+                'hemoglobin_level' => $request->input('hemoglobin_level'),
+                'blood_pressure' => $request->input('blood_pressure'),
+                'unit' => 1,
+                'status' => $request->input('donation_status'),
+                'staff_id' => auth()->user()->id,
+                'collected_date' => now(),
                 'expiration_date' => now()->addDays(42),
-                'notes'            => $request->input('notes'),
+                'notes' => $request->input('notes'),
             ]);
         }
-        
+
         $appointment->status = 'COMPLETED';
         $appointment->save();
 
-        if($request->input('donation_status') === 'SUCCESSFUL') {
+        if ($request->input('donation_status') === 'SUCCESSFUL') {
             $bloodInventory = BloodInventory::where('medical_facilities_id', auth()->user()->facility_id)
                 ->where('blood_type', $donorHealthDetails->blood_type)
                 ->first();
@@ -292,8 +376,55 @@ class MedicalFacilitiesController extends Controller
             'timestamp' => now(),
         ]);
 
-        
+
         return redirect()->back()->with('success', 'Selected blood bags have been marked as used.');
     }
-    
+
+    public function exportInventoryReport(Request $request)
+    {
+        $facilityId = auth()->user()->facility_id;
+        $now = now()->toDateString();
+        $format = $request->input('format', 'xlsx');
+        $facility_name = MedicalFacility::find($facilityId)->name;
+
+        return Excel::download(new InventoryExport($facilityId), 'blood_inventory_' . $facility_name . '_' . $now . '.' . $format);
+    }
+
+    public function exportUsageReport(Request $request)
+    {
+        $facilityId = auth()->user()->facility_id;
+        $from = $request->input('from') ?? '1900-01-01';
+        $to = $request->input('to') ?? '2100-12-31';
+        $format = $request->input('format', 'xlsx');
+
+        if ($from > $to) {
+            return redirect()->back()->with('error', 'Invalid date range: "From" date cannot be later than "To" date.');
+        }
+
+        return Excel::download(
+            new BloodUsageExport($facilityId, $from, $to),
+            'blood_usage_' . $from . '_to_' . $to . '.' . $format
+        );
+    }
+
+    public function exportWastageReport(Request $request)
+    {
+        $facilityId = auth()->user()->facility_id;
+        $from = $request->input('from') ?? '1900-01-01';
+        $to = $request->input('to') ?? '2100-12-31';
+
+        return Excel::download(
+            new WastageExport($facilityId, $from, $to),
+            'blood_wastage_' . $from . '_to_' . $to . '.xlsx'
+        );
+    }
+
+    public function exportDonationRecords(Request $request)
+    {
+        $facilityName = MedicalFacility::find(auth()->user()->facility_id)->name;
+        return Excel::download(
+            new DonationHistoryExport(),
+            'donation_records_' . $facilityName . "_" . now()->toDateString() . '.xlsx'
+        );
+    }
 }

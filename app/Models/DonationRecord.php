@@ -33,4 +33,9 @@ class DonationRecord extends Model
     {
         return $this->belongsTo(MedicalFacility::class, 'facility_id');
     }
+
+    public function donor()
+    {
+        return $this->belongsTo(User::class, 'donor_id');
+    }
 }

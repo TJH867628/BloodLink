@@ -64,7 +64,8 @@
         }
 
         .nav-icon {
-            width: 32px;              /* FIXED WIDTH */
+            width: 32px;
+            /* FIXED WIDTH */
             display: flex;
             justify-content: center;
             font-size: 1rem;
@@ -234,12 +235,16 @@
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
                 <div class="brand-icon"><i class="fas fa-droplet"></i></div> <span class="fw-bold">BloodLink</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span class="navbar-toggler-icon"></span></button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span
+                    class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="mobileMenu">
                 <ul class="navbar-nav mt-3">
-                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="/medical_facilities/dashboard">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/inventory">Inventory & Reports</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/donationManagement">Donation Management</a></li>
+                    <li class="nav-item"><a class="nav-link fw-bold text-danger"
+                            href="/medical_facilities/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/inventory">Inventory &
+                            Reports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/medical_facilities/donationManagement">Donation
+                            Management</a></li>
                 </ul>
             </div>
         </div>
@@ -247,14 +252,20 @@
 
     <div class="sidebar d-none d-lg-flex">
         <div class="brand-section">
-            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span class="fs-4 fw-bolder text-dark">BloodLink</span>
+            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span
+                class="fs-4 fw-bolder text-dark">BloodLink</span>
         </div>
         <nav class="nav flex-column mt-2 w-100">
-            <div class="px-4 pb-2 text-label" style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Hospital Portal</div>
+            <div class="px-4 pb-2 text-label"
+                style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Hospital Portal
+            </div>
             <a href="/medical_facilities/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
-            <a href="/medical_facilities/inventory" class="nav-link active"><i class="fas fa-box-open w-25"></i> Inventory & Reports</a>
-            <a href="/medical_facilities/donationManagement" class="nav-link"><i class="fas fa-user-nurse w-25"></i> Donation Management</a>
-            <a href="/medical_facilities/bloodManagement" class="nav-link"><i class="fas fa-exchange-alt w-25"></i> Blood Management</a>
+            <a href="/medical_facilities/inventory" class="nav-link active"><i class="fas fa-box-open w-25"></i>
+                Inventory & Reports</a>
+            <a href="/medical_facilities/donationManagement" class="nav-link"><i class="fas fa-user-nurse w-25"></i>
+                Donation Management</a>
+            <a href="/medical_facilities/bloodManagement" class="nav-link"><i class="fas fa-exchange-alt w-25"></i>
+                Blood Management</a>
             <a href="/medical_facilities/profile" class="nav-link"><i class="fas fa-hospital w-25"></i> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
@@ -286,7 +297,8 @@
             <div class="d-flex align-items-center gap-4">
                 <button class="btn border-0 position-relative text-secondary">
                     <i class="fas fa-bell fa-lg"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                    <span
+                        class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
                 </button>
                 <div class="d-none d-md-block border-start h-50 mx-2"></div>
                 <div class="d-flex align-items-center gap-3">
@@ -294,13 +306,13 @@
                         <div class="fw-bold small">Hospital Staff</div>
                         <div class="text-label text-success">Verified Staff</div>
                     </div>
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hospital" class="rounded-3 border" width="40" height="40" alt="Avatar">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hospital" class="rounded-3 border"
+                        width="40" height="40" alt="Avatar">
                 </div>
             </div>
         </header>
 
         <div class="row g-4">
-            <!-- Inventory Table Section -->
             <div class="col-xl-8">
                 <div class="custom-card">
                     <div class="table-responsive">
@@ -314,24 +326,25 @@
                             </thead>
                             <tbody>
                                 @foreach($blood_inventories as $inventory)
-                                <tr>
-                                    <td class="px-4 py-3 fw-black fs-5">{{ $inventory->blood_type }}</td>
-                                    <td class="px-4 py-3 fw-bold">{{ $inventory->quantity }} Units</td>
-                                    @if($inventory->status == 'OPTIMAL')
-                                    <td class="px-4 py-3"><span class="status-badge badge-optimal">Optimal</span></td>
-                                    @elseif($inventory->status == 'LOW_STOCK')
-                                    <td class="px-4 py-3"><span class="status-badge badge-low">Low Stock</span></td>
-                                    @elseif($inventory->status == 'CRITICAL')
-                                    <td class="px-4 py-3"><span class="status-badge badge-critical">Critical</span></td>
-                                    @else
-                                    <td class="px-4 py-3"><span class="status-badge badge-critical">Critical</span></td>
-                                    @endif
-                                </tr>
+                                    <tr>
+                                        <td class="px-4 py-3 fw-black fs-5">{{ $inventory->blood_type }}</td>
+                                        <td class="px-4 py-3 fw-bold">{{ $inventory->quantity }} Units</td>
+                                        @if($inventory->status == 'OPTIMAL')
+                                            <td class="px-4 py-3"><span class="status-badge badge-optimal">Optimal</span></td>
+                                        @elseif($inventory->status == 'LOW_STOCK')
+                                            <td class="px-4 py-3"><span class="status-badge badge-low">Low Stock</span></td>
+                                        @elseif($inventory->status == 'CRITICAL')
+                                            <td class="px-4 py-3"><span class="status-badge badge-critical">Critical</span></td>
+                                        @else
+                                            <td class="px-4 py-3"><span class="status-badge badge-critical">Critical</span></td>
+                                        @endif
+                                    </tr>
                                 @endforeach
                                 @if($blood_inventories->isEmpty())
-                                <tr>
-                                    <td colspan="3" class="px-4 py-3 text-center text-muted">No inventory data available.</td>
-                                </tr>
+                                    <tr>
+                                        <td colspan="3" class="px-4 py-3 text-center text-muted">No inventory data
+                                            available.</td>
+                                    </tr>
                                 @endif
                             </tbody>
                         </table>
@@ -339,50 +352,106 @@
                 </div>
             </div>
 
-            <!-- Reports Sidebar Section -->
             <div class="col-xl-4">
                 <div class="report-card h-100">
                     <h3 class="fw-bold mb-4">Generate Reports</h3>
-                    <p class="text-white-50 mb-4 small">Select a report type below to generate a detailed PDF analysis for administrative review.</p>
+                    <p class="text-white-50 mb-4 small">
+                        Download blood bank reports for audit and management.
+                    </p>
 
-                    <div class="vstack gap-3 mb-5">
-                        <button class="report-btn">
-                            <div class="d-flex align-items-center gap-3">
-                                <i class="fas fa-file-invoice text-success"></i>
-                                <span class="fw-bold small">Inventory Summary</span>
-                            </div>
-                            <i class="fas fa-download"></i>
-                        </button>
-                        <button class="report-btn">
-                            <div class="d-flex align-items-center gap-3">
-                                <i class="fas fa-trash-alt text-danger"></i>
-                                <span class="fw-bold small">Wastage Analysis</span>
-                            </div>
-                            <i class="fas fa-download"></i>
-                        </button>
-                        <button class="report-btn">
-                            <div class="d-flex align-items-center gap-3">
-                                <i class="fas fa-users text-warning"></i>
-                                <span class="fw-bold small">Donor Turnout</span>
-                            </div>
-                            <i class="fas fa-download"></i>
-                        </button>
-                    </div>
+                    <div class="mb-4">
+                        <label class="small fw-bold text-secondary text-uppercase mb-2">
+                            Inventory Summary
+                        </label>
 
-                    <div class="border-top border-secondary pt-4">
-                        <label class="small fw-bold text-secondary text-uppercase mb-2">Custom Date Range</label>
-                        <div class="row g-2">
-                            <div class="col-6"><input type="date" class="form-control form-control-sm bg-dark text-white border-secondary"></div>
-                            <div class="col-6"><input type="date" class="form-control form-control-sm bg-dark text-white border-secondary"></div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-12">
+                                <select name="format" id="inventoryFormat"
+                                    class="form-select form-select-sm bg-white text-dark border-secondary">
+                                    <option value="xlsx">Excel (.xlsx)</option>
+                                    <option value="csv">CSV (.csv)</option>
+                                </select>
+                            </div>
+                            <div class="col-12 d-grid">
+                                <button class="report-btn"
+                                    onclick="downloadReport('{{ route('medical.exportInventory') }}', 'inventoryFormat')">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <i class="fas fa-boxes text-success"></i>
+                                        <span class="fw-bold small">Download Inventory</span>
+                                    </div>
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
                         </div>
-                        <button class="btn btn-danger w-100 mt-3 fw-bold py-2">Generate Custom PDF</button>
                     </div>
+
+                    <hr class="border-secondary my-4">
+
+                    <label class="small fw-bold text-secondary text-uppercase mb-2">
+                        Date Range (Usage & Wastage)
+                    </label>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <input type="date" id="fromDate"
+                                class="form-control form-control-sm bg-white text-dark border-secondary">
+                        </div>
+                        <div class="col-6">
+                            <input type="date" id="toDate"
+                                class="form-control form-control-sm bg-white text-dark border-secondary">
+                        </div>
+                    </div>
+
+                    <label class="small fw-bold text-secondary text-uppercase mb-2">
+                        File Format
+                    </label>
+
+                    <select id="dateFormat" class="form-select form-select-sm bg-white text-dark border-secondary mb-3">
+                        <option value="xlsx">Excel (.xlsx)</option>
+                        <option value="csv">CSV (.csv)</option>
+                    </select>
+
+                    <button class="report-btn w-100 mb-2"
+                        onclick="downloadDateReport('{{ route('medical.exportUsage') }}')">
+                        <div class="d-flex align-items-center gap-3">
+                            <i class="fas fa-tint text-warning"></i>
+                            <span class="fw-bold small">Blood Usage & Distribution</span>
+                        </div>
+                        <i class="fas fa-download"></i>
+                    </button>
+
+                    <button class="report-btn w-100"
+                        onclick="downloadDateReport('{{ route('medical.exportWastage') }}')">
+                        <div class="d-flex align-items-center gap-3">
+                            <i class="fas fa-trash-alt text-danger"></i>
+                            <span class="fw-bold small">Expired & Wastage</span>
+                        </div>
+                        <i class="fas fa-download"></i>
+                    </button>
+
                 </div>
             </div>
-        </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
+<script>
+function downloadReport(url, formatSelectId) {
+    const format = document.getElementById(formatSelectId).value;
+    window.location = url + '?format=' + format;
+}
+
+function downloadDateReport(url) {
+    const from = document.getElementById('fromDate').value;
+    const to = document.getElementById('toDate').value;
+    const format = document.getElementById('dateFormat').value;
+
+    let query = '?format=' + format;
+
+    if (from) query += '&from=' + from;
+    if (to) query += '&to=' + to;
+
+    window.location = url + query;
+}
+</script>

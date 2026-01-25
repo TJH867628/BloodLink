@@ -9,6 +9,15 @@ use App\Models\User;
 use App\Models\BloodInventory;
 use Illuminate\Http\Request;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\AdminBloodInventoryExport;;
+use App\Exports\AdminBloodUsageExport;
+use App\Exports\AdminBloodWastageExport;
+use App\Exports\AdminDonationRecordsExport;
+use App\Exports\AdminEventExport;
+use App\Exports\AdminUserSummaryExport;
+use App\Models\Notification as NotificationModel;
+use Auth;
 
 class AdminController extends Controller
 {
@@ -23,21 +32,48 @@ class AdminController extends Controller
         ->orderBy('timestamp', 'desc')
         ->limit(5)
         ->get();
-        return view('Admin.dashboard', compact('totalUsers', 'totalMedicalFacilities', 'currentBloodStock', 'emergencyMode', 'logs'));
+        $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
+            ->where('status', 'SEND')
+            ->exists();
+        return view('Admin.dashboard', compact('totalUsers', 'totalMedicalFacilities', 'currentBloodStock', 'emergencyMode', 'logs','hasUnreadNotifications'));
     }
-    public function userManagement()
-    {
-        $users = User::all();
-        $facilities = MedicalFacility::all();
-        $emergencyMode = SystemSettings::where('name', 'emergency_mode')->value('value');
-        return view('Admin.userManagement', compact('users', 'facilities','emergencyMode'));
+
+    public function notification () {
+        $user = Auth::user();
+        $notifications = NotificationModel::where('user_id', $user->id)
+            ->orderByRaw("status = 'READ'")
+            ->orderBy('datetime', 'desc')
+            ->get();
+        return view('admin.notification', compact('user','notifications'));
     }
-    public function medicalFacilitiesManagement()
-    {
-        $facilities = MedicalFacility::all();
-        $emergencyMode = SystemSettings::where('name', 'emergency_mode')->value('value');
-        return view('Admin.medicalFacilitiesManagement', compact('facilities'),compact('emergencyMode'));
+
+    public function markNotificationAsRead(Request $request, $notificationId) {
+        $user = Auth::user();
+
+        $notification = NotificationModel::where('id', $notificationId)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (!$notification) {
+            return redirect()->back()->with('error', 'Notification not found.');
+        }
+
+        $notification->status = 'READ';
+        $notification->save();
+
+        return redirect()->back()->with('success', 'Notification marked as read.');
     }
+
+    public function markAllNotificationsAsRead(Request $request) {
+        $user = Auth::user();
+
+        NotificationModel::where('user_id', $user->id)
+            ->where('status', 'SEND')
+            ->update(['status' => 'READ']);
+
+        return redirect()->back()->with('success', 'All notifications marked as read.');
+    }
+
     public function systemModification()
     {
         $settings = SystemSettings::pluck('value', 'name');
@@ -212,6 +248,72 @@ class AdminController extends Controller
         $settings = SystemSettings::pluck('value', 'name');
 
         return view('Admin.inventory',compact('user', 'blood_inventories', 'bloodTypeSummary','settings'));
+    }
+
+    public function exportBloodInventory(Request $request)
+    {
+        $format = $request->input('format', 'xlsx');
+        $now = now()->toDateString();
+
+        return Excel::download(new AdminBloodInventoryExport, 'blood_inventory_' . $now . '.' . $format);
+    }
+
+    public function exportBloodUsage(Request $request)
+    {
+        $from = $request->input('from') ?? '1900-01-01';
+        $to = $request->input('to') ?? '2100-12-31';
+        $now = now()->toDateString();
+
+        if ($from > $to) {
+            return redirect()->back()->with('error', 'Invalid date range: "From" date cannot be later than "To" date.');
+        }
+        
+        $format = $request->input('format', 'xlsx');
+
+        return Excel::download(new AdminBloodUsageExport($from, $to), 'blood_usage_'  . $from . '_to_' . $to . '.' . $format);
+    }
+
+    public function exportBloodWastage(Request $request)
+    {
+        $from = $request->input('from') ?? '1900-01-01';
+        $to = $request->input('to') ?? '2100-12-31';
+        $now = now()->toDateString();
+
+        if ($from > $to) {
+            return redirect()->back()->with('error', 'Invalid date range: "From" date cannot be later than "To" date.');
+        }
+
+        $format = $request->input('format', 'xlsx');
+
+        return Excel::download(new AdminBloodWastageExport($from, $to), 'blood_wastage_'   . $from . '_to_' . $to . '.' . $format);
+    }
+
+    public function exportDonationRecords(Request $request)
+    {
+        $format = $request->input('format', 'xlsx');
+        $from = $request->input('from') ?? '1900-01-01';
+        $to = $request->input('to') ?? '2100-12-31';
+        $now = now()->toDateString();
+
+        return Excel::download(new AdminDonationRecordsExport($from,$to), 'donation_records_'  . $from . '_to_' . $to  . '.' . $format);
+    }
+
+    public function exportEvent(Request $request)
+    {
+        $format = $request->input('format', 'xlsx');
+        $from = $request->input('from') ?? '1900-01-01';
+        $to = $request->input('to') ?? '2100-12-31';
+        $now = now()->toDateString();
+
+        return Excel::download(new AdminEventExport($from,$to), 'events_'  . $from . '_to_' . $to . '.' . $format);
+    }
+
+    public function exportUserSummary(Request $request)
+    {
+        $format = $request->input('format', 'xlsx');
+        $now = now()->toDateString();
+
+        return Excel::download(new AdminUserSummaryExport, 'user_summary_'  . $now . '.' . $format);
     }
 }
 
