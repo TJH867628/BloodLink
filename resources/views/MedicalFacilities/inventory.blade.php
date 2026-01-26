@@ -288,18 +288,8 @@
         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
                 <h2 class="fw-black mb-0">Inventory & Reports</h2>
-                <div class="d-flex align-items-center gap-2 mt-1">
-                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3">
-                        <i class="fas fa-check-circle me-1"></i> System Operational
-                    </span>
-                </div>
             </div>
             <div class="d-flex align-items-center gap-4">
-                <button class="btn border-0 position-relative text-secondary">
-                    <i class="fas fa-bell fa-lg"></i>
-                    <span
-                        class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
-                </button>
                 <div class="d-none d-md-block border-start h-50 mx-2"></div>
                 <div class="d-flex align-items-center gap-3">
                     <div class="text-end d-none d-md-block">

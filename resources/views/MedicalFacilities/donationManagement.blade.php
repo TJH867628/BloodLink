@@ -410,7 +410,7 @@
                     <div class="d-flex gap-2 mb-3">
                         <input type="text" id="historySearch" class="form-control form-control-sm w-auto"
                             placeholder="Search Donor ID">
-                        <select id="historyStatus" class="form-select form-select-sm w-auto">
+                        <select id="historyStatus" class="form-select">
                             <option value="all">All Results</option>
                             <option value="SUCCESSFUL">Successful</option>
                             <option value="DISCARDED">Discarded</option>
