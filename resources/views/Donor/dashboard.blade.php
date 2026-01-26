@@ -341,7 +341,7 @@
             <div class="row align-items-center">
                 <div class="col-md-8">
                     <h1 class="fw-bold display-6 mb-3">Welcome back, Donor!</h1>
-                    <p class="opacity-75 fs-5 mb-4">You are currently eligible to donate!</p>
+                    <p class="opacity-75 fs-5 mb-4">You are currently a donor of BloodLink!</p>
                     <a href="/donor/findEvent" class="btn find-event-btn text-danger fw-bold rounded-pill px-4 py-2 shadow-sm text-decoration-none">
                         Find Event <i class="fas fa-arrow-right ms-2"></i>
                     </a>
