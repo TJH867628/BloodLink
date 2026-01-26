@@ -233,21 +233,20 @@
         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
                 <h2 class="fw-black mb-0">Donation Management</h2>
-                <p class="text-muted small fw-medium mt-1 mb-0">Process today's donor queue and record clinical results.
-                </p>
             </div>
             <div class="d-flex align-items-center gap-4">
-                <div class="position-relative d-none d-md-block" style="width: 250px;">
-                    <i
-                        class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
-                    <input type="text" class="form-control rounded-pill ps-5" placeholder="Search donor...">
-                </div>
                 <div class="d-none d-md-block border-start h-50 mx-2"></div>
                 <div class="d-flex align-items-center gap-3">
+                    <a href="/medical_facilities/notification" class="btn border-0 position-relative text-secondary">
+                        <i class="fas fa-bell fa-lg"></i>
+                        @if($hasUnreadNotifications)
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                        @endif
+                    </a>
                     <div class="text-end d-none d-md-block">
                         <div class="fw-bold small">Hospital Staff</div>
-                        <div class="text-label text-success"
-                            style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Verified Staff</div>
+                        <div class="text-label text-success">Staff</div>
                     </div>
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hospital" class="rounded-3 border"
                         width="40" height="40" alt="Avatar">

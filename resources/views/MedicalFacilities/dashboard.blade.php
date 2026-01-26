@@ -336,7 +336,7 @@
 
         </div>
 
-        ◊<div class="card border-0 shadow-sm p-4 p-lg-5" style="border-radius: 24px;">
+        <div class="card border-0 shadow-sm p-4 p-lg-5" style="border-radius: 24px;">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h4 class="fw-bold mb-0">
                     <i class="fas fa-heartbeat text-danger me-2"></i>

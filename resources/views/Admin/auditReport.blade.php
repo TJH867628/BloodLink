@@ -204,14 +204,21 @@
     </div>
 
     <div class="main-content">
-        <header class="d-flex justify-content-between align-items-center mb-5">
+         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
-                <h2 class="fw-black mb-0">Audit & Report</h2>
+                <h2 class="fw-black mb-0">Audit Log & Reports</h2>
             </div>
             <div class="d-flex align-items-center gap-3">
+                <a href="/admin/notification" class="btn border-0 position-relative text-secondary">
+                    <i class="fas fa-bell fa-lg"></i>
+                    @if($hasUnreadNotifications)
+                        <span
+                            class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                    @endif
+                </a>
                 <div class="text-end d-none d-md-block">
                     <div class="fw-bold small">System Admin</div>
-                    <div class="text-label text-primary">Superadmin</div>
+                    <div class="text-label text-primary">Admin</div>
                 </div>
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" class="rounded-3 border" width="40"
                     height="40" alt="Avatar">

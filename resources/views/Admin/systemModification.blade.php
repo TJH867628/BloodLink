@@ -237,8 +237,12 @@
                             <input type="number" class="form-control" name="inventory_optimal_pct" value="{{ $settings['inventory_optimal_pct'] ?? 80 }}">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted">Target Unit (Bags)</label>
+                            <label class="form-label small fw-bold text-muted">Target Unit (Bags) - Each Medical Facility</label>
                             <input type="number" class="form-control" name="inventory_target_units" min="10" value="{{ $settings['inventory_target_units'] ?? 100 }}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Target Unit (Bags) - Overall System</label>
+                            <input type="number" class="form-control" name="inventory_target_units" min="10" value="{{ $settings['overall_target_units'] ?? 100 }}">
                         </div>
                     </div>
                 </div>

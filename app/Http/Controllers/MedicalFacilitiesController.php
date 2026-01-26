@@ -53,7 +53,7 @@ class MedicalFacilitiesController extends Controller
         $bloodStocks = BloodInventory::where('medical_facilities_id', $medical_facility_id)
             ->get()
             ->keyBy('blood_type');
-        
+
         $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
             ->where('status', 'SEND')
             ->exists();
@@ -82,7 +82,8 @@ class MedicalFacilitiesController extends Controller
         return view('MedicalFacilities.notification', compact('user', 'notifications'));
     }
 
-public function markNotificationAsRead(Request $request, $notificationId) {
+    public function markNotificationAsRead(Request $request, $notificationId)
+    {
         $user = Auth::user();
 
         $notification = NotificationModel::where('id', $notificationId)
@@ -99,7 +100,8 @@ public function markNotificationAsRead(Request $request, $notificationId) {
         return redirect()->back()->with('success', 'Notification marked as read.');
     }
 
-    public function markAllNotificationsAsRead(Request $request) {
+    public function markAllNotificationsAsRead(Request $request)
+    {
         $user = Auth::user();
 
         NotificationModel::where('user_id', $user->id)
@@ -113,7 +115,10 @@ public function markNotificationAsRead(Request $request, $notificationId) {
     {
         $user = auth()->user();
         $blood_inventories = BloodInventory::where('medical_facilities_id', auth()->user()->facility_id)->get();
-        return view('MedicalFacilities.inventory', compact('user', 'blood_inventories'));
+        $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
+            ->where('status', 'SEND')
+            ->exists();
+        return view('MedicalFacilities.inventory', compact('user', 'blood_inventories','hasUnreadNotifications'));
     }
 
     public function donationManagement()
@@ -165,14 +170,21 @@ public function markNotificationAsRead(Request $request, $notificationId) {
             )
             ->get();
 
-        return view('MedicalFacilities.donationManagement', compact('user', 'donation_today', 'donationHistory', 'recentRecords'));
+        $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
+            ->where('status', 'SEND')
+            ->exists();
+
+        return view('MedicalFacilities.donationManagement', compact('user', 'donation_today', 'donationHistory', 'recentRecords','hasUnreadNotifications'));
     }
 
     public function profile()
     {
         $user = auth()->user();
         $medical_facility = MedicalFacility::find($user->facility_id);
-        return view('MedicalFacilities.profile', compact('user', 'medical_facility'));
+        $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
+            ->where('status', 'SEND')
+            ->exists();
+        return view('MedicalFacilities.profile', compact('user', 'medical_facility','hasUnreadNotifications'));
     }
 
     public function updateProfile(Request $request)
@@ -272,7 +284,11 @@ public function markNotificationAsRead(Request $request, $notificationId) {
             ->paginate(10, ['*'], 'history_page')
             ->withQueryString();
 
-        return view('MedicalFacilities.bloodManagement', compact('bloodBags', 'user', 'history'));
+        $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
+            ->where('status', 'SEND')
+            ->exists();
+
+        return view('MedicalFacilities.bloodManagement', compact('bloodBags', 'user', 'history','hasUnreadNotifications'));
     }
 
     public function recordDonationResult(Request $request, int $appointmentId)

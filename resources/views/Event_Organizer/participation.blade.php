@@ -175,12 +175,15 @@
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
                 <div class="brand-icon"><i class="fas fa-droplet"></i></div> <span class="fw-bold">BloodLink</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span class="navbar-toggler-icon"></span></button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span
+                    class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="mobileMenu">
                 <ul class="navbar-nav mt-3">
                     <li class="nav-item"><a class="nav-link" href="/event_organizer/dashboard">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/event_organizer/eventManagement">Event Management</a></li>
-                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="/event_organizer/participation">Participation</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/event_organizer/eventManagement">Event
+                            Management</a></li>
+                    <li class="nav-item"><a class="nav-link fw-bold text-danger"
+                            href="/event_organizer/participation">Participation</a></li>
                 </ul>
             </div>
         </div>
@@ -188,14 +191,21 @@
 
     <div class="sidebar d-none d-lg-flex">
         <div class="brand-section">
-            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span class="fs-4 fw-bolder text-dark">BloodLink</span>
+            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span
+                class="fs-4 fw-bolder text-dark">BloodLink</span>
         </div>
         <nav class="nav flex-column mt-2 w-100">
-            <div class="px-4 pb-2 text-label" style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Organizer Portal</div>
-            <a href="/event_organizer/dashboard" class="nav-link"><span class="nav-icon"><i class="fas fa-chart-pie w-25"></i></span> Dashboard</a>
-            <a href="/event_organizer/eventManagement" class="nav-link"><span class="nav-icon"><i class="fas fa-calendar-alt w-25"></i></span> Event Management</a>
-            <a href="/event_organizer/participation" class="nav-link active"><span class="nav-icon"><i class="fas fa-users w-25"></i></span> Participation</a>
-            <a href="/event_organizer/profile" class="nav-link"><span class="nav-icon"><i class="fas fa-id-card"></i></span> Profile</a>
+            <div class="px-4 pb-2 text-label"
+                style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Organizer Portal
+            </div>
+            <a href="/event_organizer/dashboard" class="nav-link"><span class="nav-icon"><i
+                        class="fas fa-chart-pie w-25"></i></span> Dashboard</a>
+            <a href="/event_organizer/eventManagement" class="nav-link"><span class="nav-icon"><i
+                        class="fas fa-calendar-alt w-25"></i></span> Event Management</a>
+            <a href="/event_organizer/participation" class="nav-link active"><span class="nav-icon"><i
+                        class="fas fa-users w-25"></i></span> Participation</a>
+            <a href="/event_organizer/profile" class="nav-link"><span class="nav-icon"><i
+                        class="fas fa-id-card"></i></span> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">
@@ -214,37 +224,48 @@
         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
                 <h2 class="fw-black mb-0">Donor Participation</h2>
-                <p class="text-muted small fw-medium mt-1 mb-0">Monitor registrations and attendance for your drives.</p>
+                <p class="text-muted small fw-medium mt-1 mb-0">Monitor registrations and attendance for your drives.
+                </p>
             </div>
             <div class="d-flex align-items-center gap-3">
+                <a href="/event_organizer/notification" class="btn border-0 position-relative text-secondary">
+                    <i class="fas fa-bell fa-lg"></i>
+                    @if($hasUnreadNotifications)
+                        <span
+                            class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                    @endif
+                </a>
                 <div class="text-end d-none d-md-block">
                     <div class="fw-bold small">Organizer</div>
-                    <div class="text-label text-success" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Event Organizer</div>
+                    <div class="text-label text-success"
+                        style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Event Organizer</div>
                 </div>
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Organizer" class="rounded-3 border" width="40" height="40" alt="Avatar">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Organizer" class="rounded-3 border" width="40"
+                    height="40" alt="Avatar">
             </div>
         </header>
         @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         @elseif(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         @endif
         <div class="row g-4 mb-4">
             <!-- Filter Section -->
             <div class="col-12">
-                <div class="custom-card p-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                <div
+                    class="custom-card p-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
                     <div class="d-flex align-items-center gap-3 w-100 w-md-50">
                         <i class="fas fa-filter text-muted"></i>
                         <select class="form-select" id="eventFilter">
                             <option value="all">All Events</option>
                             @foreach($events as $event)
-                            <option value="{{ $event->id }}">{{ $event->name }}</option>
+                                <option value="{{ $event->id }}">{{ $event->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -276,67 +297,72 @@
                     </thead>
                     <tbody>
                         @foreach($appoinments as $app)
-                        <tr class="appointment-row" data-event-id="{{ $app->id }}">
-                            <td class="px-4 py-3">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="bg-danger-subtle text-danger rounded p-1 fw-bold small text-center" style="width: 32px;">
-                                        {{ strtoupper(substr($app->donor_name,0,1)) }}
+                            <tr class="appointment-row" data-event-id="{{ $app->id }}">
+                                <td class="px-4 py-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="bg-danger-subtle text-danger rounded p-1 fw-bold small text-center"
+                                            style="width: 32px;">
+                                            {{ strtoupper(substr($app->donor_name, 0, 1)) }}
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-dark">{{ $app->donor_name }}</div>
+                                            <div class="small text-muted">ID: {{ $app->id }}</div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <div class="fw-bold text-dark">{{ $app->donor_name }}</div>
-                                        <div class="small text-muted">ID: {{ $app->id }}</div>
-                                    </div>
-                                </div>
-                            </td>
+                                </td>
 
-                            <td class="px-4 py-3 fw-bold text-dark event-name">{{ $app->event_name }}</td>
-                            <td class="px-4 py-3 text-muted">{{ \Carbon\Carbon::parse($app->event_date)->format('d M Y') }} . {{ $app->event_time }}</td>
-                            <td class="px-4 py-3 small">
-                                <i class="fas fa-phone me-1 text-muted"></i> {{ $app->phone }}
-                            </td>
+                                <td class="px-4 py-3 fw-bold text-dark event-name">{{ $app->event_name }}</td>
+                                <td class="px-4 py-3 text-muted">
+                                    {{ \Carbon\Carbon::parse($app->event_date)->format('d M Y') }} . {{ $app->event_time }}
+                                </td>
+                                <td class="px-4 py-3 small">
+                                    <i class="fas fa-phone me-1 text-muted"></i> {{ $app->phone }}
+                                </td>
 
-                            <td class="px-4 py-3">
-                                @if($app->status == 'COMPLETED')
-                                <span class="badge bg-success-subtle text-success rounded-pill">Completed</span>
-                                @elseif($app->status == 'ACCEPTED')
-                                <span class="badge bg-primary-subtle text-primary rounded-pill">Accepted</span>
-                                @elseif($app->status == 'PENDING')
-                                <span class="badge bg-warning-subtle text-warning rounded-pill">Pending</span>
-                                @elseif($app->status == 'CANCELLED')
-                                <span class="badge bg-danger-subtle text-danger rounded-pill">Cancelled</span>
-                                @elseif($app->status == 'REJECTED')
-                                <span class="badge bg-danger-subtle text-danger rounded-pill">Rejected</span>
-                                @endif
-                            </td>
+                                <td class="px-4 py-3">
+                                    @if($app->status == 'COMPLETED')
+                                        <span class="badge bg-success-subtle text-success rounded-pill">Completed</span>
+                                    @elseif($app->status == 'ACCEPTED')
+                                        <span class="badge bg-primary-subtle text-primary rounded-pill">Accepted</span>
+                                    @elseif($app->status == 'PENDING')
+                                        <span class="badge bg-warning-subtle text-warning rounded-pill">Pending</span>
+                                    @elseif($app->status == 'CANCELLED')
+                                        <span class="badge bg-danger-subtle text-danger rounded-pill">Cancelled</span>
+                                    @elseif($app->status == 'REJECTED')
+                                        <span class="badge bg-danger-subtle text-danger rounded-pill">Rejected</span>
+                                    @endif
+                                </td>
 
-                            <td class="px-4 py-3 text-end">
-                                @if($app->status === 'PENDING')
-                                <!-- ACCEPT -->
-                                <form method="POST" action="/event_organizer/acceptAppointment/{{ $app->id }}" class="d-inline">
-                                    @csrf
-                                    <button class="btn btn-light btn-sm text-success">
-                                        <i class="fas fa-check"></i>
-                                    </button>
-                                </form>
-                                <!-- REJECT -->
-                                <form method="POST" action="/event_organizer/rejectAppointment/{{ $app->id }}" class="d-inline">
-                                    @csrf
-                                    <button class="btn btn-light btn-sm text-danger">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </form>
-                                @else
-                                <!-- Disabled buttons -->
-                                <button class="btn btn-light btn-sm text-secondary" disabled>
-                                    <i class="fas fa-check"></i>
-                                </button>
+                                <td class="px-4 py-3 text-end">
+                                    @if($app->status === 'PENDING')
+                                        <!-- ACCEPT -->
+                                        <form method="POST" action="/event_organizer/acceptAppointment/{{ $app->id }}"
+                                            class="d-inline">
+                                            @csrf
+                                            <button class="btn btn-light btn-sm text-success">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </form>
+                                        <!-- REJECT -->
+                                        <form method="POST" action="/event_organizer/rejectAppointment/{{ $app->id }}"
+                                            class="d-inline">
+                                            @csrf
+                                            <button class="btn btn-light btn-sm text-danger">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <!-- Disabled buttons -->
+                                        <button class="btn btn-light btn-sm text-secondary" disabled>
+                                            <i class="fas fa-check"></i>
+                                        </button>
 
-                                <button class="btn btn-light btn-sm text-secondary" disabled>
-                                    <i class="fas fa-times"></i>
-                                </button>
-                                @endif
-                            </td>
-                        </tr>
+                                        <button class="btn btn-light btn-sm text-secondary" disabled>
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    @endif
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>

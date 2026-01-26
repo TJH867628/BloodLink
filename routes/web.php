@@ -65,8 +65,8 @@ Route::middleware(['role:ORGANIZER','auth'])->group(function () {
     Route::post('event_organizer/acceptAppointment/{id}', [EventOrganizerController::class, 'acceptAppointment'])->name('event_organizer.acceptAppointment');
     Route::post('event_organizer/rejectAppointment/{id}', [EventOrganizerController::class, 'rejectAppointment'])->name('event_organizer.rejectAppointment');
     Route::post('event_organizer/updateProfile', [EventOrganizerController::class, 'updateProfile'])->name('event_organizer.updateProfile');
-    Route::post('event_organizer/markNotificationRead/{notificationId}', [EventOrganizerController::class, 'markNotificationAsRead'])->name('event_organizer.markNotificationRead ');
-    Route::post('event_organizer/markAllNotificationsRead', [EventOrganizerController::class, 'markAllNotificationsAsRead'])->name('event_organizer.markAllNotificationsRead ');
+    Route::post('event_organizer/markNotificationRead/{notificationId}', [EventOrganizerController::class, 'markNotificationAsRead'])->name('event_organizer.markNotificationRead');
+    Route::post('event_organizer/markAllNotificationsRead', [EventOrganizerController::class, 'markAllNotificationsAsRead'])->name('event_organizer.markAllNotificationsRead');
     Route::post('event_organizer/changePassword', [EventOrganizerController::class, 'changePassword'])->name('event_organizer.changePassword');
 });
 Route::middleware(['role:ADMIN','auth'])->group(function () {
@@ -92,4 +92,5 @@ Route::middleware(['role:ADMIN','auth'])->group(function () {
     Route::post('admin/updateSystemSettings', [App\Http\Controllers\AdminController::class, 'updateSystemSettings'])->name('admin.updateSystemSettings');
     Route::post('admin/markNotificationRead/{notificationId}', [App\Http\Controllers\AdminController::class, 'markNotificationAsRead'])->name('admin.markNotificationRead');
     Route::post('admin/markAllNotificationsRead', [App\Http\Controllers\AdminController::class, 'markAllNotificationsAsRead'])->name('admin.markAllNotificationsRead');
+    Route::post('admin/deleteMedicalFacility/{facilityId}', [App\Http\Controllers\AdminController::class, 'deleteMedicalFacility'])->name('admin.deleteMedicalFacility');
 });

@@ -64,7 +64,8 @@
         }
 
         .nav-icon {
-            width: 32px;              /* FIXED WIDTH */
+            width: 32px;
+            /* FIXED WIDTH */
             display: flex;
             justify-content: center;
             font-size: 1rem;
@@ -234,29 +235,37 @@
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
                 <div class="brand-icon"><i class="fas fa-droplet"></i></div> <span class="fw-bold">BloodLink</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span class="navbar-toggler-icon"></span></button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span
+                    class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="mobileMenu">
-                            <a href="/admin/dashboard" class="nav-link active"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
-            <a href="/admin/userManagement" class="nav-link"><i class="fas fa-users w-25"></i> User Management</a>
-            <a href="/admin/medicalFacilitiesManagement" class="nav-link"><i class="fas fa-hospital w-25"></i>Medical Facilities Management</a>
-            <a href="/admin/inventory" class="nav-link"><i class="fas fa-hospital w-25"></i>Blood Inventories</a>
-            <a href="/admin/systemModification" class="nav-link"><i class="fas fa-cogs w-25"></i> System Modification</a>
-            <a href="/admin/auditReport" class="nav-link"><i class="fas fa-file-alt w-25"></i> Audit & Reports</a>
+                <a href="/admin/dashboard" class="nav-link active"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
+                <a href="/admin/userManagement" class="nav-link"><i class="fas fa-users w-25"></i> User Management</a>
+                <a href="/admin/medicalFacilitiesManagement" class="nav-link"><i
+                        class="fas fa-hospital w-25"></i>Medical Facilities Management</a>
+                <a href="/admin/inventory" class="nav-link"><i class="fas fa-hospital w-25"></i>Blood Inventories</a>
+                <a href="/admin/systemModification" class="nav-link"><i class="fas fa-cogs w-25"></i> System
+                    Modification</a>
+                <a href="/admin/auditReport" class="nav-link"><i class="fas fa-file-alt w-25"></i> Audit & Reports</a>
             </div>
         </div>
     </nav>
 
     <div class="sidebar d-none d-lg-flex">
         <div class="brand-section">
-            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span class="fs-4 fw-bolder text-dark">BloodLink</span>
+            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span
+                class="fs-4 fw-bolder text-dark">BloodLink</span>
         </div>
         <nav class="nav flex-column mt-2 w-100">
-            <div class="px-4 pb-2 text-label" style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Hospital Portal</div>
-                        <a href="/admin/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
+            <div class="px-4 pb-2 text-label"
+                style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Hospital Portal
+            </div>
+            <a href="/admin/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
             <a href="/admin/userManagement" class="nav-link"><i class="fas fa-users w-25"></i> User Management</a>
-            <a href="/admin/medicalFacilitiesManagement" class="nav-link"><i class="fas fa-hospital w-25"></i>Medical Facilities Management</a>
+            <a href="/admin/medicalFacilitiesManagement" class="nav-link"><i class="fas fa-hospital w-25"></i>Medical
+                Facilities Management</a>
             <a href="/admin/inventory" class="nav-link active"><i class="fas fa-hospital w-25"></i>Blood Inventories</a>
-            <a href="/admin/systemModification" class="nav-link"><i class="fas fa-cogs w-25"></i> System Modification</a>
+            <a href="/admin/systemModification" class="nav-link"><i class="fas fa-cogs w-25"></i> System
+                Modification</a>
             <a href="/admin/auditReport" class="nav-link"><i class="fas fa-file-alt w-25"></i> Audit & Reports</a>
         </nav>
         <div class="mt-auto border-top p-3">
@@ -275,29 +284,24 @@
     </div>
 
     <div class="main-content">
-        <!-- Header Section -->
-        <header class="d-flex justify-content-between align-items-center mb-5">
+         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
-                <h2 class="fw-black mb-0">Inventory & Reports</h2>
-                <div class="d-flex align-items-center gap-2 mt-1">
-                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3">
-                        <i class="fas fa-check-circle me-1"></i> System Operational
-                    </span>
-                </div>
+                <h2 class="fw-black mb-0">Blood Inventories</h2>
             </div>
-            <div class="d-flex align-items-center gap-4">
-                <button class="btn border-0 position-relative text-secondary">
+            <div class="d-flex align-items-center gap-3">
+                <a href="/admin/notification" class="btn border-0 position-relative text-secondary">
                     <i class="fas fa-bell fa-lg"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
-                </button>
-                <div class="d-none d-md-block border-start h-50 mx-2"></div>
-                <div class="d-flex align-items-center gap-3">
-                    <div class="text-end d-none d-md-block">
-                        <div class="fw-bold small">Hospital Staff</div>
-                        <div class="text-label text-success">Verified Staff</div>
-                    </div>
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hospital" class="rounded-3 border" width="40" height="40" alt="Avatar">
+                    @if($hasUnreadNotifications)
+                        <span
+                            class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                    @endif
+                </a>
+                <div class="text-end d-none d-md-block">
+                    <div class="fw-bold small">System Admin</div>
+                    <div class="text-label text-primary">Admin</div>
                 </div>
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" class="rounded-3 border" width="40"
+                    height="40" alt="Avatar">
             </div>
         </header>
 
@@ -305,42 +309,85 @@
             <!-- Inventory Table Section -->
             <div class="col-xl-12">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="fw-bold mb-0">Current Stock Batches</h4>
-                    <button class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#addBatchModal"><i class="fas fa-plus me-2"></i> Add Batch</button>
+                    <h4 class="fw-bold mb-0">Current Overall Stock</h4>
+                    <button class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal"
+                        data-bs-target="#addBatchModal"><i class="fas fa-plus me-2"></i> Add Batch</button>
                 </div>
                 <div class="row g-3 mb-5">
-                @foreach($bloodTypeSummary as $type)
-                @php
-                    $critical = (int)$settings['inventory_critical_pct'];
-                    $warning  = (int)$settings['inventory_warning_pct'];
+                    @foreach($bloodTypeSummary as $type)
+                        @php
+                            $critical = (int) $settings['inventory_critical_pct'];
+                            $warning = (int) $settings['inventory_warning_pct'];
+                            $optimal = (int) $settings['inventory_optimal_pct'];
+                            $overall_target = (int) $settings['overall_target_units'];
+                        @endphp
+                        <div class="col-lg-3 col-md-4 col-6">
+                            <div class="p-4 rounded-4 shadow-sm text-center 
+                            @if($type->quantity <= $overall_target * ($critical / 100)) bg-danger text-white
+                            @elseif($type->status <= $overall_target * ($warning / 100)) bg-warning
+                            @else bg-success text-white
+                            @endif
+                        ">
+                                <h4 class="fw-black">{{ $type->blood_type }}</h4>
+                                <div class="fs-1 fw-bold">{{ $type->total }}</div>
+                                <div class="small">Total Units</div>
+                                <span class="badge bg-dark mt-2">{{ $type->status }}</span>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                
+                <h4 class="fw-bold mb-0">Current Stock For Each Medical Facilities</h4><br>
+                <form method="GET" action="{{ route('admin.inventory') }}" class="row g-3 mb-4">
 
-                    $status = 'OPTIMAL';
-                    if($type->total <= $critical) $status = 'CRITICAL';
-                    elseif($type->total <= $warning) $status = 'LOW';
-                @endphp
-
-                <div class="col-lg-3 col-md-4 col-6">
-                    <div class="p-4 rounded-4 shadow-sm text-center 
-                        @if($status=='CRITICAL') bg-danger text-white
-                        @elseif($status=='LOW') bg-warning
-                        @else bg-success text-white
-                        @endif
-                    ">
-                        <h4 class="fw-black">{{ $type->blood_type }}</h4>
-                        <div class="fs-1 fw-bold">{{ $type->total }}</div>
-                        <div class="small">Total Units</div>
-                        <span class="badge bg-dark mt-2">{{ $status }}</span>
+                    <div class="col-md-4">
+                        <select name="facility" class="form-select">
+                            <option value="">All Facilities</option>
+                            @foreach($facilities as $f)
+                                <option value="{{ $f->id }}" {{ request('facility') == $f->id ? 'selected' : '' }}>
+                                    {{ $f->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
-                </div>
-                @endforeach
-                </div>
 
+                    <div class="col-md-3">
+                        <select name="blood_type" class="form-select">
+                            <option value="">All Blood Types</option>
+                            @foreach($bloodTypes as $bt)
+                                <option value="{{ $bt }}" {{ request('blood_type') == $bt ? 'selected' : '' }}>
+                                    {{ $bt }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <select name="status" class="form-select">
+                            <option value="">All Status</option>
+                            <option value="OPTIMAL" {{ request('status') == 'OPTIMAL' ? 'selected' : '' }}>Optimal
+                            </option>
+                            <option value="LOW_STOCK" {{ request('status') == 'LOW_STOCK' ? 'selected' : '' }}>Low Stock
+                            </option>
+                            <option value="CRITICAL" {{ request('status') == 'CRITICAL' ? 'selected' : '' }}>Critical
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <button class="btn btn-danger w-100">
+                            <i class="fas fa-filter"></i> Filter
+                        </button>
+                    </div>
+
+                </form>
                 <div class="custom-card">
                     <div class="table-responsive">
                         <table class="table table-hover mb-0 align-middle">
                             <thead class="bg-light">
                                 <tr>
-                                    <th class="px-4 py-3 text-muted small fw-bold text-uppercase">Medical Facilities</th>
+                                    <th class="px-4 py-3 text-muted small fw-bold text-uppercase">Medical Facilities
+                                    </th>
                                     <th class="px-4 py-3 text-muted small fw-bold text-uppercase">Type</th>
                                     <th class="px-4 py-3 text-muted small fw-bold text-uppercase">Quantity</th>
                                     <th class="px-4 py-3 text-muted small fw-bold text-uppercase">Status</th>
@@ -348,30 +395,31 @@
                             </thead>
                             <tbody>
                                 @foreach($blood_inventories as $inventory)
-                                <tr>
-                                    <td class="px-4 py-3 fw-bold">
-                                        {{ $inventory->medicalFacility->name ?? 'Unknown Facility' }}
-                                        <div class="text-muted small">
-                                            ID: {{ $inventory->medical_facilities_id }}
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 fw-black fs-5">{{ $inventory->blood_type }}</td>
-                                    <td class="px-4 py-3 fw-bold">{{ $inventory->quantity }} Units</td>
-                                    @if($inventory->status == 'OPTIMAL')
-                                    <td class="px-4 py-3"><span class="status-badge badge-optimal">Optimal</span></td>
-                                    @elseif($inventory->status == 'LOW_STOCK')
-                                    <td class="px-4 py-3"><span class="status-badge badge-low">Low Stock</span></td>
-                                    @elseif($inventory->status == 'CRITICAL')
-                                    <td class="px-4 py-3"><span class="status-badge badge-critical">Critical</span></td>
-                                    @else
-                                    <td class="px-4 py-3"><span class="status-badge badge-critical">Critical</span></td>
-                                    @endif
-                                </tr>
+                                    <tr>
+                                        <td class="px-4 py-3 fw-bold">
+                                            {{ $inventory->medicalFacility->name ?? 'Unknown Facility' }}
+                                            <div class="text-muted small">
+                                                ID: {{ $inventory->medical_facilities_id }}
+                                            </div>
+                                        </td>
+                                        <td class="px-4 py-3 fw-black fs-5">{{ $inventory->blood_type }}</td>
+                                        <td class="px-4 py-3 fw-bold">{{ $inventory->quantity }} Units</td>
+                                        @if($inventory->status == 'OPTIMAL')
+                                            <td class="px-4 py-3"><span class="status-badge badge-optimal">Optimal</span></td>
+                                        @elseif($inventory->status == 'LOW_STOCK')
+                                            <td class="px-4 py-3"><span class="status-badge badge-low">Low Stock</span></td>
+                                        @elseif($inventory->status == 'CRITICAL')
+                                            <td class="px-4 py-3"><span class="status-badge badge-critical">Critical</span></td>
+                                        @else
+                                            <td class="px-4 py-3"><span class="status-badge badge-critical">Critical</span></td>
+                                        @endif
+                                    </tr>
                                 @endforeach
                                 @if($blood_inventories->isEmpty())
-                                <tr>
-                                    <td colspan="3" class="px-4 py-3 text-center text-muted">No inventory data available.</td>
-                                </tr>
+                                    <tr>
+                                        <td colspan="3" class="px-4 py-3 text-center text-muted">No inventory data
+                                            available.</td>
+                                    </tr>
                                 @endif
                             </tbody>
                         </table>

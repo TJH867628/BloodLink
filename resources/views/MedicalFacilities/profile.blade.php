@@ -241,19 +241,24 @@
         <!-- Header Section -->
         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
-                <h2 class="fw-black mb-0">Facility Profils</h2>
-                <div class="d-flex align-items-center gap-2 mt-1">
-                    <p class="text-muted small fw-medium mt-1 mb-0">Manage account settings and view facility information</p>
-                </div>
+                <h2 class="fw-black mb-0">Medical Facilities Staff Profile</h2>
             </div>
             <div class="d-flex align-items-center gap-4">
                 <div class="d-none d-md-block border-start h-50 mx-2"></div>
                 <div class="d-flex align-items-center gap-3">
+                    <a href="/medical_facilities/notification" class="btn border-0 position-relative text-secondary">
+                        <i class="fas fa-bell fa-lg"></i>
+                        @if($hasUnreadNotifications)
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                        @endif
+                    </a>
                     <div class="text-end d-none d-md-block">
                         <div class="fw-bold small">Hospital Staff</div>
-                        <div class="text-label text-success">Verified Staff</div>
+                        <div class="text-label text-success">Staff</div>
                     </div>
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hospital" class="rounded-3 border" width="40" height="40" alt="Avatar">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hospital" class="rounded-3 border"
+                        width="40" height="40" alt="Avatar">
                 </div>
             </div>
         </header>

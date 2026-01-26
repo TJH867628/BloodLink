@@ -176,12 +176,15 @@
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
                 <div class="brand-icon"><i class="fas fa-droplet"></i></div> <span class="fw-bold">BloodLink</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span class="navbar-toggler-icon"></span></button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><span
+                    class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="mobileMenu">
                 <ul class="navbar-nav mt-3">
                     <li class="nav-item"><a class="nav-link" href="/event_organizer.dashboard">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link fw-bold text-danger" href="/event_organizer/eventManagement">Event Management</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/event_organizer/participation">Participation</a></li>
+                    <li class="nav-item"><a class="nav-link fw-bold text-danger"
+                            href="/event_organizer/eventManagement">Event Management</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/event_organizer/participation">Participation</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -189,14 +192,21 @@
 
     <div class="sidebar d-none d-lg-flex">
         <div class="brand-section">
-            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span class="fs-4 fw-bolder text-dark">BloodLink</span>
+            <div class="brand-icon"><i class="fas fa-droplet fa-lg"></i></div><span
+                class="fs-4 fw-bolder text-dark">BloodLink</span>
         </div>
         <nav class="nav flex-column mt-2 w-100">
-            <div class="px-4 pb-2 text-label" style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Organizer Portal</div>
-            <a href="/event_organizer/dashboard" class="nav-link"><span class="nav-icon"><i class="fas fa-chart-pie w-25"></i></span> Dashboard</a>
-            <a href="/event_organizer/eventManagement" class="nav-link active"><span class="nav-icon"><i class="fas fa-calendar-alt w-25"></i></span> Event Management</a>
-            <a href="/event_organizer/participation" class="nav-link"><span class="nav-icon"><i class="fas fa-users w-25"></i></span> Participation</a>
-            <a href="/event_organizer/profile" class="nav-link"><span class="nav-icon"><i class="fas fa-id-card"></i></span> Profile</a>
+            <div class="px-4 pb-2 text-label"
+                style="font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Organizer Portal
+            </div>
+            <a href="/event_organizer/dashboard" class="nav-link"><span class="nav-icon"><i
+                        class="fas fa-chart-pie w-25"></i></span> Dashboard</a>
+            <a href="/event_organizer/eventManagement" class="nav-link active"><span class="nav-icon"><i
+                        class="fas fa-calendar-alt w-25"></i></span> Event Management</a>
+            <a href="/event_organizer/participation" class="nav-link"><span class="nav-icon"><i
+                        class="fas fa-users w-25"></i></span> Participation</a>
+            <a href="/event_organizer/profile" class="nav-link"><span class="nav-icon"><i
+                        class="fas fa-id-card"></i></span> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">
@@ -218,11 +228,19 @@
                 <p class="text-muted small fw-medium mt-1 mb-0">Create new blood drives or update existing details.</p>
             </div>
             <div class="d-flex align-items-center gap-3">
+                <a href="/event_organizer/notification" class="btn border-0 position-relative text-secondary">
+                    <i class="fas fa-bell fa-lg"></i>
+                    @if($hasUnreadNotifications)
+                        <span
+                            class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                    @endif
+                </a>
                 <div class="text-end d-none d-md-block">
                     <div class="fw-bold small">Organizer</div>
                     <div class="text-label text-success" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Event Organizer</div>
                 </div>
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Organizer" class="rounded-3 border" width="40" height="40" alt="Avatar">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Organizer" class="rounded-3 border" width="40"
+                    height="40" alt="Avatar">
             </div>
         </header>
 
@@ -241,7 +259,8 @@
         <div class="custom-card">
             <div class="p-4 border-bottom bg-light d-flex justify-content-between align-items-center">
                 <h5 class="fw-bold mb-0">Managed Events</h5>
-                <button class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#eventModal"><i class="fas fa-plus me-2"></i> Create New Event</button>
+                <button class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal"
+                    data-bs-target="#eventModal"><i class="fas fa-plus me-2"></i> Create New Event</button>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover mb-0 align-middle">
@@ -255,84 +274,79 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach($events as $event)
-                    @php
-                        $used = $event->total_slots - $event->available_slots;
-                        $percent = $event->total_slots > 0 ? ($used / $event->total_slots) * 100 : 0;
-                    @endphp
+                        @foreach($events as $event)
+                            @php
+                                $used = $event->total_slots - $event->available_slots;
+                                $percent = $event->total_slots > 0 ? ($used / $event->total_slots) * 100 : 0;
+                            @endphp
 
-                    <tr @if($event->status == 'COMPLETED') class="opacity-50" @endif>
-                        <td class="px-4 py-3">
-                            <div class="fw-bold text-dark">{{ $event->name }}</div>
-                            <div class="small text-muted">
-                                {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }} • {{ $event->time }}
-                            </div>
-                        </td>
-
-                        <td class="px-4 py-3 text-muted fw-medium">
-                            <i class="fas fa-map-pin me-1 text-danger"></i> {{ $event->location }}
-                        </td>
-
-                        <td class="px-4 py-3">
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="progress flex-grow-1" style="height: 6px; width: 100px;">
-                                    <div class="progress-bar
-                                        @if($percent > 70) bg-danger
-                                        @elseif($percent > 40) bg-warning
-                                        @else bg-primary @endif"
-                                        style="width: {{ $percent }}%">
+                            <tr @if($event->status == 'COMPLETED') class="opacity-50" @endif>
+                                <td class="px-4 py-3">
+                                    <div class="fw-bold text-dark">{{ $event->name }}</div>
+                                    <div class="small text-muted">
+                                        {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }} • {{ $event->time }}
                                     </div>
-                                </div>
-                                <span class="small fw-bold">{{ $used }}/{{ $event->total_slots }}</span>
-                            </div>
-                        </td>
+                                </td>
 
-                        <td class="px-4 py-3">
-                            @if($event->status == 'ACTIVE')
-                                <span class="badge bg-success-subtle text-success rounded-pill">Active</span>
-                            @elseif($event->status == 'FULL')
-                                <span class="badge bg-warning-subtle text-warning rounded-pill">Full</span>
-                            @else
-                                <span class="badge bg-secondary rounded-pill">Completed</span>
-                            @endif
-                        </td>
+                                <td class="px-4 py-3 text-muted fw-medium">
+                                    <i class="fas fa-map-pin me-1 text-danger"></i> {{ $event->location }}
+                                </td>
 
-                        <td class="px-4 py-3 text-end">
-                            @if($event->status != 'COMPLETED')
-                                <button class="btn btn-light btn-sm text-secondary"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#editEventModal"
-                                    data-id="{{ $event->id }}"
-                                    data-name="{{ $event->name }}"
-                                    data-date="{{ $event->date }}"
-                                    data-time="{{ $event->time }}"
-                                    data-location="{{ $event->location }}"
-                                    data-slots="{{ $event->total_slots }}"
-                                    data-description="{{ $event->details }}">
-                                    <i class="fas fa-edit"></i>
-                                </button>
+                                <td class="px-4 py-3">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="progress flex-grow-1" style="height: 6px; width: 100px;">
+                                            <div class="progress-bar
+                                            @if($percent > 70) bg-danger
+                                            @elseif($percent > 40) bg-warning
+                                            @else bg-primary @endif" style="width: {{ $percent }}%">
+                                            </div>
+                                        </div>
+                                        <span class="small fw-bold">{{ $used }}/{{ $event->total_slots }}</span>
+                                    </div>
+                                </td>
 
-                                <form action="/event_organizer/deleteEvent/{{ $event->id }}" method="POST" style="display:inline" onsubmit="return confirmDelete(event)">
-                                    @csrf
-                                    <button type="submit" class="btn btn-light btn-sm text-danger">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
-                            @else
-                                <button class="btn btn-light btn-sm text-secondary" disabled>
-                                    <i class="fas fa-lock"></i>
-                                </button>
-                            @endif
-                        </td>
-                    </tr>
-                    @endforeach
+                                <td class="px-4 py-3">
+                                    @if($event->status == 'ACTIVE')
+                                        <span class="badge bg-success-subtle text-success rounded-pill">Active</span>
+                                    @elseif($event->status == 'FULL')
+                                        <span class="badge bg-warning-subtle text-warning rounded-pill">Full</span>
+                                    @else
+                                        <span class="badge bg-secondary rounded-pill">Completed</span>
+                                    @endif
+                                </td>
+
+                                <td class="px-4 py-3 text-end">
+                                    @if($event->status != 'COMPLETED')
+                                        <button class="btn btn-light btn-sm text-secondary" data-bs-toggle="modal"
+                                            data-bs-target="#editEventModal" data-id="{{ $event->id }}"
+                                            data-name="{{ $event->name }}" data-date="{{ $event->date }}"
+                                            data-time="{{ $event->time }}" data-location="{{ $event->location }}"
+                                            data-slots="{{ $event->total_slots }}" data-description="{{ $event->details }}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+
+                                        <form action="/event_organizer/deleteEvent/{{ $event->id }}" method="POST"
+                                            style="display:inline" onsubmit="return confirmDelete(event)">
+                                            @csrf
+                                            <button type="submit" class="btn btn-light btn-sm text-danger">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <button class="btn btn-light btn-sm text-secondary" disabled>
+                                            <i class="fas fa-lock"></i>
+                                        </button>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
                 @if($events->isEmpty())
-                <div class="text-center py-5"> <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
-                    <h5 class="fw-bold text-muted">No records found</h5>
-                    <p class="text-muted small"> There are no participants for the selected event. </p>
-                </div>
+                    <div class="text-center py-5"> <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                        <h5 class="fw-bold text-muted">No records found</h5>
+                        <p class="text-muted small"> There are no participants for the selected event. </p>
+                    </div>
                 @endif
             </div>
         </div>
@@ -351,20 +365,24 @@
                         @csrf
                         <div class="mb-3">
                             <label class="text-muted fw-bold small text-uppercase mb-1">Event Name</label>
-                            <input type="text" class="form-control" name="event_name" placeholder="e.g. City Mall Blood Drive" required>
+                            <input type="text" class="form-control" name="event_name"
+                                placeholder="e.g. City Mall Blood Drive" required>
                         </div>
                         <div class="mb-3">
                             <label class="text-muted fw-bold small text-uppercase mb-1">Venue / Location</label>
-                            <input type="text" class="form-control"  name="location" placeholder="e.g. Main Atrium" required>
+                            <input type="text" class="form-control" name="location" placeholder="e.g. Main Atrium"
+                                required>
                         </div>
                         <div class="row g-3 mb-3">
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Date</label>
-                                <input type="date"  name="event_date" min="{{ \Carbon\Carbon::tomorrow()->toDateString() }}" class="form-control" required>
+                                <input type="date" name="event_date"
+                                    min="{{ \Carbon\Carbon::tomorrow()->toDateString() }}" class="form-control"
+                                    required>
                             </div>
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Time</label>
-                                <input type="time"  name="event_time" class="form-control" required>
+                                <input type="time" name="event_time" class="form-control" required>
                             </div>
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Description</label>
@@ -375,7 +393,8 @@
                             <label class="text-muted fw-bold small text-uppercase mb-1">Maximum Donors</label>
                             <input type="number" class="form-control" name="total_slots" placeholder="e.g. 50" required>
                         </div>
-                        <button type="submit" class="btn btn-danger w-100 py-3 rounded-pill fw-bold shadow-sm">Save Event</button>
+                        <button type="submit" class="btn btn-danger w-100 py-3 rounded-pill fw-bold shadow-sm">Save
+                            Event</button>
                     </form>
                 </div>
             </div>
@@ -393,25 +412,30 @@
                 <div class="modal-body p-4">
                     <form method="post" id="editEventForm">
                         @csrf
-                        <div class="alert alert-light border border-secondary-subtle d-flex align-items-center mb-4 rounded-3 p-3">
+                        <div
+                            class="alert alert-light border border-secondary-subtle d-flex align-items-center mb-4 rounded-3 p-3">
                             <i class="fas fa-info-circle text-primary me-3 fs-5"></i>
                             <div class="small text-muted lh-sm">
-                                Changes to date or venue will automatically notify all <strong>registered donors</strong> via notification page.
+                                Changes to date or venue will automatically notify all <strong>registered
+                                    donors</strong> via notification page.
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label class="text-muted fw-bold small text-uppercase mb-1">Event Name</label>
-                            <input type="text" class="form-control fw-bold" name="event_name" value="Red Cross Annual Drive" required>
+                            <input type="text" class="form-control fw-bold" name="event_name"
+                                value="Red Cross Annual Drive" required>
                         </div>
                         <div class="mb-3">
                             <label class="text-muted fw-bold small text-uppercase mb-1">Venue / Location</label>
-                            <input type="text" class="form-control" name="location" value="City Hall, Main Wing" required>
+                            <input type="text" class="form-control" name="location" value="City Hall, Main Wing"
+                                required>
                         </div>
                         <div class="row g-3 mb-3">
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Date</label>
-                                <input type="date" class="form-control" name="event_date" min="{{ \Carbon\Carbon::tomorrow()->toDateString() }}" value="2026-01-10" required>
+                                <input type="date" class="form-control" name="event_date"
+                                    min="{{ \Carbon\Carbon::tomorrow()->toDateString() }}" value="2026-01-10" required>
                             </div>
                             <div class="col-6">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Time</label>
@@ -424,8 +448,10 @@
                         </div>
 
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-light w-50 py-3 rounded-pill fw-bold border">Cancel</button>
-                            <button type="submit" class="btn btn-dark w-50 py-3 rounded-pill fw-bold shadow-sm">Save Changes</button>
+                            <button type="submit"
+                                class="btn btn-light w-50 py-3 rounded-pill fw-bold border">Cancel</button>
+                            <button type="submit" class="btn btn-dark w-50 py-3 rounded-pill fw-bold shadow-sm">Save
+                                Changes</button>
                         </div>
                     </form>
                 </div>
@@ -438,37 +464,37 @@
 
 </html>
 <script>
-document.getElementById('editEventModal').addEventListener('show.bs.modal', function (event) {
-    let button = event.relatedTarget;
+    document.getElementById('editEventModal').addEventListener('show.bs.modal', function (event) {
+        let button = event.relatedTarget;
 
-    let id = button.getAttribute('data-id');
-    let name = button.getAttribute('data-name');
-    let date = button.getAttribute('data-date');
-    let time = button.getAttribute('data-time');
-    let location = button.getAttribute('data-location');
-    let slots = button.getAttribute('data-slots');
-    let description = button.getAttribute('data-description');
+        let id = button.getAttribute('data-id');
+        let name = button.getAttribute('data-name');
+        let date = button.getAttribute('data-date');
+        let time = button.getAttribute('data-time');
+        let location = button.getAttribute('data-location');
+        let slots = button.getAttribute('data-slots');
+        let description = button.getAttribute('data-description');
 
-    let form = document.getElementById('editEventForm');
-    console.log(form);
-    form.action = "/event_organizer/editEvent/" + id;
+        let form = document.getElementById('editEventForm');
+        console.log(form);
+        form.action = "/event_organizer/editEvent/" + id;
 
-    // Fill the inputs
-    form.querySelector('[name="event_name"]').value = name;
-    form.querySelector('[name="event_date"]').value = date;
-    form.querySelector('[name="event_time"]').value = time;
-    form.querySelector('[name="location"]').value = location;
-    form.querySelector('[name="total_slots"]').value = slots;
-    form.querySelector('[name="description"]').value = description ?? '';
-});
+        // Fill the inputs
+        form.querySelector('[name="event_name"]').value = name;
+        form.querySelector('[name="event_date"]').value = date;
+        form.querySelector('[name="event_time"]').value = time;
+        form.querySelector('[name="location"]').value = location;
+        form.querySelector('[name="total_slots"]').value = slots;
+        form.querySelector('[name="description"]').value = description ?? '';
+    });
 
-function confirmDelete(e) {
-    e.preventDefault();   // stop form submission
+    function confirmDelete(e) {
+        e.preventDefault();   // stop form submission
 
-    if (confirm("Are you sure you want to delete this event?\nThis action cannot be undone.")) {
-        e.target.submit();   // user clicked OK → submit
+        if (confirm("Are you sure you want to delete this event?\nThis action cannot be undone.")) {
+            e.target.submit();   // user clicked OK → submit
+        }
+
+        return false; // cancel if user clicks Cancel
     }
-
-    return false; // cancel if user clicks Cancel
-}
 </script>

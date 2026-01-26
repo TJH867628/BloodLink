@@ -61,7 +61,11 @@ class EventOrganizerController extends Controller
     {
         $user = auth()->user();
         $events = EventModel::where('organizer_id', auth()->id())->get();
-        return view('Event_Organizer.eventManagement',compact('events', 'user'));
+        $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
+            ->where('status', 'SEND')
+            ->exists();
+
+        return view('Event_Organizer.eventManagement',compact('events', 'user', 'hasUnreadNotifications'));
     }
     public function participation()
     {
@@ -83,8 +87,12 @@ class EventOrganizerController extends Controller
         ->get();
 
         $events = EventModel::where('organizer_id', auth()->id())->get();
+
+        $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
+            ->where('status', 'SEND')
+            ->exists();
         
-        return view('Event_Organizer.participation',compact('appoinments','user', 'events'));
+        return view('Event_Organizer.participation',compact('appoinments','user', 'events','hasUnreadNotifications'));
     }
 
     public function profile()

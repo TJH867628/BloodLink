@@ -10,7 +10,8 @@ use App\Models\BloodInventory;
 use Illuminate\Http\Request;
 use DB;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\AdminBloodInventoryExport;;
+use App\Exports\AdminBloodInventoryExport;
+;
 use App\Exports\AdminBloodUsageExport;
 use App\Exports\AdminBloodWastageExport;
 use App\Exports\AdminDonationRecordsExport;
@@ -29,25 +30,27 @@ class AdminController extends Controller
         $currentBloodStock = BloodInventory::sum('quantity');
         $emergencyMode = SystemSettings::where('name', 'emergency_mode')->value('value');
         $logs = AuditLog::with('user')
-        ->orderBy('timestamp', 'desc')
-        ->limit(5)
-        ->get();
+            ->orderBy('timestamp', 'desc')
+            ->limit(5)
+            ->get();
         $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
             ->where('status', 'SEND')
             ->exists();
-        return view('Admin.dashboard', compact('totalUsers', 'totalMedicalFacilities', 'currentBloodStock', 'emergencyMode', 'logs','hasUnreadNotifications'));
+        return view('Admin.dashboard', compact('totalUsers', 'totalMedicalFacilities', 'currentBloodStock', 'emergencyMode', 'logs', 'hasUnreadNotifications'));
     }
 
-    public function notification () {
+    public function notification()
+    {
         $user = Auth::user();
         $notifications = NotificationModel::where('user_id', $user->id)
             ->orderByRaw("status = 'READ'")
             ->orderBy('datetime', 'desc')
             ->get();
-        return view('admin.notification', compact('user','notifications'));
+        return view('admin.notification', compact('user', 'notifications'));
     }
 
-    public function markNotificationAsRead(Request $request, $notificationId) {
+    public function markNotificationAsRead(Request $request, $notificationId)
+    {
         $user = Auth::user();
 
         $notification = NotificationModel::where('id', $notificationId)
@@ -64,7 +67,8 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Notification marked as read.');
     }
 
-    public function markAllNotificationsAsRead(Request $request) {
+    public function markAllNotificationsAsRead(Request $request)
+    {
         $user = Auth::user();
 
         NotificationModel::where('user_id', $user->id)
@@ -77,23 +81,26 @@ class AdminController extends Controller
     public function systemModification()
     {
         $settings = SystemSettings::pluck('value', 'name');
-        return view('Admin.systemModification',compact('settings'));
+        return view('Admin.systemModification', compact('settings'));
     }
     public function auditReport()
     {
         $emergencyMode = SystemSettings::where('name', 'emergency_mode')->value('value');
         $logs = DB::table('audit_log')
-        ->leftJoin('users', 'audit_log.user_id', '=', 'users.id')
-        ->select(
-            'audit_log.*',
-            'users.id as user_id',
-            'users.name as user_name',
-            'users.role as user_role'
-        )
-        ->orderBy('audit_log.timestamp', 'desc')
-        ->get();
+            ->leftJoin('users', 'audit_log.user_id', '=', 'users.id')
+            ->select(
+                'audit_log.*',
+                'users.id as user_id',
+                'users.name as user_name',
+                'users.role as user_role'
+            )
+            ->orderBy('audit_log.timestamp', 'desc')
+            ->get();
+        $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
+            ->where('status', 'SEND')
+            ->exists();
 
-        return view('Admin.auditReport', compact('emergencyMode', 'logs'));
+        return view('Admin.auditReport', compact('emergencyMode', 'logs','hasUnreadNotifications'));
     }
 
     public function toggleUserActivation($id)
@@ -144,14 +151,20 @@ class AdminController extends Controller
         $users = User::all();
         $emergencyMode = SystemSettings::where('name', 'emergency_mode')->value('value');
         $facilities = MedicalFacility::all();
-        return view('Admin.userManagement', compact('users','emergencyMode','facilities'));
+        $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
+            ->where('status', 'SEND')
+            ->exists();
+        return view('Admin.userManagement', compact('users', 'emergencyMode', 'facilities','hasUnreadNotifications'));
     }
 
     public function medicalFacilitiesManagement()
     {
         $facilities = MedicalFacility::all();
         $emergencyMode = SystemSettings::where('name', 'emergency_mode')->value('value');
-        return view('Admin.medicalFacilitiesManagement', compact('facilities','emergencyMode'));
+        $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
+            ->where('status', 'SEND')
+            ->exists();
+        return view('Admin.medicalFacilitiesManagement', compact('facilities', 'emergencyMode','hasUnreadNotifications'));
     }
 
     public function createMedicalFacility(Request $request)
@@ -193,9 +206,32 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Medical Facility updated successfully.');
     }
 
+    public function deleteMedicalFacility($facilityId)
+    {
+        $facility = MedicalFacility::findOrFail($facilityId);
+        //CHeck if any users are associated with this facility
+        $associatedUsers = User::where('facility_id', $facilityId)->count();
+        //Check if any blood inventory is associated with this facility
+        $associatedInventory = BloodInventory::where('medical_facilities_id', $facilityId)->count();
+        //Check if any blood bags are associated with this facility
+        $associatedBloodBags = DB::table('blood_bags')->where('facility_id', $facilityId)->count();
+        if ($associatedUsers > 0 || $associatedInventory > 0 || $associatedBloodBags > 0) {
+            return redirect()->back()->with('error', 'Cannot delete facility. There are associated users or blood inventory linked to this facility.');
+        }
+        $facility->delete();
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Deleted medical facility ID: ' . $facilityId,
+            'timestamp' => now(),
+        ]);
+
+        return redirect()->back()->with('success', 'Medical Facility deleted successfully.');
+    }
+
     public function updateSystemSettings(Request $request)
     {
-        $oldEmergency = SystemSettings::where('name','emergency_mode')->value('value') ?? 0;
+        $oldEmergency = SystemSettings::where('name', 'emergency_mode')->value('value') ?? 0;
         $newEmergency = $request->has('emergency_mode') ? 1 : 0;
 
         $settings = [
@@ -242,7 +278,7 @@ class AdminController extends Controller
     private function sendEmergencyAlerts()
     {
         $donors = User::where('role', 'DONOR')
-                    ->get();
+            ->get();
 
         foreach ($donors as $donor) {
             sendSystemNotification(
@@ -252,17 +288,38 @@ class AdminController extends Controller
         }
     }
 
-    public function inventory()
+    public function inventory(Request $request)
     {
         $user = auth()->user();
-        $blood_inventories = BloodInventory::with('medicalFacility')->get();
-        $bloodTypeSummary = BloodInventory::selectRaw('blood_type, SUM(quantity) as total')
-        ->groupBy('blood_type')
-        ->get();
+        $blood_inventories = BloodInventory::with('medicalFacility');
+
+        if ($request->has('facility_id') && $request->input('facility_id') != '') {
+            $blood_inventories->where('medical_facilities_id', $request->input('facility_id'));
+        }
+
+        if ($request->has('blood_type') && $request->input('blood_type') != '') {
+            $blood_inventories->where('blood_type', $request->input('blood_type'));
+        }
+
+        if ($request->has('status') && $request->input('status') != '') {
+            $blood_inventories->where('status', $request->input('status'));
+        }
+
+        $blood_inventories = $blood_inventories->orderBy('created_at', 'desc')->get();
+        $facilities = MedicalFacility::all();
+
+        $bloodTypeSummary = BloodInventory::selectRaw('blood_type,status, SUM(quantity) as total')
+            ->groupBy('blood_type', 'status')
+            ->get();
+        $bloodTypes = SystemSettings::where('name', 'blood_type')
+            ->pluck('value');
 
         $settings = SystemSettings::pluck('value', 'name');
+        $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
+            ->where('status', 'SEND')
+            ->exists();
 
-        return view('Admin.inventory',compact('user', 'blood_inventories', 'bloodTypeSummary','settings'));
+        return view('Admin.inventory', compact('user', 'blood_inventories', 'bloodTypeSummary', 'settings', 'facilities', 'bloodTypes','hasUnreadNotifications'));
     }
 
     public function exportBloodInventory(Request $request)
@@ -282,10 +339,10 @@ class AdminController extends Controller
         if ($from > $to) {
             return redirect()->back()->with('error', 'Invalid date range: "From" date cannot be later than "To" date.');
         }
-        
+
         $format = $request->input('format', 'xlsx');
 
-        return Excel::download(new AdminBloodUsageExport($from, $to), 'blood_usage_'  . $from . '_to_' . $to . '.' . $format);
+        return Excel::download(new AdminBloodUsageExport($from, $to), 'blood_usage_' . $from . '_to_' . $to . '.' . $format);
     }
 
     public function exportBloodWastage(Request $request)
@@ -300,7 +357,7 @@ class AdminController extends Controller
 
         $format = $request->input('format', 'xlsx');
 
-        return Excel::download(new AdminBloodWastageExport($from, $to), 'blood_wastage_'   . $from . '_to_' . $to . '.' . $format);
+        return Excel::download(new AdminBloodWastageExport($from, $to), 'blood_wastage_' . $from . '_to_' . $to . '.' . $format);
     }
 
     public function exportDonationRecords(Request $request)
@@ -310,7 +367,7 @@ class AdminController extends Controller
         $to = $request->input('to') ?? '2100-12-31';
         $now = now()->toDateString();
 
-        return Excel::download(new AdminDonationRecordsExport($from,$to), 'donation_records_'  . $from . '_to_' . $to  . '.' . $format);
+        return Excel::download(new AdminDonationRecordsExport($from, $to), 'donation_records_' . $from . '_to_' . $to . '.' . $format);
     }
 
     public function exportEvent(Request $request)
@@ -320,7 +377,7 @@ class AdminController extends Controller
         $to = $request->input('to') ?? '2100-12-31';
         $now = now()->toDateString();
 
-        return Excel::download(new AdminEventExport($from,$to), 'events_'  . $from . '_to_' . $to . '.' . $format);
+        return Excel::download(new AdminEventExport($from, $to), 'events_' . $from . '_to_' . $to . '.' . $format);
     }
 
     public function exportUserSummary(Request $request)
@@ -328,7 +385,7 @@ class AdminController extends Controller
         $format = $request->input('format', 'xlsx');
         $now = now()->toDateString();
 
-        return Excel::download(new AdminUserSummaryExport, 'user_summary_'  . $now . '.' . $format);
+        return Excel::download(new AdminUserSummaryExport, 'user_summary_' . $now . '.' . $format);
     }
 }
 

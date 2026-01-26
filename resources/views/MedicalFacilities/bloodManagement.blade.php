@@ -231,16 +231,21 @@
     <div class="main-content">
         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
-                <h2 class="fw-black mb-0">Blood Usage</h2>
-                <p class="text-muted small fw-medium mt-1 mb-0">Manage donor intake and record blood distribution.</p>
+                <h2 class="fw-black mb-0">Blood Management</h2>
             </div>
             <div class="d-flex align-items-center gap-4">
                 <div class="d-none d-md-block border-start h-50 mx-2"></div>
                 <div class="d-flex align-items-center gap-3">
+                    <a href="/medical_facilities/notification" class="btn border-0 position-relative text-secondary">
+                        <i class="fas fa-bell fa-lg"></i>
+                        @if($hasUnreadNotifications)
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                        @endif
+                    </a>
                     <div class="text-end d-none d-md-block">
-                        <div class="fw-bold small">{{ $user->role }}</div>
-                        <div class="text-label text-success"
-                            style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Verified Staff</div>
+                        <div class="fw-bold small">Hospital Staff</div>
+                        <div class="text-label text-success">Staff</div>
                     </div>
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hospital" class="rounded-3 border"
                         width="40" height="40" alt="Avatar">
@@ -363,35 +368,32 @@
                 <h5 class="fw-bold mb-0">Usage & Expiry History</h5>
                 <p class="text-muted small mb-0">Used and expired blood bags</p>
             </div>
-        <form method="GET" class="row g-3 p-3 border-bottom bg-white">
+            <form method="GET" class="row g-3 p-3 border-bottom bg-white">
 
-            <div class="col-md-4">
-                <select name="history_status" class="form-select">
-                    <option value="">All (Used & Expired)</option>
-                    <option value="USED" {{ request('history_status') == 'USED' ? 'selected' : '' }}>
-                        Used
-                    </option>
-                    <option value="EXPIRED" {{ request('history_status') == 'EXPIRED' ? 'selected' : '' }}>
-                        Expired
-                    </option>
-                </select>
-            </div>
+                <div class="col-md-4">
+                    <select name="history_status" class="form-select">
+                        <option value="">All (Used & Expired)</option>
+                        <option value="USED" {{ request('history_status') == 'USED' ? 'selected' : '' }}>
+                            Used
+                        </option>
+                        <option value="EXPIRED" {{ request('history_status') == 'EXPIRED' ? 'selected' : '' }}>
+                            Expired
+                        </option>
+                    </select>
+                </div>
 
-            <div class="col-md-6">
-                <input type="number"
-                    name="history_bag_id"
-                    class="form-control"
-                    placeholder="Search Blood Bag ID"
-                    value="{{ request('history_bag_id') }}">
-            </div>
+                <div class="col-md-6">
+                    <input type="number" name="history_bag_id" class="form-control" placeholder="Search Blood Bag ID"
+                        value="{{ request('history_bag_id') }}">
+                </div>
 
-            <div class="col-md-2 d-grid">
-                <button class="btn btn-secondary fw-bold">
-                    <i class="fas fa-filter me-1"></i> Filter
-                </button>
-            </div>
+                <div class="col-md-2 d-grid">
+                    <button class="btn btn-secondary fw-bold">
+                        <i class="fas fa-filter me-1"></i> Filter
+                    </button>
+                </div>
 
-        </form>
+            </form>
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead class="bg-white">

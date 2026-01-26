@@ -60,7 +60,10 @@ class DonorController extends Controller
             ->value('event.date');
         $intervalMonths = SystemSettings::where('name', 'donation_interval_months')->value('value');
         $intervalMonths = (int) $intervalMonths ?: 3;
-        return view('donor.findEvent', compact('user', 'donorHealthDetails', 'events', 'bookedEventId', 'lastAcceptedDate', 'intervalMonths'));
+        $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
+            ->where('status', 'SEND')
+            ->exists();
+        return view('donor.findEvent', compact('user', 'donorHealthDetails', 'events', 'bookedEventId', 'lastAcceptedDate', 'intervalMonths','hasUnreadNotifications'));
     }
 
     public function history()
@@ -92,37 +95,12 @@ class DonorController extends Controller
             )
             ->orderBy('appointment.created_at', 'desc')
             ->get();
+        
+        $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
+            ->where('status', 'SEND')
+            ->exists();
 
-        return view('donor.history', compact('user', 'appointments', 'donations'));
-        $user = Auth::user();
-
-        // Completed donations
-        $donations = DonationRecord::join('event', 'donation_record.event_id', '=', 'event.id')
-            ->leftJoin('medical_facilities', 'donation_record.facility_id', '=', 'medical_facilities.id')
-            ->where('donation_record.donor_id', $user->id)
-            ->select(
-                'donation_record.*',
-                'event.name as event_name',
-                'medical_facilities.name as facility_name'
-            )
-            ->orderBy('donation_record.created_at', 'desc')
-            ->get();
-
-        // All appointments (pending / approved / cancelled)
-        $appointments = Appointment::join('event', 'appointment.event_id', '=', 'event.id')
-            ->where('appointment.donor_id', $user->id)
-            ->whereNotIn('appointment.status', ['COMPLETED'])
-            ->select(
-                'appointment.*',
-                'event.name as event_name',
-                'event.location',
-                'event.date',
-                'event.time'
-            )
-            ->orderBy('appointment.created_at', 'desc')
-            ->get();
-
-        return view('donor.history', compact('user', 'appointments', 'donations'));
+        return view('donor.history', compact('user', 'appointments', 'donations','hasUnreadNotifications'));
     }
 
     public function feedback()
@@ -144,7 +122,11 @@ class DonorController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('donor.feedback', compact('user', 'donations', 'feedbacks'));
+        $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
+            ->where('status', 'SEND')
+            ->exists();
+
+        return view('donor.feedback', compact('user', 'donations', 'feedbacks','hasUnreadNotifications'));
     }
 
     public function submitFeedback(Request $request)
@@ -306,7 +288,11 @@ class DonorController extends Controller
             ->orderBy('value')
             ->get();
 
-        return view('donor.profile', compact('user', 'donorHealthDetails', 'bloodTypes'));
+        $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
+            ->where('status', 'SEND')
+            ->exists();
+
+        return view('donor.profile', compact('user', 'donorHealthDetails', 'bloodTypes','hasUnreadNotifications'));
     }
 
     public function updateProfile(Request $request)

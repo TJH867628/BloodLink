@@ -56,7 +56,7 @@ Schedule::call(function () {
             ->where('blood_type', $bag->blood_type)
             ->decrement('quantity', 1);
     }
-})->everyThirtySeconds();
+})->everyTenSeconds();
 
 Schedule::call(function () {
 
@@ -71,10 +71,6 @@ Schedule::call(function () {
 
         if (!$facility)
             continue;
-
-        $title = $inv->status == 'CRITICAL'
-            ? "Critical Blood Shortage"
-            : "⚠ Low Blood Stock";
 
         $message = "{$facility->name} has {$inv->quantity} units of {$inv->blood_type} blood remaining ({$inv->status}). Immediate replenishment required.";
 
@@ -102,10 +98,41 @@ Schedule::call(function () {
             ]);
         }
     }
+
+    $overallTargetUnit = (int) SystemSettings::where('name', 'overall_target_units')->value('value');
+    $criticalPct = (int) SystemSettings::where('name', 'inventory_critical_pct')->value('value');
+
+    $criticalThreshold = $overallTargetUnit * ($criticalPct / 100);
+
+    $overallInventory = BloodInventory::selectRaw('blood_type, SUM(quantity) as total')
+        ->groupBy('blood_type')
+        ->get();
+
+    $admins = User::where('role', 'ADMIN')->get();
+
+    foreach ($overallInventory as $inv) {
+
+        if ($inv->total > $criticalThreshold) {
+            continue;
+        }
+
+        // CRITICAL
+        $message = "CRITICAL: {$inv->blood_type} blood stock is critical low. Only {$inv->total} units available. Immediate replenishment required.";
+
+        foreach ($admins as $admin) {
+            Notification::create([
+                'user_id' => $admin->id,
+                'message' => $message,
+                'status' => 'SEND',
+                'datetime' => now(),
+            ]);
+        }
+    }
+
 })->daily();
 
 Schedule::call(function () {
-    
+
     $minHemoglobin = SystemSettings::where('name', 'min_hemoglobin')->value('value');
 
     $allHealth = DonorHealthDetails::all();

@@ -268,14 +268,14 @@
         </div>
         <nav class="nav flex-column mt-2 w-100">
             <div class="px-4 pb-2 text-label">Organizer Portal</div>
-            <a href="/event_organizer/dashboard" class="nav-link active"><span class="nav-icon"><i
-                        class="fas fa-chart-pie w-25"></i></span> Dashboard</a>
-            <a href="/event_organizer/eventManagement" class="nav-link"><span class="nav-icon"><i
-                        class="fas fa-calendar-alt w-25"></i></span> Event Management</a>
-            <a href="/event_organizer/participation" class="nav-link"><span class="nav-icon"><i
-                        class="fas fa-users w-25"></i></span> Participation</a>
-            <a href="/event_organizer/profile" class="nav-link"><span class="nav-icon"><i
-                        class="fas fa-id-card"></i></span> Profile</a>
+            <a href="/medical_facilities/dashboard" class="nav-link"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
+            <a href="/medical_facilities/inventory" class="nav-link"><i class="fas fa-box-open w-25"></i> Inventory &
+                Reports</a>
+            <a href="/medical_facilities/donationManagement" class="nav-link"><i class="fas fa-user-nurse w-25"></i>
+                Donation Management</a>
+            <a href="/medical_facilities/bloodManagement" class="nav-link"><i
+                    class="fas fa-exchange-alt w-25"></i> Blood Management</a>
+            <a href="/medical_facilities/profile" class="nav-link"><i class="fas fa-hospital w-25"></i> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">

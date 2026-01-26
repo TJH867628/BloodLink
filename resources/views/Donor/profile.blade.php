@@ -260,6 +260,12 @@
                 <p class="text-muted small fw-medium mt-1">Manage your personal information and health details.</p>
             </div>
             <div class="d-flex align-items-center gap-3">
+                <a href="/donor/notification" class="btn border-0 position-relative text-secondary">
+                    <i class="fas fa-bell fa-lg"></i>
+                    @if($hasUnreadNotifications)
+                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                    @endif
+                </a>
                 <div class="text-end d-none d-md-block">
                     <div class="fw-bold small">{{ $user->name }}</div>
                     <div class="text-label text-success">Donor</div>
