@@ -139,6 +139,14 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'User created successfully.');
     }
 
+    public function userManagement()
+    {
+        $users = User::all();
+        $emergencyMode = SystemSettings::where('name', 'emergency_mode')->value('value');
+        $facilities = MedicalFacility::all();
+        return view('Admin.userManagement', compact('users','emergencyMode','facilities'));
+    }
+
     public function medicalFacilitiesManagement()
     {
         $facilities = MedicalFacility::all();
