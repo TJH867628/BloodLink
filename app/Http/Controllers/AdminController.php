@@ -392,5 +392,27 @@ class AdminController extends Controller
 
         return Excel::download(new AdminUserSummaryExport, 'user_summary_' . $now . '.' . $format);
     }
+
+    public function editUser(Request $request, $userId)
+    {
+        $user = User::findOrFail($userId);
+        if($userId == auth()->user()->id){
+            return redirect()->back()->with('error', 'You cannot edit or suspend your own account.');
+        }
+
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->role = $request->input('role');
+        $user->facility_id = $request->input('facility_id') ?: null;
+        $user->save();
+
+        AuditLog::create([
+            'user_id' => auth()->user()->id,
+            'action' => 'Edited user ID: ' . $userId,
+            'timestamp' => now(),
+        ]);
+
+        return redirect()->back()->with('success', 'User updated successfully.');
+    }
 }
 

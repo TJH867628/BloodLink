@@ -260,6 +260,7 @@
                                 @endif
                             </td>
                             <td class="text-end flex pe-4">
+                                @if($user->role != 'ADMIN' && $user->id != auth()->id())
                                 <button class="btn btn-sm btn-outline-dark rounded-pill fw-bold px-3"
                                     data-bs-toggle="modal"
                                     data-bs-target="#editUserModal"
@@ -269,7 +270,8 @@
                                     data-role="{{ $user->role }}">
                                     <i class="fas fa-edit me-2"></i> Edit
                                 </button>
-                                @if($user->is_active)
+                                @endif
+                                @if($user->is_active && $user->role != 'ADMIN' && $user->id != auth()->id())
                                 <form method="POST" action="{{ route('admin.toggleUserActivation', $user->id) }}" class="d-inline">
                                     @csrf
                                     <button type="submit"
@@ -278,6 +280,10 @@
                                         <i class="fas fa-ban me-1"></i> Suspend
                                     </button>
                                 </form>
+                                @elseif($user->role == 'ADMIN' && $user->id == auth()->id())
+                                    <button class="btn btn-sm btn-outline-success" disabled>
+                                        <i class="fas fa-check me-1"></i> Activate
+                                    </button>
                                 @else
                                 <form method="POST" action="{{ route('admin.toggleUserActivation', $user->id) }}" class="d-inline">
                                     @csrf
@@ -384,11 +390,21 @@
                             </div>
                             <div class="mb-3">
                                 <label class="text-muted fw-bold small text-uppercase mb-1">Role</label>
-                                <select class="form-select" name="role">
+                                <select class="form-select" name="role" id="userEditRoleSelect" required>
                                     <option value="DONOR">Donor</option>
                                     <option value="STAFF">Hospital/Clinic Staff</option>
                                     <option value="ORGANIZER">Event Organizer</option>
                                     <option value="ADMIN">Administrator</option>
+                                </select>
+                            </div>
+                            <!-- Facility only for hospital staff -->
+                            <div class="mb-3" id="userEditFacilityBox" style="display:none;">
+                                <label class="text-muted fw-bold small text-uppercase">Medical Facility</label>
+                                <select class="form-select" name="facility_id">
+                                    <option value="">-- Select Facility --</option>
+                                    @foreach($facilities as $facility)
+                                    <option value="{{ $facility->id }}">{{ $facility->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="d-flex gap-2">
@@ -413,6 +429,20 @@
 <script>
     document.getElementById('roleSelect').addEventListener('change', function() {
         const facilityBox = document.getElementById('facilityBox');
+        const facilitySelect = document.querySelector('select[name="facility_id"]');
+
+        if (this.value === 'STAFF') {
+            facilityBox.style.display = 'block';
+            facilitySelect.setAttribute('required', 'required'); // make it required
+        } else {
+            facilityBox.style.display = 'none';
+            facilitySelect.removeAttribute('required'); // remove requirement
+            facilitySelect.value = '';
+        }
+    });
+
+    document.getElementById('userEditRoleSelect').addEventListener('change', function() {
+        const facilityBox = document.getElementById('userEditFacilityBox');
         const facilitySelect = document.querySelector('select[name="facility_id"]');
 
         if (this.value === 'STAFF') {
