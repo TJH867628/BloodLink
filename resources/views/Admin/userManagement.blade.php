@@ -211,11 +211,11 @@
         @endif
         <div class="custom-card">
             <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
-                <input type="text" class="form-control rounded-pill ps-4" style="max-width: 300px;" placeholder="Search users...">
+                <input type="text" id="userSearch" class="form-control rounded-pill ps-4" style="max-width: 300px;" placeholder="Search users...">
                 <button class="btn btn-primary rounded-pill fw-bold px-4" data-bs-toggle="modal" data-bs-target="#addUserModal"><i class="fas fa-user-plus me-2"></i> Add User</button>
             </div>
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+                <table class="table table-hover align-middle mb-0" id="userTable">
                     <thead class="bg-light">
                         <tr>
                             <th class="ps-4">User</th>
@@ -426,5 +426,21 @@
         form.querySelector('[name="name"]').value = name;
         form.querySelector('[name="email"]').value = email;
         form.querySelector('[name="role"]').value = role;
+    });
+
+    document.getElementById("userSearch").addEventListener("keyup", function() {
+        let keyword = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#userTable tr");
+
+        rows.forEach(function(row) {
+            let text = row.innerText.toLowerCase();
+
+            if (text.includes(keyword)) {
+                row.style.display = "";
+                row.style.backgroundColor = "#fff9db"; 
+            } else {
+                row.style.display = "none";
+            }
+        });
     });
 </script>
