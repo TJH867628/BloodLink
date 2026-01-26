@@ -317,11 +317,6 @@
         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
                 <h2 class="fw-black mb-0">Dashboard</h2>
-                <div class="d-none d-md-flex align-items-center gap-2 mt-1">
-                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3">
-                        <i class="fas fa-check-circle me-1"></i> Authorized
-                    </span>
-                </div>
             </div>
             <div class="d-flex align-items-center gap-4">
                 <a href="/donor/notification" class="btn border-0 position-relative text-secondary">
@@ -334,7 +329,7 @@
                 <div class="d-flex align-items-center gap-3">
                     <div class="text-end d-none d-md-block">
                         <div class="fw-bold small">{{ $user->name }}</div>
-                        <div class="text-label text-success">Donor</div>
+                        <div class="text-label text-success">{{ $user->role }}</div>
                     </div>
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Donor" class="rounded-3 border" width="40" height="40" alt="Avatar">
                 </div>

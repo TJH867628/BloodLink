@@ -262,7 +262,7 @@
             <div class="d-flex align-items-center gap-3">
                 <div class="text-end d-none d-md-block">
                     <div class="fw-bold small">{{ $user->name }}</div>
-                    <div class="text-label text-success">Donor</div>
+                    <div class="text-label text-success">{{ $user->role }}</div>
                 </div>
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Donor" class="rounded-3 border" width="40" height="40" alt="Avatar">
             </div>

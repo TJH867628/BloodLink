@@ -250,8 +250,8 @@
                 <div class="d-none d-md-block border-start h-50 mx-2"></div>
                 <div class="d-flex align-items-center gap-3">
                     <div class="text-end d-none d-md-block">
-                        <div class="fw-bold small">Organizer</div>
-                        <div class="text-label text-success">Event Organizer</div>
+                        <div class="fw-bold small">{{ $user->name }}</div>
+                        <div class="text-label text-success" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">{{ $user->role }}</div>
                     </div>
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Organizer" class="rounded-3 border" width="40" height="40" alt="Avatar">
                 </div>
@@ -331,10 +331,10 @@
                                 <div class="d-flex align-items-center gap-2">
                                     <div class="progress grow" style="height: 6px;">
                                         @php
-                                            $capacity = max((int)$event->slot_capacity, 1);
-                                            $registered = (int)$event->registered_donors;
+                                        $capacity = max((int)$event->slot_capacity, 1);
+                                        $registered = (int)$event->registered_donors;
 
-                                            $filledPercentage = ($registered / $capacity) * 100;
+                                        $filledPercentage = ($registered / $capacity) * 100;
                                         @endphp
                                         <div class="progress-bar {{ $filledPercentage >= 75 ? 'bg-primary' : ($filledPercentage >= 50 ? 'bg-success' : 'bg-warning') }}" style="width: {{ $filledPercentage }}%"></div>
                                     </div>
@@ -343,9 +343,9 @@
                             </td>
                             <td class="px-4 py-3 text-end">
                                 @if($event->status == 'ACTIVE')
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Active</span>
+                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">Active</span>
                                 @else
-                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill">Inactive</span>
+                                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill">Inactive</span>
                                 @endif
                             </td>
                         </tr>
