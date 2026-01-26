@@ -172,7 +172,7 @@
                 <div class="d-flex align-items-center gap-3 p-2 rounded logout-item">
                     <div class="icon-box"><i class="fas fa-sign-out-alt"></i></div>
                     <div>
-                        <div class="fw-bold text-dark small">Admin</div>
+                        <div class="fw-bold text-dark small">{{ $user->name }}</div>
                         <div class="logout-text">Sign Out</div>
                     </div>
                 </div>

@@ -317,11 +317,6 @@
         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
                 <h2 class="fw-black mb-0">Dashboard</h2>
-                <div class="d-none d-md-flex align-items-center gap-2 mt-1">
-                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3">
-                        <i class="fas fa-check-circle me-1"></i> Authorized
-                    </span>
-                </div>
             </div>
             <div class="d-flex align-items-center gap-4">
                 <a href="/donor/notification" class="btn border-0 position-relative text-secondary">
@@ -334,7 +329,7 @@
                 <div class="d-flex align-items-center gap-3">
                     <div class="text-end d-none d-md-block">
                         <div class="fw-bold small">{{ $user->name }}</div>
-                        <div class="text-label text-success">Donor</div>
+                        <div class="text-label text-success">{{ $user->role }}</div>
                     </div>
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Donor" class="rounded-3 border" width="40" height="40" alt="Avatar">
                 </div>
@@ -346,7 +341,7 @@
             <div class="row align-items-center">
                 <div class="col-md-8">
                     <h1 class="fw-bold display-6 mb-3">Welcome back, Donor!</h1>
-                    <p class="opacity-75 fs-5 mb-4">You are currently eligible to donate!</p>
+                    <p class="opacity-75 fs-5 mb-4">You are currently a donor of BloodLink!</p>
                     <a href="/donor/findEvent" class="btn find-event-btn text-danger fw-bold rounded-pill px-4 py-2 shadow-sm text-decoration-none">
                         Find Event <i class="fas fa-arrow-right ms-2"></i>
                     </a>

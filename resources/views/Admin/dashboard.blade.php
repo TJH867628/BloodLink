@@ -204,7 +204,7 @@
                 <div class="d-flex align-items-center gap-3 p-2 rounded logout-item">
                     <div class="icon-box"><i class="fas fa-sign-out-alt"></i></div>
                     <div>
-                        <div class="fw-bold text-dark small">Admin</div>
+                        <div class="fw-bold text-dark small">{{ $user->name }}</div>
                         <div class="logout-text">Sign Out</div>
                     </div>
                 </div>
@@ -221,26 +221,26 @@
                 <a href="/admin/notification" class="btn border-0 position-relative text-secondary">
                     <i class="fas fa-bell fa-lg"></i>
                     @if($hasUnreadNotifications)
-                        <span
-                            class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                    <span
+                        class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
                     @endif
                 </a>
                 <div class="text-end d-none d-md-block">
-                    <div class="fw-bold small">System Admin</div>
-                    <div class="text-label text-primary">Admin</div>
+                    <div class="fw-bold small">{{ $user->name }}</div>
+                    <div class="text-label text-primary" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">{{ $user->role }}</div>
                 </div>
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" class="rounded-3 border" width="40"
                     height="40" alt="Avatar">
             </div>
         </header>
         @if($emergencyMode == 1)
-            <div class="alert alert-danger d-flex align-items-center" role="alert">
-                <i class="fas fa-exclamation-triangle me-2"></i>
-                <div>
-                    <strong>Emergency Mode is Enabled!</strong> The system is currently in emergency mode. Donation
-                    intervals have been reduced to 2 months.
-                </div>
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <div>
+                <strong>Emergency Mode is Enabled!</strong> The system is currently in emergency mode. Donation
+                intervals have been reduced to 2 months.
             </div>
+        </div>
         @endif
         <div class="row g-4 mb-5">
             <div class="col-md-4">
@@ -285,37 +285,37 @@
                     </thead>
                     <tbody>
                         @forelse($logs as $log)
-                            <tr>
-                                <td class="small text-muted">
-                                    {{ \Carbon\Carbon::parse($log->timestamp)->format('h:i A') }}
-                                </td>
+                        <tr>
+                            <td class="small text-muted">
+                                {{ \Carbon\Carbon::parse($log->timestamp)->format('h:i A') }}
+                            </td>
 
-                                <td>
-                                    <div class="fw-bold">{{ $log->user->name }}</div>
-                                    <div class="text-muted small">
-                                        ID {{ $log->user_id }} •
-                                        <span class="
+                            <td>
+                                <div class="fw-bold">{{ $log->user->name }}</div>
+                                <div class="text-muted small">
+                                    ID {{ $log->user_id }} •
+                                    <span class="
                                             @if($log->user->role == 'ADMIN') text-danger
                                             @elseif($log->user->role == 'HOSPITAL') text-primary
                                             @elseif($log->user->role == 'DONOR') text-success
                                             @else text-secondary
                                             @endif
                                         ">
-                                            {{ $log->user->role }}
-                                        </span>
-                                    </div>
-                                </td>
+                                        {{ $log->user->role }}
+                                    </span>
+                                </div>
+                            </td>
 
-                                <td class="fw-semibold">
-                                    {{ $log->action }}
-                                </td>
-                            </tr>
+                            <td class="fw-semibold">
+                                {{ $log->action }}
+                            </td>
+                        </tr>
                         @empty
-                            <tr>
-                                <td colspan="3" class="text-center text-muted py-3">
-                                    No activity yet
-                                </td>
-                            </tr>
+                        <tr>
+                            <td colspan="3" class="text-center text-muted py-3">
+                                No activity yet
+                            </td>
+                        </tr>
                         @endforelse
                     </tbody>
                 </table>

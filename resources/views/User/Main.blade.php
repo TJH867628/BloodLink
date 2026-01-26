@@ -313,7 +313,7 @@
                     <h2 class="display-5 fw-black mb-2 text-dark">Upcoming Drives</h2>
                     <p class="text-secondary lead fs-6 mb-0">Join a donation event near you and make a difference.</p>
                 </div>
-                <button class="btn btn-outline-custom">View All Events</button>
+                <a href="{{ route('login') }}" class="btn btn-outline-custom">View All Events</a>
             </div>
 
             <div class="row g-4">
@@ -342,7 +342,7 @@
 
                         <div class="pt-4 border-top mt-auto d-flex align-items-center justify-content-between">
                             <span class="text-brand fw-black text-uppercase" style="font-size: 0.75rem;">12 Slots Remaining</span>
-                            <button class="btn btn-brand py-2 px-4 rounded-3 text-sm">Book</button>
+                            <a href="{{ route('login') }}" class="btn btn-brand py-2 px-4 rounded-3 text-sm">Book</a>
                         </div>
                     </div>
                 </div>
@@ -372,7 +372,7 @@
 
                         <div class="pt-4 border-top mt-auto d-flex align-items-center justify-content-between">
                             <span class="text-brand fw-black text-uppercase" style="font-size: 0.75rem;">30 Slots Remaining</span>
-                            <button class="btn btn-brand py-2 px-4 rounded-3 text-sm">Book</button>
+                            <a href="{{ route('login') }}" class="btn btn-brand py-2 px-4 rounded-3 text-sm">Book</a>
                         </div>
                     </div>
                 </div>

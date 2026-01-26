@@ -278,9 +278,18 @@
     </div>
 
     <div class="main-content">
-        <header class="mb-5">
-            <h2 class="fw-black mb-0">Organizer Profile</h2>
-            <p class="text-muted small fw-medium mt-1">Manage organization details and personal account settings.</p>
+        <header class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h2 class="fw-black mb-0">Organizer Profile</h2>
+                <p class="text-muted small fw-medium mt-1">Manage organization details and personal account settings.</p>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="text-end d-none d-md-block">
+                    <div class="fw-bold small">{{ $user->name }}</div>
+                    <div class="text-label text-success" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">{{ $user->role }}</div>
+                </div>
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Organizer" class="rounded-3 border" width="40" height="40" alt="Avatar">
+            </div>
         </header>
         @if(session('success'))
             <div class="alert alert-success">

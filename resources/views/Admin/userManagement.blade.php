@@ -173,7 +173,7 @@
                 <div class="d-flex align-items-center gap-3 p-2 rounded logout-item">
                     <div class="icon-box"><i class="fas fa-sign-out-alt"></i></div>
                     <div>
-                        <div class="fw-bold text-dark small">Admin</div>
+                        <div class="fw-bold text-dark small">{{ $user->name }}</div>
                         <div class="logout-text">Sign Out</div>
                     </div>
                 </div>
@@ -195,8 +195,8 @@
                     @endif
                 </a>
                 <div class="text-end d-none d-md-block">
-                    <div class="fw-bold small">System Admin</div>
-                    <div class="text-label text-primary">Admin</div>
+                     <div class="fw-bold small">{{ $user->name }}</div>
+                    <div class="text-label text-primary" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">{{ $user->role }}</div>
                 </div>
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" class="rounded-3 border" width="40"
                     height="40" alt="Avatar">
@@ -212,25 +212,23 @@
             </div>
         @endif
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         @elseif(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         @endif
         <div class="custom-card">
             <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
-                <input type="text" class="form-control rounded-pill ps-4" style="max-width: 300px;"
-                    placeholder="Search users...">
-                <button class="btn btn-primary rounded-pill fw-bold px-4" data-bs-toggle="modal"
-                    data-bs-target="#addUserModal"><i class="fas fa-user-plus me-2"></i> Add User</button>
+                <input type="text" id="userSearch" class="form-control rounded-pill ps-4" style="max-width: 300px;" placeholder="Search users...">
+                <button class="btn btn-primary rounded-pill fw-bold px-4" data-bs-toggle="modal" data-bs-target="#addUserModal"><i class="fas fa-user-plus me-2"></i> Add User</button>
             </div>
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+                <table class="table table-hover align-middle mb-0" id="userTable">
                     <thead class="bg-light">
                         <tr>
                             <th class="ps-4">User</th>
@@ -241,48 +239,57 @@
                     </thead>
                     <tbody>
                         @foreach ($users as $user)
-                            <tr>
-                                <td class="ps-4">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div>
-                                            <span class="badge bg-light text-dark border">ID: {{ $user->id }}</span>
-                                            <div class="fw-bold">{{ $user->name }}</div>
-                                            <div class="text-muted small">{{ $user->email }}</div>
-                                        </div>
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div>
+                                        <span class="badge bg-light text-dark border">ID: {{ $user->id }}</span>
+                                        <div class="fw-bold">{{ $user->name }}</div>
+                                        <div class="text-muted small">{{ $user->email }}</div>
                                     </div>
-                                </td>
-                                <td>{{ $user->role }}</td>
-                                <td>
-                                    @if ($user->is_active == true)
-                                        <span class="badge bg-success">Active</span>
-                                    @elseif ($user->is_active == false)
-                                        <span class="badge bg-danger">Suspended</span>
-                                    @else
-                                        <span class="badge bg-secondary">Unknown</span>
-                                    @endif
-                                </td>
-                                <td class="text-end pe-4">
-                                    @if($user->is_active)
-                                        <form method="POST" action="{{ route('admin.toggleUserActivation', $user->id) }}"
-                                            class="d-inline">
-                                            @csrf
-                                            <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                onclick="return confirm('Suspend this account? The user will no longer be able to log in.')">
-                                                <i class="fas fa-ban me-1"></i> Suspend
-                                            </button>
-                                        </form>
-                                    @else
-                                        <form method="POST" action="{{ route('admin.toggleUserActivation', $user->id) }}"
-                                            class="d-inline">
-                                            @csrf
-                                            <button type="submit" class="btn btn-sm btn-outline-success"
-                                                onclick="return confirm('Activate this account? The user will be able to log in again.')">
-                                                <i class="fas fa-check me-1"></i> Activate
-                                            </button>
-                                        </form>
-                                    @endif
-                                </td>
-                            </tr>
+                                </div>
+                            </td>
+                            <td>{{ $user->role }}</td>
+                            <td>
+                                @if ($user->is_active == true)
+                                <span class="badge bg-success">Active</span>
+                                @elseif ($user->is_active == false)
+                                <span class="badge bg-danger">Suspended</span>
+                                @else
+                                <span class="badge bg-secondary">Unknown</span>
+                                @endif
+                            </td>
+                            <td class="text-end flex pe-4">
+                                <button class="btn btn-sm btn-outline-dark rounded-pill fw-bold px-3"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editUserModal"
+                                    data-id="{{ $user->id }}"
+                                    data-name="{{ $user->name }}"
+                                    data-email="{{ $user->email }}"
+                                    data-role="{{ $user->role }}">
+                                    <i class="fas fa-edit me-2"></i> Edit
+                                </button>
+                                @if($user->is_active)
+                                <form method="POST" action="{{ route('admin.toggleUserActivation', $user->id) }}" class="d-inline">
+                                    @csrf
+                                    <button type="submit"
+                                        class="btn btn-sm btn-outline-danger"
+                                        onclick="return confirm('Suspend this account? The user will no longer be able to log in.')">
+                                        <i class="fas fa-ban me-1"></i> Suspend
+                                    </button>
+                                </form>
+                                @else
+                                <form method="POST" action="{{ route('admin.toggleUserActivation', $user->id) }}" class="d-inline">
+                                    @csrf
+                                    <button type="submit"
+                                        class="btn btn-sm btn-outline-success"
+                                        onclick="return confirm('Activate this account? The user will be able to log in again.')">
+                                        <i class="fas fa-check me-1"></i> Activate
+                                    </button>
+                                </form>
+                                @endif
+                            </td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -337,7 +344,7 @@
                                 <select class="form-select" name="facility_id">
                                     <option value="">-- Select Facility --</option>
                                     @foreach($facilities as $facility)
-                                        <option value="{{ $facility->id }}">{{ $facility->name }}</option>
+                                    <option value="{{ $facility->id }}">{{ $facility->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -355,13 +362,56 @@
                 </div>
             </div>
         </div>
+
+        <!-- Edit User Modal -->
+        <div class="modal fade" id="editUserModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow" style="border-radius: 24px;">
+                    <div class="modal-header border-0 p-4 pb-0">
+                        <h5 class="modal-title fw-bold">Edit User</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <form method="POST" id="editUserForm">
+                            @csrf
+                            <div class="mb-3">
+                                <label class="text-muted fw-bold small text-uppercase mb-1">User Name</label>
+                                <input type="text" class="form-control" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted fw-bold small text-uppercase mb-1">User Email</label>
+                                <input type="text" class="form-control" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted fw-bold small text-uppercase mb-1">Role</label>
+                                <select class="form-select" name="role">
+                                    <option value="DONOR">Donor</option>
+                                    <option value="STAFF">Hospital/Clinic Staff</option>
+                                    <option value="ORGANIZER">Event Organizer</option>
+                                    <option value="ADMIN">Administrator</option>
+                                </select>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-light w-50 py-3 rounded-pill fw-bold border" data-bs-dismiss="modal">
+                                    Cancel
+                                </button>
+                                <button type="submit" class="btn btn-dark w-50 py-3 rounded-pill fw-bold shadow-sm">
+                                    Save Changes
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
 <script>
-    document.getElementById('roleSelect').addEventListener('change', function () {
+    document.getElementById('roleSelect').addEventListener('change', function() {
         const facilityBox = document.getElementById('facilityBox');
         const facilitySelect = document.querySelector('select[name="facility_id"]');
 
@@ -373,5 +423,37 @@
             facilitySelect.removeAttribute('required'); // remove requirement
             facilitySelect.value = '';
         }
+    });
+
+    document.getElementById('editUserModal').addEventListener('show.bs.modal', function(event) {
+        let button = event.relatedTarget;
+
+        let id = button.getAttribute('data-id');
+        let name = button.getAttribute('data-name');
+        let email = button.getAttribute('data-email');
+        let role = button.getAttribute('data-role');
+
+        let form = document.getElementById('editUserForm');
+        form.action = "/admin/editUser/" + id;
+
+        form.querySelector('[name="name"]').value = name;
+        form.querySelector('[name="email"]').value = email;
+        form.querySelector('[name="role"]').value = role;
+    });
+
+    document.getElementById("userSearch").addEventListener("keyup", function() {
+        let keyword = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#userTable tr");
+
+        rows.forEach(function(row) {
+            let text = row.innerText.toLowerCase();
+
+            if (text.includes(keyword)) {
+                row.style.display = "";
+                row.style.backgroundColor = "#fff9db"; 
+            } else {
+                row.style.display = "none";
+            }
+        });
     });
 </script>

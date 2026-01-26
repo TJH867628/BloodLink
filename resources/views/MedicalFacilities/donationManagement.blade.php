@@ -221,7 +221,7 @@
                         <i class="fas fa-sign-out-alt"></i>
                     </div>
                     <div>
-                        <div class="fw-bold text-dark small">Dr. {{ $user->name }}</div>
+                        <div class="fw-bold text-dark small">{{ $user->name }}</div>
                         <div class="logout-text">Sign Out</div>
                     </div>
                 </div>
@@ -245,8 +245,8 @@
                         @endif
                     </a>
                     <div class="text-end d-none d-md-block">
-                        <div class="fw-bold small">Hospital Staff</div>
-                        <div class="text-label text-success">Staff</div>
+                        <div class="fw-bold small">{{ $user->name }}</div>
+                        <div class="text-label text-success" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">{{ $user->role }}</div>
                     </div>
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Hospital" class="rounded-3 border"
                         width="40" height="40" alt="Avatar">
@@ -275,30 +275,30 @@
                             </thead>
                             <tbody>
                                 @foreach ($donation_today as $donation)
-                                    <tr>
-                                        <td class="px-4 py-3">
-                                            <div class="d-flex align-items-center gap-3">
-                                                <div class="bg-danger-subtle text-danger rounded p-1 fw-bold small text-center"
-                                                    style="width: 32px;">{{ $donation->blood_type }}</div>
-                                                <div>
-                                                    <div class="fw-bold">{{ $donation->donor_name }}</div>
-                                                </div>
+                                <tr>
+                                    <td class="px-4 py-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="bg-danger-subtle text-danger rounded p-1 fw-bold small text-center"
+                                                style="width: 32px;">{{ $donation->blood_type }}</div>
+                                            <div>
+                                                <div class="fw-bold">{{ $donation->donor_name }}</div>
                                             </div>
-                                        </td>
-                                        <td class="px-4 py-3 text-muted fw-medium">{{ $donation->time }}</td>
-                                        <td class="px-4 py-3 text-end">
-                                            <button class="btn btn-outline-danger btn-sm fw-bold rounded-pill px-3"
-                                                data-bs-toggle="modal" data-bs-target="#recordModal"
-                                                data-appointment="{{ $donation->appointment_id }}">Record Result</button>
-                                        </td>
-                                    </tr>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3 text-muted fw-medium">{{ $donation->time }}</td>
+                                    <td class="px-4 py-3 text-end">
+                                        <button class="btn btn-outline-danger btn-sm fw-bold rounded-pill px-3"
+                                            data-bs-toggle="modal" data-bs-target="#recordModal"
+                                            data-appointment="{{ $donation->appointment_id }}">Record Result</button>
+                                    </td>
+                                </tr>
                                 @endforeach
                                 @if(count($donation_today) == 0)
-                                    <tr>
-                                        <td colspan="3" class="text-center text-muted py-4">
-                                            No more donors in the queue
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-4">
+                                        No more donors in the queue
+                                    </td>
+                                </tr>
                                 @endif
                             </tbody>
                         </table>
@@ -312,24 +312,24 @@
                     <h5 class="fw-bold mb-4">Recent Records</h5>
                     <div class="vstack gap-3">
                         @forelse($recentRecords as $r)
-                            <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-4">
-                                <div>
-                                    <div class="fw-bold small text-dark">{{ $r->donor_name }}</div>
-                                    <div class="text-muted" style="font-size: 0.7rem;">
-                                        {{ \Carbon\Carbon::parse($r->collected_date)->format('d M Y') }}
-                                    </div>
+                        <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-4">
+                            <div>
+                                <div class="fw-bold small text-dark">{{ $r->donor_name }}</div>
+                                <div class="text-muted" style="font-size: 0.7rem;">
+                                    {{ \Carbon\Carbon::parse($r->collected_date)->format('d M Y') }}
                                 </div>
+                            </div>
 
-                                @if($r->status == 'SUCCESSFUL')
-                                    <span class="badge bg-success text-white border-0">Successful</span>
-                                @else
-                                    <span class="badge bg-warning text-dark border-0">Discarded</span>
-                                @endif
-                            </div>
+                            @if($r->status == 'SUCCESSFUL')
+                            <span class="badge bg-success text-white border-0">Successful</span>
+                            @else
+                            <span class="badge bg-warning text-dark border-0">Discarded</span>
+                            @endif
+                        </div>
                         @empty
-                            <div class="text-center text-muted small py-4">
-                                No records yet
-                            </div>
+                        <div class="text-center text-muted small py-4">
+                            No records yet
+                        </div>
                         @endforelse
                     </div>
                     <button class="btn btn-link text-danger text-decoration-none fw-bold text-uppercase w-100 mt-3"
@@ -409,7 +409,7 @@
                     <div class="d-flex gap-2 mb-3">
                         <input type="text" id="historySearch" class="form-control form-control-sm w-auto"
                             placeholder="Search Donor ID">
-                        <select id="historyStatus" class="form-select form-select-sm w-auto">
+                        <select id="historyStatus" class="form-select">
                             <option value="all">All Results</option>
                             <option value="SUCCESSFUL">Successful</option>
                             <option value="DISCARDED">Discarded</option>
@@ -429,46 +429,46 @@
                             </thead>
                             <tbody>
                                 @forelse($donationHistory as $r)
-                                    <tr>
-                                        <td class="small text-muted ps-3">
-                                            {{ \Carbon\Carbon::parse($r->collected_date)->format('d M Y') }}
-                                        </td>
+                                <tr>
+                                    <td class="small text-muted ps-3">
+                                        {{ \Carbon\Carbon::parse($r->collected_date)->format('d M Y') }}
+                                    </td>
 
-                                        <td>
-                                            <div class="fw-bold small">{{ $r->donor_name }}</div>
-                                            <div class="small text-muted">ID: D-{{ $r->donor_id }}</div>
-                                        </td>
+                                    <td>
+                                        <div class="fw-bold small">{{ $r->donor_name }}</div>
+                                        <div class="small text-muted">ID: D-{{ $r->donor_id }}</div>
+                                    </td>
 
-                                        <td>
-                                            <span class="badge bg-light text-dark border">
-                                                {{ $r->blood_type }}
-                                            </span>
-                                        </td>
+                                    <td>
+                                        <span class="badge bg-light text-dark border">
+                                            {{ $r->blood_type }}
+                                        </span>
+                                    </td>
 
-                                        <td class="small">
-                                            {{ $r->hemoglobin_level }} / {{ $r->blood_pressure }}
-                                        </td>
+                                    <td class="small">
+                                        {{ $r->hemoglobin_level }} / {{ $r->blood_pressure }}
+                                    </td>
 
-                                        <td class="text-end pe-3">
-                                            @if($r->status == 'SUCCESSFUL')
-                                                <span
-                                                    class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">
-                                                    Successful
-                                                </span>
-                                            @else
-                                                <span
-                                                    class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill">
-                                                    Discarded
-                                                </span>
-                                            @endif
-                                        </td>
-                                    </tr>
+                                    <td class="text-end pe-3">
+                                        @if($r->status == 'SUCCESSFUL')
+                                        <span
+                                            class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">
+                                            Successful
+                                        </span>
+                                        @else
+                                        <span
+                                            class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill">
+                                            Discarded
+                                        </span>
+                                        @endif
+                                    </td>
+                                </tr>
                                 @empty
-                                    <tr>
-                                        <td colspan="5" class="text-center text-muted py-4">
-                                            No donation records found
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">
+                                        No donation records found
+                                    </td>
+                                </tr>
                                 @endforelse
                                 <tr id="historyNoData" style="display: none;">
                                     <td colspan="5" class="text-center text-muted py-4">
@@ -496,7 +496,7 @@
 </html>
 
 <script>
-    document.getElementById('recordModal').addEventListener('show.bs.modal', function (event) {
+    document.getElementById('recordModal').addEventListener('show.bs.modal', function(event) {
         const button = event.relatedTarget;
         const appointmentId = button.getAttribute('data-appointment');
 

@@ -25,6 +25,7 @@ class AdminController extends Controller
     //
     public function adminDashboard()
     {
+        $user = auth()->user();
         $totalUsers = User::count();
         $totalMedicalFacilities = MedicalFacility::count();
         $currentBloodStock = BloodInventory::sum('quantity');
@@ -36,7 +37,7 @@ class AdminController extends Controller
         $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
             ->where('status', 'SEND')
             ->exists();
-        return view('Admin.dashboard', compact('totalUsers', 'totalMedicalFacilities', 'currentBloodStock', 'emergencyMode', 'logs', 'hasUnreadNotifications'));
+        return view('Admin.dashboard', compact('user', 'totalUsers', 'totalMedicalFacilities', 'currentBloodStock', 'emergencyMode', 'logs', 'hasUnreadNotifications'));
     }
 
     public function notification()
@@ -80,11 +81,13 @@ class AdminController extends Controller
 
     public function systemModification()
     {
+        $user = auth()->user();
         $settings = SystemSettings::pluck('value', 'name');
-        return view('Admin.systemModification', compact('settings'));
+        return view('Admin.systemModification', compact('user', 'settings'));
     }
     public function auditReport()
     {
+        $user = auth()->user();
         $emergencyMode = SystemSettings::where('name', 'emergency_mode')->value('value');
         $logs = DB::table('audit_log')
             ->leftJoin('users', 'audit_log.user_id', '=', 'users.id')
@@ -100,7 +103,7 @@ class AdminController extends Controller
             ->where('status', 'SEND')
             ->exists();
 
-        return view('Admin.auditReport', compact('emergencyMode', 'logs','hasUnreadNotifications'));
+        return view('Admin.auditReport', compact('user', 'emergencyMode', 'logs','hasUnreadNotifications'));
     }
 
     public function toggleUserActivation($id)
@@ -148,23 +151,25 @@ class AdminController extends Controller
 
     public function userManagement()
     {
+        $user = auth()->user();
         $users = User::all();
         $emergencyMode = SystemSettings::where('name', 'emergency_mode')->value('value');
         $facilities = MedicalFacility::all();
         $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
             ->where('status', 'SEND')
             ->exists();
-        return view('Admin.userManagement', compact('users', 'emergencyMode', 'facilities','hasUnreadNotifications'));
+        return view('Admin.userManagement', compact('user', 'users', 'emergencyMode', 'facilities','hasUnreadNotifications'));
     }
 
     public function medicalFacilitiesManagement()
     {
+        $user = auth()->user();
         $facilities = MedicalFacility::all();
         $emergencyMode = SystemSettings::where('name', 'emergency_mode')->value('value');
         $hasUnreadNotifications = NotificationModel::where('user_id', auth()->id())
             ->where('status', 'SEND')
             ->exists();
-        return view('Admin.medicalFacilitiesManagement', compact('facilities', 'emergencyMode','hasUnreadNotifications'));
+        return view('Admin.medicalFacilitiesManagement', compact('user', 'facilities', 'emergencyMode','hasUnreadNotifications'));
     }
 
     public function createMedicalFacility(Request $request)

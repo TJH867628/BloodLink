@@ -66,6 +66,8 @@
         .nav-icon {
             width: 32px;
             /* FIXED WIDTH */
+            width: 32px;
+            /* FIXED WIDTH */
             display: flex;
             justify-content: center;
             font-size: 1rem;
@@ -240,11 +242,9 @@
             <div class="collapse navbar-collapse" id="mobileMenu">
                 <a href="/admin/dashboard" class="nav-link active"><i class="fas fa-chart-pie w-25"></i> Dashboard</a>
                 <a href="/admin/userManagement" class="nav-link"><i class="fas fa-users w-25"></i> User Management</a>
-                <a href="/admin/medicalFacilitiesManagement" class="nav-link"><i
-                        class="fas fa-hospital w-25"></i>Medical Facilities Management</a>
+                <a href="/admin/medicalFacilitiesManagement" class="nav-link"><i class="fas fa-hospital w-25"></i>Medical Facilities Management</a>
                 <a href="/admin/inventory" class="nav-link"><i class="fas fa-hospital w-25"></i>Blood Inventories</a>
-                <a href="/admin/systemModification" class="nav-link"><i class="fas fa-cogs w-25"></i> System
-                    Modification</a>
+                <a href="/admin/systemModification" class="nav-link"><i class="fas fa-cogs w-25"></i> System Modification</a>
                 <a href="/admin/auditReport" class="nav-link"><i class="fas fa-file-alt w-25"></i> Audit & Reports</a>
             </div>
         </div>
@@ -275,7 +275,7 @@
                         <i class="fas fa-sign-out-alt"></i>
                     </div>
                     <div>
-                        <div class="fw-bold text-dark small">Dr. {{ $user->name }}</div>
+                        <div class="fw-bold text-dark small">{{ $user->name }}</div>
                         <div class="logout-text">Sign Out</div>
                     </div>
                 </div>
@@ -286,7 +286,7 @@
     <div class="main-content">
          <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
-                <h2 class="fw-black mb-0">Blood Inventories</h2>
+                <h2 class="fw-black mb-0">Inventory & Reports</h2>
             </div>
             <div class="d-flex align-items-center gap-3">
                 <a href="/admin/notification" class="btn border-0 position-relative text-secondary">
@@ -296,9 +296,14 @@
                             class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
                     @endif
                 </a>
-                <div class="text-end d-none d-md-block">
-                    <div class="fw-bold small">System Admin</div>
-                    <div class="text-label text-primary">Admin</div>
+                <div class="d-none d-md-block border-start h-50 mx-2"></div>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="text-end d-none d-md-block">
+                        <div class="fw-bold small">{{ $user->name }}</div>
+                        <div class="text-label text-primary" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">{{ $user->role }}</div>
+                    </div>
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" class="rounded-3 border" width="40"
+                        height="40" alt="Avatar">
                 </div>
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" class="rounded-3 border" width="40"
                     height="40" alt="Avatar">

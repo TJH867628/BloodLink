@@ -170,7 +170,7 @@
                 <div class="d-flex align-items-center gap-3 p-2 rounded logout-item">
                     <div class="icon-box"><i class="fas fa-sign-out-alt"></i></div>
                     <div>
-                        <div class="fw-bold text-dark small">Admin</div>
+                        <div class="fw-bold text-dark small">{{ $user->name }}</div>
                         <div class="logout-text">Sign Out</div>
                     </div>
                 </div>
@@ -192,8 +192,8 @@
                     @endif
                 </a>
                 <div class="text-end d-none d-md-block">
-                    <div class="fw-bold small">System Admin</div>
-                    <div class="text-label text-primary">Admin</div>
+                     <div class="fw-bold small">{{ $user->name }}</div>
+                    <div class="text-label text-primary" style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">{{ $user->role }}</div>
                 </div>
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" class="rounded-3 border" width="40"
                     height="40" alt="Avatar">
