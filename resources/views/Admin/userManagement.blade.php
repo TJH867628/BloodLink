@@ -176,7 +176,7 @@
             </a>
         </div>
     </div>
-   
+
     <div class="main-content">
         <header class="d-flex justify-content-between align-items-center mb-5">
             <div>
@@ -199,15 +199,15 @@
         </div>
         @endif
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         @elseif(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         @endif
         <div class="custom-card">
             <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
@@ -246,26 +246,35 @@
                                 <span class="badge bg-secondary">Unknown</span>
                                 @endif
                             </td>
-                            <td class="text-end pe-4">
-                               @if($user->is_active)
+                            <td class="text-end flex pe-4">
+                                <button class="btn btn-sm btn-outline-dark rounded-pill fw-bold px-3"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editUserModal"
+                                    data-id="{{ $user->id }}"
+                                    data-name="{{ $user->name }}"
+                                    data-email="{{ $user->email }}"
+                                    data-role="{{ $user->role }}">
+                                    <i class="fas fa-edit me-2"></i> Edit
+                                </button>
+                                @if($user->is_active)
                                 <form method="POST" action="{{ route('admin.toggleUserActivation', $user->id) }}" class="d-inline">
                                     @csrf
-                                    <button type="submit" 
+                                    <button type="submit"
                                         class="btn btn-sm btn-outline-danger"
                                         onclick="return confirm('Suspend this account? The user will no longer be able to log in.')">
                                         <i class="fas fa-ban me-1"></i> Suspend
                                     </button>
                                 </form>
-                            @else
+                                @else
                                 <form method="POST" action="{{ route('admin.toggleUserActivation', $user->id) }}" class="d-inline">
                                     @csrf
-                                    <button type="submit" 
+                                    <button type="submit"
                                         class="btn btn-sm btn-outline-success"
                                         onclick="return confirm('Activate this account? The user will be able to log in again.')">
                                         <i class="fas fa-check me-1"></i> Activate
                                     </button>
                                 </form>
-                            @endif
+                                @endif
                             </td>
                         </tr>
                         @endforeach
@@ -283,59 +292,102 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body p-4">
-                    <form method="POST" action="{{ route('admin.createUser') }}">
-                        @csrf
+                        <form method="POST" action="{{ route('admin.createUser') }}">
+                            @csrf
 
-                        <div class="mb-3">
-                            <label class="text-muted fw-bold small text-uppercase">Full Name</label>
-                            <input type="text" class="form-control" name="name" required>
-                        </div>
+                            <div class="mb-3">
+                                <label class="text-muted fw-bold small text-uppercase">Full Name</label>
+                                <input type="text" class="form-control" name="name" required>
+                            </div>
 
-                        <div class="mb-3">
-                            <label class="text-muted fw-bold small text-uppercase">Email</label>
-                            <input type="email" class="form-control" name="email" required>
-                        </div>
+                            <div class="mb-3">
+                                <label class="text-muted fw-bold small text-uppercase">Email</label>
+                                <input type="email" class="form-control" name="email" required>
+                            </div>
 
-                        <div class="row g-3 mb-3">
-                            <div class="col-6">
-                                <label class="text-muted fw-bold small text-uppercase">System Role</label>
-                                <select class="form-select" name="role" id="roleSelect" required>
+                            <div class="row g-3 mb-3">
+                                <div class="col-6">
+                                    <label class="text-muted fw-bold small text-uppercase">System Role</label>
+                                    <select class="form-select" name="role" id="roleSelect" required>
+                                        <option value="DONOR">Donor</option>
+                                        <option value="STAFF">Hospital/Clinic Staff</option>
+                                        <option value="ORGANIZER">Event Organizer</option>
+                                        <option value="ADMIN">Administrator</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="text-muted fw-bold small text-uppercase">Status</label>
+                                    <select class="form-select" name="status">
+                                        <option value="active">Active</option>
+                                        <option value="suspended">Suspended</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Facility only for hospital staff -->
+                            <div class="mb-3" id="facilityBox" style="display:none;">
+                                <label class="text-muted fw-bold small text-uppercase">Medical Facility</label>
+                                <select class="form-select" name="facility_id">
+                                    <option value="">-- Select Facility --</option>
+                                    @foreach($facilities as $facility)
+                                    <option value="{{ $facility->id }}">{{ $facility->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="text-muted fw-bold small text-uppercase">Temporary Password</label>
+                                <input type="text" class="form-control" name="password" value="Welcome@2026" readonly>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold rounded-pill">
+                                Create User Account
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit User Modal -->
+        <div class="modal fade" id="editUserModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow" style="border-radius: 24px;">
+                    <div class="modal-header border-0 p-4 pb-0">
+                        <h5 class="modal-title fw-bold">Edit User</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <form method="POST" id="editUserForm">
+                            @csrf
+                            <div class="mb-3">
+                                <label class="text-muted fw-bold small text-uppercase mb-1">User Name</label>
+                                <input type="text" class="form-control" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted fw-bold small text-uppercase mb-1">User Email</label>
+                                <input type="text" class="form-control" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted fw-bold small text-uppercase mb-1">Role</label>
+                                <select class="form-select" name="role">
                                     <option value="DONOR">Donor</option>
                                     <option value="STAFF">Hospital/Clinic Staff</option>
                                     <option value="ORGANIZER">Event Organizer</option>
                                     <option value="ADMIN">Administrator</option>
                                 </select>
                             </div>
-
-                            <div class="col-6">
-                                <label class="text-muted fw-bold small text-uppercase">Status</label>
-                                <select class="form-select" name="status">
-                                    <option value="active">Active</option>
-                                    <option value="suspended">Suspended</option>
-                                </select>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-light w-50 py-3 rounded-pill fw-bold border" data-bs-dismiss="modal">
+                                    Cancel
+                                </button>
+                                <button type="submit" class="btn btn-dark w-50 py-3 rounded-pill fw-bold shadow-sm">
+                                    Save Changes
+                                </button>
                             </div>
-                        </div>
 
-                        <!-- Facility only for hospital staff -->
-                        <div class="mb-3" id="facilityBox" style="display:none;">
-                            <label class="text-muted fw-bold small text-uppercase">Medical Facility</label>
-                            <select class="form-select" name="facility_id">
-                                <option value="">-- Select Facility --</option>
-                                @foreach($facilities as $facility)
-                                    <option value="{{ $facility->id }}">{{ $facility->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="text-muted fw-bold small text-uppercase">Temporary Password</label>
-                            <input type="text" class="form-control" name="password" value="Welcome@2026" readonly>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100 py-3 fw-bold rounded-pill">
-                            Create User Account
-                        </button>
-                    </form>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -346,17 +398,33 @@
 
 </html>
 <script>
-document.getElementById('roleSelect').addEventListener('change', function () {
-    const facilityBox = document.getElementById('facilityBox');
-    const facilitySelect = document.querySelector('select[name="facility_id"]');
+    document.getElementById('roleSelect').addEventListener('change', function() {
+        const facilityBox = document.getElementById('facilityBox');
+        const facilitySelect = document.querySelector('select[name="facility_id"]');
 
-    if (this.value === 'STAFF') {
-        facilityBox.style.display = 'block';
-        facilitySelect.setAttribute('required', 'required'); // make it required
-    } else {
-        facilityBox.style.display = 'none';
-        facilitySelect.removeAttribute('required'); // remove requirement
-        facilitySelect.value = '';
-    }
-});
+        if (this.value === 'STAFF') {
+            facilityBox.style.display = 'block';
+            facilitySelect.setAttribute('required', 'required'); // make it required
+        } else {
+            facilityBox.style.display = 'none';
+            facilitySelect.removeAttribute('required'); // remove requirement
+            facilitySelect.value = '';
+        }
+    });
+
+    document.getElementById('editUserModal').addEventListener('show.bs.modal', function(event) {
+        let button = event.relatedTarget;
+
+        let id = button.getAttribute('data-id');
+        let name = button.getAttribute('data-name');
+        let email = button.getAttribute('data-email');
+        let role = button.getAttribute('data-role');
+
+        let form = document.getElementById('editUserForm');
+        form.action = "/admin/editUser/" + id;
+
+        form.querySelector('[name="name"]').value = name;
+        form.querySelector('[name="email"]').value = email;
+        form.querySelector('[name="role"]').value = role;
+    });
 </script>

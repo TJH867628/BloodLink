@@ -215,11 +215,11 @@
             <a href="/medical_facilities/profile" class="nav-link"><i class="fas fa-hospital w-25"></i> Profile</a>
         </nav>
         <div class="mt-auto border-top p-3">
-            <a href="#" class="logout-link">
+            <a href="/logout" class="logout-link">
                 <div class="d-flex align-items-center gap-3 p-2 rounded logout-item">
                     <div class="icon-box"><i class="fas fa-sign-out-alt"></i></div>
                     <div>
-                        <div class="fw-bold text-dark small">Dr. {{ $user->name }}</div>
+                        <div class="fw-bold text-dark small">{{ $user->name }}</div>
                         <div class="logout-text">Sign Out</div>
                     </div>
                 </div>

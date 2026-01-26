@@ -266,7 +266,7 @@
                         <i class="fas fa-sign-out-alt"></i>
                     </div>
                     <div>
-                        <div class="fw-bold text-dark small">Dr. {{ $user->name }}</div>
+                        <div class="fw-bold text-dark small">{{ $user->name }}</div>
                         <div class="logout-text">Sign Out</div>
                     </div>
                 </div>
@@ -286,10 +286,6 @@
                 </div>
             </div>
             <div class="d-flex align-items-center gap-4">
-                <button class="btn border-0 position-relative text-secondary">
-                    <i class="fas fa-bell fa-lg"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
-                </button>
                 <div class="d-none d-md-block border-start h-50 mx-2"></div>
                 <div class="d-flex align-items-center gap-3">
                     <div class="text-end d-none d-md-block">
@@ -306,7 +302,6 @@
             <div class="col-xl-12">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="fw-bold mb-0">Current Stock Batches</h4>
-                    <button class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#addBatchModal"><i class="fas fa-plus me-2"></i> Add Batch</button>
                 </div>
                 <div class="row g-3 mb-5">
                 @foreach($bloodTypeSummary as $type)
