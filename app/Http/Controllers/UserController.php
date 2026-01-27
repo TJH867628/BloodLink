@@ -46,19 +46,7 @@ class UserController extends Controller
             'weight' => $request->weight,
             'blood_pressure' => $request->blood_pressure,
             'hemoglobin_level' => $request->hemoglobin_level,
-            'medical_conditions' => $request->medical_conditions,
-            'last_checkup_date' => $request->last_checkup_date,
-        ]);
-
-
-        DonorHealthDetails::create([
-            'donor_id' =>  $user->id,
-            'height' => $request->height,
-            'weight' => $request->weight,
-            'blood_pressure' => $request->blood_pressure,
-            'hemoglobin_level' => $request->hemoglobin_level,
-            'medical_conditions' => $request->medical_conditions,
-            'last_checkup_date' => $request->last_checkup_date,
+            'last_donation' => $request->last_donation,
         ]);
 
         AuditLog::create([
