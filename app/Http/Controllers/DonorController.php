@@ -47,7 +47,7 @@ class DonorController extends Controller
     {
         $user = Auth::user();
         $donorHealthDetails = $user->donorHealthDetails;
-        $events = Event::all();
+        $events = Event::orderBy('date', 'desc')->get();
         $bookedEventId = Appointment::where('donor_id', $user->id)
             ->whereIn('status', ['PENDING', 'ACCEPTED'])
             ->pluck('event_id')

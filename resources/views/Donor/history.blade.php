@@ -435,48 +435,6 @@
 
         <!-- History List -->
         <div class="vstack gap-3">
-            {{-- Successful donations --}}
-            @foreach($donations as $donation)
-            <div class="history-card" data-status="completed">
-                <div class="date-box">
-                    <div class="date-day">{{ $donation->created_at->format('d') }}</div>
-                    <div class="date-month">{{ $donation->created_at->format('M Y') }}</div>
-                </div>
-
-                <div class="history-content">
-                    <div class="history-header">
-                        <h5>{{ $donation->event->name ?? 'Blood Donation' }}</h5>
-                        <span class="status-badge success">Successful</span>
-                    </div>
-
-                    <div class="history-meta">
-                        <div class="meta-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            {{ $donation->facility->name ?? 'Medical Facility' }}
-                        </div>
-                        <div class="meta-item">
-                            <i class="fas fa-clock"></i>
-                            {{ $donation->created_at->format('h:i A')   }}
-                        </div>
-                        <div class="meta-item">
-                            <i class="fas fa-tint"></i>
-                            {{ $donation->unit }} unit(bag)
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center gap-3 border-start ps-md-4 mt-3 mt-md-0 pt-3 pt-md-0 border-top-0 border-top-md opacity-75">
-                    <div class="text-center">
-                        <div class="text-label mb-1">Hemoglobin</div>
-                        <div class="vitals-box text-danger border-danger">{{ $donation->hemoglobin_level ?? "NULL"}} g/dL</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-label mb-1">Pressure</div>
-                        <div class="vitals-box">{{ $donation->blood_pressure ??  "NULL"}}</div>
-                    </div>
-                </div>
-            </div>
-            @endforeach
-
             {{-- Appointments (pending / cancelled) --}}
             @foreach($appointments as $app)
             <div class="history-card" data-status="{{ strtolower($app->status) }}">
@@ -524,6 +482,47 @@
                     </div>
                 </div>
                 <div class="d-flex align-items-center gap-3 border-start ps-md-4 mt-3 mt-md-0 pt-3 pt-md-0 border-top-0 border-top-md opacity-75">
+                </div>
+            </div>
+            @endforeach
+            {{-- Successful donations --}}
+            @foreach($donations as $donation)
+            <div class="history-card" data-status="completed">
+                <div class="date-box">
+                    <div class="date-day">{{ $donation->created_at->format('d') }}</div>
+                    <div class="date-month">{{ $donation->created_at->format('M Y') }}</div>
+                </div>
+
+                <div class="history-content">
+                    <div class="history-header">
+                        <h5>{{ $donation->event->name ?? 'Blood Donation' }}</h5>
+                        <span class="status-badge success">Successful</span>
+                    </div>
+
+                    <div class="history-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            {{ $donation->facility->name ?? 'Medical Facility' }}
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            {{ $donation->created_at->format('h:i A')   }}
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-tint"></i>
+                            {{ $donation->unit }} unit(bag)
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-3 border-start ps-md-4 mt-3 mt-md-0 pt-3 pt-md-0 border-top-0 border-top-md opacity-75">
+                    <div class="text-center">
+                        <div class="text-label mb-1">Hemoglobin</div>
+                        <div class="vitals-box text-danger border-danger">{{ $donation->hemoglobin_level ?? "NULL"}} g/dL</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-label mb-1">Pressure</div>
+                        <div class="vitals-box">{{ $donation->blood_pressure ??  "NULL"}}</div>
+                    </div>
                 </div>
             </div>
             @endforeach
