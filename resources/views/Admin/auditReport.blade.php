@@ -189,6 +189,8 @@
                 Modification</a>
             <a href="/admin/auditReport" class="nav-link active"><i class="fas fa-file-alt w-25"></i> Audit &
                 Reports</a>
+            <a href="/admin/feedbackManagement" class="nav-link"><i class="fas fa-comments w-25"></i> Feedback
+                Management</a>
         </nav>
         <div class="mt-auto border-top p-3">
             <a href="/logout" class="logout-link">

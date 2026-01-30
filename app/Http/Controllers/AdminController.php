@@ -106,6 +106,13 @@ class AdminController extends Controller
         return view('Admin.auditReport', compact('user', 'emergencyMode', 'logs','hasUnreadNotifications'));
     }
 
+    public function feedbackManagement()
+    {
+        $user = auth()->user();
+
+        return view('Admin.feedbackManagement', compact('user'));
+    }
+
     public function toggleUserActivation($id)
     {
         $user = User::findOrFail($id);

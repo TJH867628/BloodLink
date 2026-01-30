@@ -83,6 +83,7 @@ Route::middleware(['role:ADMIN','auth'])->group(function () {
     Route::get('admin/exportEvent', [App\Http\Controllers\AdminController::class, 'exportEvent'])->name('admin.exportEvent');
     Route::get('admin/exportUserSummary', [App\Http\Controllers\AdminController::class, 'exportUserSummary'])->name('admin.exportUserSummary');
     Route::get('admin/notification', [App\Http\Controllers\AdminController::class, 'notification'])->name('admin.notification');
+    Route::get('admin/feedbackManagement', [App\Http\Controllers\AdminController::class, 'feedbackManagement'])->name('admin.feedbackManagement');
 
     Route::post('admin/toggleUserActivation/{userId}', [App\Http\Controllers\AdminController::class, 'toggleUserActivation'])->name('admin.toggleUserActivation');
     Route::post('admin/createUser', [App\Http\Controllers\AdminController::class, 'createUser'])->name('admin.createUser');
